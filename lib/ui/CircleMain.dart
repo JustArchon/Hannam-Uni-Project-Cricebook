@@ -4,7 +4,7 @@ class CircleMain extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Add your idea')),
+      appBar: AppBar(title: Text('Circle Book Main')),
       body: Container()
     );
   }
