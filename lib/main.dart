@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'ui/CircleMain.dart';
+import 'ui/CircleGroupMain.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -7,6 +10,12 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/': (context) => CircleMain(),
+        '/GroupMain': (context) => CircleGroupMain()
+      },
+    );
   }
 }
