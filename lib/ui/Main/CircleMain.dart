@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'Group/CircleGroupMain.dart';
+import 'MainPage/CircleMainPage.dart';
+import 'Group/CircleMainGroup.dart';
+import 'Profile/CircleMainProfile.dart';
 
-class CircleMain extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Circle Book Main')),
-      body: Container()
-    );
-  }
-}
-class CircleMainPage extends StatefulWidget {
-  const CircleMainPage({Key? key}) : super(key: key);
+class CircleMain extends StatefulWidget {
+  const CircleMain({Key? key}) : super(key: key);
    @override
-   State<CircleMainPage> createState() => CircleMainPageState();
+   State<CircleMain> createState() => CircleMainState();
 }
   
-class CircleMainPageState extends State<CircleMainPage>{
+class CircleMainState extends State<CircleMain>{
   int selectedIndex = 0; // 선택된 페이지의 인덱스 넘버 초기화
 
   final List<Widget> _widgetOptions = <Widget>[
-    CircleGroupMain(),
+    CircleMainPage(),
+    CircleMainGroup(),
+    CircleMainProfile(),
   ];
 
   void onItemTapped(int index) { // 탭을 클릭했을떄 지정한 페이지로 이동
@@ -37,15 +32,15 @@ class CircleMainPageState extends State<CircleMainPage>{
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-          icon: Icon(Icons.text_snippet),
+          icon: Icon(Icons.home),
           label: '메인화면',
           ),
           BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.group),
           label: '그룹',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people),
+            icon: Icon(Icons.person),
             label: '프로필'
           ),
         ],
