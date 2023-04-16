@@ -1,0 +1,6 @@
+Welcome to firepit v1.1.0!
+Doing JSON parses for version checks at C:\snapshot\firepit\vendor\node_modules\firebase-tools\package.json
+firebase-tools
+Installed ft@11.26.0 and packaged ft@11.27.0
+Legacy firepit / firebase-tools detected, clearing it out...
+ShellJSInternalError: ENOENT: no such file or directory, scandir 'C:/Users/User/.cache/firebase/tools/lib/node_modules/firebase-tools/node_modules/jsdoc/node_modules/mkdirp'
