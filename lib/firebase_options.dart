@@ -17,24 +17,15 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -52,11 +43,41 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBaU0p99QxGh5ct04_USGEsnBgii3zD5g4',
+    appId: '1:831140350240:web:a54dd20c0dbe102b9fef45',
+    messagingSenderId: '831140350240',
+    projectId: 'circlebook-6963b',
+    authDomain: 'circlebook-6963b.firebaseapp.com',
+    storageBucket: 'circlebook-6963b.appspot.com',
+    measurementId: 'G-WFVWKKQT0Q',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC5SfNDD0BtbIGE6lLlaceLuqxCPsVIZM0',
-    appId: '1:429697579270:android:5d7c937c31cdf01e39c687',
-    messagingSenderId: '429697579270',
+    apiKey: 'AIzaSyBnF0m2eXpJN3gWAXN3sA8FNftTK1BPyvA',
+    appId: '1:831140350240:android:6d7a1d665e992c759fef45',
+    messagingSenderId: '831140350240',
     projectId: 'circlebook-6963b',
     storageBucket: 'circlebook-6963b.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBOLJ3fz2qgSuxydjDtHVyp8Typ5aPkCNc',
+    appId: '1:831140350240:ios:1cb069c0d208edaf9fef45',
+    messagingSenderId: '831140350240',
+    projectId: 'circlebook-6963b',
+    storageBucket: 'circlebook-6963b.appspot.com',
+    iosClientId: '831140350240-fjpnvmvqaj2dupvgrqhl958lsj9ihgnn.apps.googleusercontent.com',
+    iosBundleId: 'com.example.circlebook',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBOLJ3fz2qgSuxydjDtHVyp8Typ5aPkCNc',
+    appId: '1:831140350240:ios:1cb069c0d208edaf9fef45',
+    messagingSenderId: '831140350240',
+    projectId: 'circlebook-6963b',
+    storageBucket: 'circlebook-6963b.appspot.com',
+    iosClientId: '831140350240-fjpnvmvqaj2dupvgrqhl958lsj9ihgnn.apps.googleusercontent.com',
+    iosBundleId: 'com.example.circlebook',
   );
 }
