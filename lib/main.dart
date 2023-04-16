@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       },
     */
     debugShowCheckedModeBanner: false,
-    home: FirebaseTest(),
+    home: CircleMain(),
     );
   }
 }
