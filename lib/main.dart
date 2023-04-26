@@ -4,8 +4,6 @@ import 'package:circle_book/screens/main_books_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'ui/Main/CircleMain.dart';
-import 'Controller/FirebaseTest.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
