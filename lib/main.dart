@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
-
-import 'ui/Main/CircleMain.dart';
+import 'package:webtoon/screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(Object context) {
     return MaterialApp(
-    /*
-      initialRoute: '/',
-      routes: {
-        '/': (context) => CircleMain(),
-        '/GroupMain': (context) => CircleGroupMain()
-      },
-    */
-    debugShowCheckedModeBanner: false,
-    home: CircleMain(),
+      home: HomeScreen(),
     );
   }
 }
-
