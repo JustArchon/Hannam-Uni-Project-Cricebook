@@ -11,13 +11,12 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage>{
 @override
   void initState() {
-  	Timer(Duration(milliseconds: 1500), () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const LoginScreen()
-                  )
+  	      Timer(const Duration(milliseconds: 1500), () {
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                    const LoginScreen()), (route) => false);},
                   );
-                });
-  }
+          }
   @override
   Widget build(BuildContext conext){
     return Scaffold(
