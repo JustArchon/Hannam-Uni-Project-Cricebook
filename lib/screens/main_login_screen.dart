@@ -1,12 +1,10 @@
+import 'package:circle_book/Controller/CircleBookController.dart';
 import 'package:circle_book/config/palette.dart';
-import 'package:circle_book/screens/main_books_screen.dart';
-import 'package:flutter/gestures.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:circle_book/Controller/CircleBookLoginService.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart';
 
 import 'main_screen.dart';
 
@@ -17,6 +15,7 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 class _LoginScreenState extends State<LoginScreen>{
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _authentication = FirebaseAuth.instance;
     bool isSignupScreen = true;
     final _formKey = GlobalKey<FormState>();
@@ -419,8 +418,10 @@ class _LoginScreenState extends State<LoginScreen>{
                   onTap: () async{
                     if (isSignupScreen){
                       _tryValidation();
-                    
-
+                    firestore.collection('CircleBookUserList').doc(userEmail).set({
+                      "Username": userName,
+                      "Useremail": userEmail,
+                    });
                     try {
                       final newUser = await _authentication
                         .createUserWithEmailAndPassword(
@@ -428,6 +429,7 @@ class _LoginScreenState extends State<LoginScreen>{
                           password: userPassword,
                           );
                       if(newUser.user != null){
+                        
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context){
