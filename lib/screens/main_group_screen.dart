@@ -63,13 +63,15 @@ class MyWidget extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
+            /*
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const GroupMainScreen(),
+                builder: (context) => GroupMainScreen(),
                 fullscreenDialog: true,
               ),
             );
+            */
           },
           child: const Text("Go to Group Main Page"),
         ),
