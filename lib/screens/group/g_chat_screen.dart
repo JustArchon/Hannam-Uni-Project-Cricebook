@@ -75,7 +75,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       height: 10,
                     ),
                     // 그룹 내 데이터 가져올 예정
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -91,7 +91,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(

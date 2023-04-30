@@ -74,7 +74,7 @@ class _GroupMainScreenState extends State<GroupMainScreen> {
                       height: 10,
                     ),
                     // 그룹 내 데이터 가져올 예정
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -90,7 +90,7 @@ class _GroupMainScreenState extends State<GroupMainScreen> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
