@@ -1,11 +1,9 @@
-import 'package:circle_book/screens/group_main_screen.dart';
 import 'package:circle_book/screens/main_group_screen.dart';
-import 'package:circle_book/screens/main_books_screen.dart';
-import 'package:flutter/gestures.dart';
+import 'package:circle_book/screens/main_landing_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:circle_book/screens/main_books/mb_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,8 +37,9 @@ class _TabPageState extends State<TabPage> {
   // �̵��� ������
   final List _pages = [
     MainBooksScreen(),
+    MainBooksScreen(),
     const MainGroupScreen(),
-    const GroupMainScreen(),
+    MainBooksScreen(),
   ];
 
   @override
