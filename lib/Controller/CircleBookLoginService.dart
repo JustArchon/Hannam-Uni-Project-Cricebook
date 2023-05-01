@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:circle_book/screens/main_login_screen.dart';
 import 'package:get/get.dart';
 
-class AuthManage extends GetxController{
+class AuthManage{
   bool CreateUserCheck = false;
   /// 회원가입
   Future<bool> createUser(String name, String email, String pw,) async{
