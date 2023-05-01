@@ -418,10 +418,6 @@ class _LoginScreenState extends State<LoginScreen>{
                   onTap: () async{
                     if (isSignupScreen){
                       _tryValidation();
-                    firestore.collection('CircleBookUserList').doc(userEmail).set({
-                      "Username": userName,
-                      "Useremail": userEmail,
-                    });
                     try {
                       final newUser = await _authentication
                         .createUserWithEmailAndPassword(
@@ -429,7 +425,11 @@ class _LoginScreenState extends State<LoginScreen>{
                           password: userPassword,
                           );
                       if(newUser.user != null){
-                        
+                    firestore.collection('CircleBookUserList').doc(FirebaseAuth.instance.currentUser?.uid).set({
+                      "Username": userName,
+                      "Useremail": userEmail,
+                      "UserUID": FirebaseAuth.instance.currentUser?.uid
+                    });
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context){
