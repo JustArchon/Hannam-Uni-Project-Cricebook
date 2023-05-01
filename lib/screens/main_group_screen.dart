@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:circle_book/screens/group_main_screen.dart';
+// import 'package:circle_book/screens/group_main_screen.dart';
+import 'package:circle_book/Controller/CircleBookController.dart';
+import 'package:get/get.dart';
 
 class MainGroupScreen extends StatelessWidget {
   const MainGroupScreen({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: "MyApp",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -63,15 +66,8 @@ class MyWidget extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            /*
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GroupMainScreen(),
-                fullscreenDialog: true,
-              ),
-            );
-            */
+            CircleBookController().authCatch();
+            CircleBookController().displayemail();
           },
           child: const Text("Go to Group Main Page"),
         ),

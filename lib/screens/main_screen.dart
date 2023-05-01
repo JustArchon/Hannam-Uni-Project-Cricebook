@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:circle_book/screens/group_main_screen.dart';
+import 'package:circle_book/screens/main_books/mb_screen.dart';
 import 'package:circle_book/screens/main_group_screen.dart';
-import 'package:circle_book/screens/main_books_screen.dart';
 import 'package:flutter/gestures.dart';
+import 'package:circle_book/Controller/CircleBookController.dart';
 import 'package:get/get.dart';
 
 class MainScreen extends StatefulWidget {
@@ -14,8 +14,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen>{
   @override
+  void initState() {
+    super.initState();
+    CircleBookController().authCatch();
+  }
+  @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    Get.put(CircleBookController());
+    return MaterialApp(
       title: "MyApp",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -37,7 +43,7 @@ class _MainScreenState extends State<MainScreen>{
 
 class MyWidget extends StatelessWidget {
   const MyWidget({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
@@ -50,7 +56,7 @@ class MyWidget extends StatelessWidget {
 
 class TabPage extends StatefulWidget {
   const TabPage({super.key});
-
+  
   @override
   _TabPageState createState() => _TabPageState();
 }
@@ -62,7 +68,7 @@ class _TabPageState extends State<TabPage> {
   final List _pages = [
     MainBooksScreen(),
     const MainGroupScreen(),
-    const GroupMainScreen(),
+    MainBooksScreen(),
   ];
 
   @override
