@@ -1,8 +1,11 @@
 //import 'package:circle_book/ex_webtoon/services/api_service.dart';
 import 'package:circle_book/screens/group/g_base_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //import 'package:circle_book/ex_webtoon/models/webtoon_detail_model.dart';
 import 'package:circle_book/models/book_model.dart';
+
 
 class BooksDetailScreen extends StatefulWidget {
   final String id, title, thumb, description;
@@ -21,16 +24,10 @@ class BooksDetailScreen extends StatefulWidget {
 
 class _BooksDetailScreenState extends State<BooksDetailScreen> {
   late Future<BookModel> book;
-
-/*
-  @override
-  void initState() {
-    super.initState();
-    book = ApiService.getToonById(widget.id);
-  }
-*/
+  
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -200,6 +197,14 @@ class GroupCreationPopup extends StatefulWidget {
 
 class _GroupCreationPopupState extends State<GroupCreationPopup> {
   final _formKey = GlobalKey<FormState>();
+  String groupName = '';
+  int numMembers = 0;
+  int readingPeriod = 0;
+  int certificationPeriod = 0;
+  int passCount = 0;
+  int discussionCount = 0;
+  String notice = '';
+
   late TextEditingController _groupNameController;
   late TextEditingController _numMembersController;
   late TextEditingController _readingPeriodController;
@@ -234,6 +239,7 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     return AlertDialog(
       title: const Text('그룹 생성'),
       content: SingleChildScrollView(
@@ -256,6 +262,9 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  groupName = value!;
+                },
               ),
               TextFormField(
                 controller: _numMembersController,
@@ -270,6 +279,9 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                     return '최대 인원은 2 이상의 정수여야 합니다.';
                   }
                   return null;
+                },
+                onSaved: (value) {
+                  numMembers = int.parse(value!);
                 },
               ),
               TextFormField(
@@ -286,6 +298,9 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  readingPeriod = int.parse(value!);
+                },
               ),
               TextFormField(
                 controller: _certificationPeriodController,
@@ -300,6 +315,9 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                     return '현황 인증 간격은 0 이상의 정수여야 합니다.';
                   }
                   return null;
+                },
+                onSaved: (value) {
+                  certificationPeriod = int.parse(value!);
                 },
               ),
               TextFormField(
@@ -316,6 +334,9 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  passCount = int.parse(value!);
+                },
               ),
               TextFormField(
                 controller: _discussionCountController,
@@ -331,12 +352,18 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                   }
                   return null;
                 },
+                onSaved: (value) {
+                  discussionCount = int.parse(value!);
+                },
               ),
               TextFormField(
                 controller: _noticeController,
                 decoration: const InputDecoration(
                   labelText: '공지사항',
                 ),
+                onSaved: (value) {
+                  notice = value!;
+                },
               ),
             ],
           ),
@@ -352,6 +379,20 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+              firestore.collection('CircleBookGroupList').doc(groupName).set({
+                      "BookISBN" : '',
+                      "GroupName": groupName,
+                      "GroupLeader": FirebaseAuth.instance.currentUser?.uid,
+                      "GroupMembers": [FirebaseAuth.instance.currentUser?.uid,],
+                      "numMembers": numMembers,
+                      "readingPeriod": readingPeriod,
+                      "certificationPeriod": certificationPeriod,
+                      "passCount": passCount,
+                      "discussionCount": discussionCount,
+                      "notice": notice,
+                      "Groupstate": 1
+                    });
               Navigator.pop(context, {
                 'groupName': _groupNameController.text,
                 'numMembers': int.parse(_numMembersController.text),
