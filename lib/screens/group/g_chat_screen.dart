@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:circle_book/screens/group/g_chat_screen2.dart';
 
 class GroupChatScreen extends StatefulWidget {
   final String id, title, thumb;
@@ -114,7 +115,12 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             children: [
               // 기본 생성 채팅방 버튼
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context){
+                  return ChatScreen();
+                }));
+                },
                 style: OutlinedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),
                   backgroundColor: Colors.blue[400],
