@@ -43,6 +43,7 @@ dependencies:
   get: ^4.6.5
   firebase_auth: ^4.4.2
   google_sign_in: ^6.1.0
+  flutter_chat_bubble: ^2.0.2
 
 dev_dependencies:
   flutter_test:
