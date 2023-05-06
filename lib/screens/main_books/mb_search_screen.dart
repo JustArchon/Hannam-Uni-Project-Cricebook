@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+import 'package:circle_book/models/book_model.dart';
+import 'package:circle_book/services/api_services.dart';
+import 'package:circle_book/widgets/books_widget.dart';
+
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController textController = TextEditingController();
+  String searchData = "";
+
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
+  void onSearch(String text) {
+    setState(() {
+      searchData = text;
+    });
+  }
+
+  Widget resultScreen() {
+    Future<List<BookModel>> result = ApiService().searchByName(searchData);
+    return FutureBuilder(
+      future : result,
+      builder: (context, snapshot) {
+        if(!snapshot.hasData) {
+          return const Center(
+            child: Text("검색결과가 없습니다."),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            Expanded(child: makeList(snapshot)),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor : Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.green,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+             Flexible(
+              flex: 1,
+              child: TextField(
+                controller: textController,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(8),
+                    ),
+                  ),
+                  hintText: '검색 할 책 이름을 입력해주세요',
+                ),
+                textInputAction: TextInputAction.search,
+                onSubmitted: (value) {
+                  onSearch(textController.text);
+                },
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            IconButton(
+              icon : const Icon(Icons.search_outlined),
+              color: Colors.green,
+              onPressed: () {
+                onSearch(textController.text);
+              },
+            ),
+          ],
+        ),
+      ),
+      body: resultScreen()
+    );
+  }
+}
+
+Widget makeList(AsyncSnapshot<List<BookModel>> snapshot) {
+    return GridView.count(
+      crossAxisCount: 3,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+      mainAxisSpacing: 20,
+      crossAxisSpacing: 20,
+      childAspectRatio: 0.6,
+      children: List.generate(
+        snapshot.data!.length,
+        (index) {
+          var book = snapshot.data![index];
+          return Book(
+            id: book.id,
+            title: book.title,
+            thumb: book.thumb,
+            description: book.description,
+          );
+        },
+      ),
+    );
+  }
