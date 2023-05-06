@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:circle_book/screens/main_books/mb_detail_screen.dart';
+import 'package:circle_book/screens/main/main_books/mb_detail_screen.dart';
 
 class Book extends StatelessWidget {
   final String id, title, thumb, description;
