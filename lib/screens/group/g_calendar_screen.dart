@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class GroupCalendarScreen extends StatefulWidget {
-  final String id, title, thumb;
+  final String title, groupId;
 
   const GroupCalendarScreen({
     super.key,
-    required this.id,
     required this.title,
-    required this.thumb,
+    required this.groupId,
   });
 
   @override
@@ -52,8 +51,8 @@ class _GroupCalendarScreenState extends State<GroupCalendarScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.only(
-                  left: 50,
-                  right: 50,
+                  left: 10,
+                  right: 10,
                   top: 10,
                   bottom: 10,
                 ),
@@ -76,11 +75,14 @@ class _GroupCalendarScreenState extends State<GroupCalendarScreen> {
                     ),
                     // 그룹 내 데이터 가져올 예정
                     const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "그룹 인원 (04 / 04)",
                           style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          width: 80,
                         ),
                         Text(
                           "토론 횟수 (01 / 02)",
@@ -92,11 +94,14 @@ class _GroupCalendarScreenState extends State<GroupCalendarScreen> {
                       height: 10,
                     ),
                     const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "독서 기간 (11 / 14)",
                           style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          width: 80,
                         ),
                         Text(
                           "인증 기간 (02 / 03)",

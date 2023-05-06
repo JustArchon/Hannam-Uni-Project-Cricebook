@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class GroupChatScreen extends StatefulWidget {
-  final String id, title, thumb;
+  final String title, groupId;
 
   const GroupChatScreen({
     super.key,
-    required this.id,
     required this.title,
-    required this.thumb,
+    required this.groupId,
   });
 
   @override
@@ -52,8 +51,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.only(
-                  left: 50,
-                  right: 50,
+                  left: 10,
+                  right: 10,
                   top: 10,
                   bottom: 10,
                 ),
@@ -76,11 +75,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                     ),
                     // 그룹 내 데이터 가져올 예정
                     const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "그룹 인원 (04 / 04)",
                           style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          width: 80,
                         ),
                         Text(
                           "토론 횟수 (01 / 02)",
@@ -92,11 +94,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       height: 10,
                     ),
                     const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           "독서 기간 (11 / 14)",
                           style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(
+                          width: 80,
                         ),
                         Text(
                           "인증 기간 (02 / 03)",
@@ -110,70 +115,61 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             ],
           ),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 기본 생성 채팅방 버튼
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  shape: const BeveledRectangleBorder(),
-                  backgroundColor: Colors.blue[400],
-                  padding: const EdgeInsets.only(
-                    left: 50,
-                    right: 50,
-                    top: 30,
-                    bottom: 30,
-                  ),
+              Container(
+                height: 500,
+                padding: const EdgeInsets.only(
+                  left: 50,
+                  right: 50,
+                  top: 50,
+                  bottom: 50,
                 ),
-                child: const Text(
-                  "[ 그룹 채팅방 ]",
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  shape: const BeveledRectangleBorder(),
-                  backgroundColor: Colors.blue[400],
-                  padding: const EdgeInsets.only(
-                    left: 50,
-                    right: 50,
-                    top: 30,
-                    bottom: 30,
-                  ),
-                ),
-                child: const Text(
-                  "[ 독서 토론 채팅방 ]",
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                ),
-              ),
-              // 추가 생성 채팅방 버튼
-              OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  shape: const BeveledRectangleBorder(),
-                  backgroundColor: Colors.red[300],
-                  padding: const EdgeInsets.only(
-                    left: 50,
-                    right: 50,
-                    top: 30,
-                    bottom: 30,
-                  ),
-                ),
-                child: const Text(
-                  "[ 그룹원1 과의 채팅 ]",
-                  style: TextStyle(fontSize: 30, color: Colors.white),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // 기본 생성 채팅방 버튼
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        shape: const BeveledRectangleBorder(),
+                        backgroundColor: Colors.blue[400],
+                        padding: const EdgeInsets.only(
+                          left: 50,
+                          right: 50,
+                          top: 30,
+                          bottom: 30,
+                        ),
+                      ),
+                      child: const Text(
+                        "[ 그룹 채팅방 ]",
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 100,
+                    ),
+                    OutlinedButton(
+                      onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        shape: const BeveledRectangleBorder(),
+                        backgroundColor: Colors.blue[400],
+                        padding: const EdgeInsets.only(
+                          left: 50,
+                          right: 50,
+                          top: 30,
+                          bottom: 30,
+                        ),
+                      ),
+                      child: const Text(
+                        "[ 독서 토론 채팅방 ]",
+                        style: TextStyle(fontSize: 30, color: Colors.white),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-          // 채팅방 추가 생성 버튼
-          Center(
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.add_circle_outline),
-              iconSize: 50,
-            ),
           ),
         ],
       ),

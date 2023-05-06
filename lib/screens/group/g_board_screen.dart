@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class GroupBoardScreen extends StatefulWidget {
-  final String id, title, thumb;
+  final String title, groupId;
 
   const GroupBoardScreen({
     super.key,
-    required this.id,
     required this.title,
-    required this.thumb,
+    required this.groupId,
   });
 
   @override
@@ -111,8 +110,8 @@ class _GroupBoardScreenState extends State<GroupBoardScreen> {
           ),
           Column(
             children: [
-              // 채팅방들 기능 구현 예정
               Container(
+                height: 500,
                 padding: const EdgeInsets.only(
                   left: 50,
                   right: 50,
@@ -120,6 +119,7 @@ class _GroupBoardScreenState extends State<GroupBoardScreen> {
                   bottom: 50,
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     OutlinedButton(
@@ -141,7 +141,7 @@ class _GroupBoardScreenState extends State<GroupBoardScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 30,
+                      height: 100,
                     ),
                     OutlinedButton(
                       onPressed: () {},
@@ -158,48 +158,6 @@ class _GroupBoardScreenState extends State<GroupBoardScreen> {
                       ),
                       child: const Text(
                         "[ 독후감 게시판 ]",
-                        style: TextStyle(fontSize: 30, color: Colors.black),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        backgroundColor: Colors.green[200],
-                        padding: const EdgeInsets.only(
-                          left: 50,
-                          right: 50,
-                          top: 30,
-                          bottom: 30,
-                        ),
-                      ),
-                      child: const Text(
-                        "[ 자유 게시판 ]",
-                        style: TextStyle(fontSize: 30, color: Colors.black),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        backgroundColor: Colors.grey[200],
-                        padding: const EdgeInsets.only(
-                          left: 50,
-                          right: 50,
-                          top: 30,
-                          bottom: 30,
-                        ),
-                      ),
-                      child: const Text(
-                        "[ 익명 질문 게시판 ]",
                         style: TextStyle(fontSize: 30, color: Colors.black),
                       ),
                     ),

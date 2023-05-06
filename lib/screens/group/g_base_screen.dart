@@ -1,18 +1,19 @@
-import 'package:circle_book/screens/group/g_main_screen.dart';
 import 'package:circle_book/screens/group/g_chat_screen.dart';
 import 'package:circle_book/screens/group/g_calendar_screen.dart';
 import 'package:circle_book/screens/group/g_board_screen.dart';
+import 'package:circle_book/screens/group/g_main_screen.dart';
 
 import 'package:flutter/material.dart';
 
 class GroupBaseScreen extends StatefulWidget {
-  final String id, title, thumb;
+  final String id, title, thumb, groupId;
 
   const GroupBaseScreen({
     Key? key,
     required this.id,
     required this.title,
     required this.thumb,
+    required this.groupId,
   }) : super(key: key);
 
   @override
@@ -30,11 +31,15 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
 
     // initState에서 _pages 리스트 초기화
     _pages = [
-      GroupMainScreen(id: widget.id, title: widget.title, thumb: widget.thumb),
-      GroupChatScreen(id: widget.id, title: widget.title, thumb: widget.thumb),
-      GroupCalendarScreen(
-          id: widget.id, title: widget.title, thumb: widget.thumb),
-      GroupBoardScreen(id: widget.id, title: widget.title, thumb: widget.thumb),
+      GroupMainScreen(
+        id: widget.id,
+        title: widget.title,
+        thumb: widget.thumb,
+        groupId: widget.groupId,
+      ),
+      GroupChatScreen(title: widget.title, groupId: widget.groupId),
+      GroupCalendarScreen(title: widget.title, groupId: widget.groupId),
+      GroupBoardScreen(title: widget.title, groupId: widget.groupId),
       // 다른 페이지 추가
     ];
   }
