@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:circle_book/Controller/CircleBookController.dart';
 import 'package:circle_book/config/palette.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:circle_book/Controller/CircleBookLoginService.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
+import '../widgets/Add_imageWidget.dart';
 import 'main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,11 +26,29 @@ class _LoginScreenState extends State<LoginScreen>{
     String userName = '';
     String userEmail = '';
     String userPassword = '';
+    File? userPickedImage;
+
+    void pickedImage(File image){
+        userPickedImage = image;
+    }
+
     void _tryValidation(){
       final isValid = _formKey.currentState!.validate();
       if(isValid){
         _formKey.currentState!.save();
       }
+    }
+
+    void showAlert(BuildContext context){
+      showDialog(
+        context: context,
+        builder: (context){
+          return Dialog(
+            backgroundColor: Colors.white,
+            child: AddImage(pickedImage),
+          );
+        },
+      );
     }
     @override
     Widget build(BuildContext conext){
@@ -172,17 +194,32 @@ class _LoginScreenState extends State<LoginScreen>{
                           },
                         child: Column(
                           children: [
-                            Text(
-                              'SIGNUP',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: isSignupScreen ? Colors.black : Palette.textColor1
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  'SIGNUP',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSignupScreen ? Colors.black : Palette.textColor1
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                if(isSignupScreen)
+                                GestureDetector(
+                                  onTap: () {
+                                    showAlert(context);
+                                  },
+                                  child: Icon(Icons.image,
+                                  color: isSignupScreen ? Colors.green : Colors.grey[300],),
+                                )
+                              ],
                             ),
                             if(isSignupScreen)
                             Container(
-                              margin: EdgeInsets.only(top: 3),
+                              margin: EdgeInsets.fromLTRB(0,3,35,0),
                               height: 2,
                               width: 55,
                               color: Colors.orange,
@@ -417,6 +454,16 @@ class _LoginScreenState extends State<LoginScreen>{
                 child: GestureDetector(
                   onTap: () async{
                     if (isSignupScreen){
+                      if(userPickedImage == null){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                          Text('프로필 이미지를 지정해주시기 바랍니다.'),
+                          backgroundColor: Colors. blue,
+                        ),
+                      );
+                      return;
+                      }
                       _tryValidation();
                     try {
                       final newUser = await _authentication
@@ -424,12 +471,18 @@ class _LoginScreenState extends State<LoginScreen>{
                           email: userEmail,
                           password: userPassword,
                           );
-                      if(newUser.user != null){
-                    firestore.collection('CircleBookUserList').doc(FirebaseAuth.instance.currentUser?.uid).set({
+                      final refImage = FirebaseStorage.instance.ref()
+                          .child('UserProfile')
+                          .child(newUser.user!.uid + '.png');
+                    await refImage.putFile(userPickedImage!);
+                    final url = await refImage.getDownloadURL();
+                    await firestore.collection('CircleBookUserList').doc(FirebaseAuth.instance.currentUser?.uid).set({
                       "Username": userName,
                       "Useremail": userEmail,
-                      "UserUID": FirebaseAuth.instance.currentUser?.uid
+                      "UserUID": FirebaseAuth.instance.currentUser?.uid,
+                      "UserProfileImage" : url
                     });
+                    if(newUser.user != null){
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context){
@@ -439,6 +492,7 @@ class _LoginScreenState extends State<LoginScreen>{
                       }
                     }catch(e){
                       print(e);
+                      if(mounted){
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content:
@@ -446,6 +500,7 @@ class _LoginScreenState extends State<LoginScreen>{
                           backgroundColor: Colors. blue,
                         ),
                       );
+                      }
                     }
                     }
                     try {
