@@ -1,12 +1,12 @@
-
-import 'package:circle_book/screens/main_group_screen.dart';
+import 'package:circle_book/screens/login_page.dart';
+//import 'package:circle_book/screens/main/m_base_screen.dart';
+//import 'package:circle_book/test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:circle_book/screens/main_books/mb_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() async{
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      // ¿•,æ€ ∏µŒ µÂ∑°±◊ ¿€µø«œ∞‘«œ¥¬ ƒ⁄µÂ
+      // Ïõπ,Ïï± Î™®Îëê ÎìúÎûòÍ∑∏ ÏûëÎèôÌïòÍ≤åÌïòÎäî ÏΩîÎìú
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
           PointerDeviceKind.mouse,
@@ -35,69 +35,9 @@ class MyApp extends StatelessWidget {
           PointerDeviceKind.unknown
         },
       ),
-      home: const MyWidget(),
+      home: //const MainBaseScreen(),
+          const LoginScreen(),
+      //const TestScreen(),
     );
-  }
-}
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: TabPage(),
-      ),
-    );
-  }
-}
-
-class TabPage extends StatefulWidget {
-  const TabPage({super.key});
-
-  @override
-  _TabPageState createState() => _TabPageState();
-}
-
-class _TabPageState extends State<TabPage> {
-  int _selectedIndex = 0; // √≥¿Ωø° ≥™ø√ »≠∏È ¡ˆ¡§
-
-  // ¿Ãµø«“ ∆‰¿Ã¡ˆ
-  final List _pages = [
-    MainBooksScreen(),
-    const MainGroupScreen(),
-    MainBooksScreen(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: _pages[_selectedIndex], // ∆‰¿Ã¡ˆøÕ ø¨∞·
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          //type: BottomNavigationBarType.fixed, // bottomNavigationBar item¿Ã 4∞≥ ¿ÃªÛ¿œ ∞ÊøÏ
-
-          onTap: _onItemTapped,
-
-          currentIndex: _selectedIndex,
-
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(Icons.menu_book_rounded), label: "Books"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.groups_rounded), label: "Group"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_rounded), label: "Profile"),
-          ],
-        ));
-  }
-
-  void _onItemTapped(int index) {
-    // state ∞ªΩ≈
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }
