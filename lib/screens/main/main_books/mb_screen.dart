@@ -1,4 +1,5 @@
 import 'package:circle_book/models/book_model.dart';
+import 'package:circle_book/screens/main/main_books/mb_search_screen.dart';
 import 'package:circle_book/services/api_services.dart';
 import 'package:circle_book/widgets/books_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,17 +17,14 @@ class MainBooksScreen extends StatelessWidget {
       backgroundColor: Colors.white,
 
       appBar: AppBar(
-        title: const Text(
-          "CircleBook",
-          style: TextStyle(
-            fontSize: 24,
-          ),
+        title: SizedBox(
+          height: 50,
+          child: Image.asset('assets/icons/아이콘_흰색(512px).png'),
         ),
         centerTitle: true,
         elevation: 2,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
-
+        backgroundColor: const Color(0xff6DC4DB),
+        foregroundColor: Colors.white,
         //toolbarHeight: 50,
 
         // 좌측 아이콘 버튼
@@ -40,16 +38,20 @@ class MainBooksScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.search_outlined), // 책 검색 아이콘 생성
             onPressed: () {
-              // 아이콘 버튼 실행
-              //print('Book search button is clicked');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ),
+              );
             },
           ),
+          // 테스트용 더미 유저ID, 그룹 생성 버튼
           IconButton(
             icon: const Icon(Icons.settings), // 책 설정 아이콘 생성
             onPressed: () {
               // 아이콘 버튼 실행
-              //print('Book settings button is clicked');
-              String collectionName = "CircleBookGroupList"; // 생성하고자 하는 컬렉션 이름
+              String collectionName = "groups"; // 생성하고자 하는 컬렉션 이름
 
               FirebaseFirestore.instance
                   .collection(collectionName)
@@ -61,12 +63,12 @@ class MainBooksScreen extends StatelessWidget {
                   for (int i = 0; i < 3; i++) {
                     ti.add(randomAlphaNumeric(28));
                     FirebaseFirestore.instance
-                        .collection('CircleBookUserList')
+                        .collection('users')
                         .doc(ti[i])
                         .set({
-                      "Username": "testUser$i",
-                      "Useremail": "testUser$i@naver.com",
-                      "UserUID": ti[i],
+                      "userName": "testUser$i",
+                      "userEmail": "testUser$i@naver.com",
+                      "userUID": ti[i],
                     });
                   }
                   String? tm1, tm2, tm3;
@@ -117,37 +119,36 @@ class MainBooksScreen extends StatelessWidget {
                           break;
                       }
                       String groupId = FirebaseFirestore.instance
-                          .collection('CircleBookGroupList')
+                          .collection('groups')
                           .doc()
                           .id;
 
                       FirebaseFirestore.instance
-                          .collection('CircleBookGroupList')
+                          .collection('groups')
                           .doc('$i의 그룹 $x')
                           .set({
                         'groupId': groupId, // 이 부분이 새롭게 추가된 부분입니다.
-                        'BookData': [
+                        'bookData': [
                           isbn,
                           bn,
                           bt,
                           bd,
                         ],
-                        'GroupName': '$i의 그룹 $x',
-                        'GroupLeader': tm1,
-                        'GroupMembers': [
+                        'groupName': '$i의 그룹 $x',
+                        'groupLeader': tm1,
+                        'groupMembers': [
                           tm1,
                           tm2,
                           tm3,
                         ],
-                        'numMembers': x + 4,
+                        'groupMembersCount': 3,
+                        'maxMembers': x + 4,
                         'readingPeriod': x + 7,
-                        'certificationPeriod': x + 1,
-                        'passCount': x,
+                        'readingStatusVerificationPeriod': x + 1,
+                        'verificationPassCount': x,
                         'discussionCount': x,
                         'notice': 'testUser$i의 $bn 그룹입니다.',
-                        'Groupstate': 1,
-                        'timestamp':
-                            FieldValue.serverTimestamp(), // 타임스탬프 필드를 추가합니다.
+                        'groupStatus': 1, // 타임스탬프 필드를 추가합니다.
                       });
                     }
                   }
@@ -188,23 +189,13 @@ class MainBooksScreen extends StatelessWidget {
                     '주간 베스트셀러',
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                      fontFamily: "Ssurround",
                       color: Colors.black,
                     ),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  /*
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.green, // 배경색을 초록색으로 설정
-                      ),
-                      child: makeList(snapshot),
-                    ),
-                  ),
-                  */
                   Expanded(child: makeList(snapshot)),
                 ],
               ),

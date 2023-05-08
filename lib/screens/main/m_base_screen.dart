@@ -30,6 +30,7 @@ class _TabPageState extends State<TabPage> {
     MainBooksScreen(),
     const MainGroupScreen(),
     MainBooksScreen(),
+    MainBooksScreen(),
   ];
 
   @override
@@ -39,19 +40,62 @@ class _TabPageState extends State<TabPage> {
           child: _pages[_selectedIndex], // 페이지와 연결
         ),
         bottomNavigationBar: BottomNavigationBar(
-          //type: BottomNavigationBarType.fixed, // bottomNavigationBar item이 4개 이상일 경우
+          type: BottomNavigationBarType
+              .fixed, // bottomNavigationBar item이 4개 이상일 경우
 
           onTap: _onItemTapped,
 
           currentIndex: _selectedIndex,
 
-          items: const <BottomNavigationBarItem>[
+          selectedItemColor: const Color(0xff6DC4DB),
+          unselectedItemColor: Colors.black,
+          showUnselectedLabels: true,
+
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.menu_book_rounded), label: "Books"),
+              icon: Image.asset(
+                'assets/icons/book-bookmark.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/book-bookmark_selected.png',
+                height: 20,
+              ),
+              label: "도서",
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.groups_rounded), label: "Group"),
+              icon: Image.asset(
+                'assets/icons/people.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/people_selected.png',
+                height: 20,
+              ),
+              label: "그룹",
+            ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person_rounded), label: "Profile"),
+              icon: Image.asset(
+                'assets/icons/clipboard-user.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/clipboard-user_selected.png',
+                height: 20,
+              ),
+              label: "프로필",
+            ),
+            BottomNavigationBarItem(
+              icon: Image.asset(
+                'assets/icons/gear.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/gear_selected.png',
+                height: 20,
+              ),
+              label: "설정",
+            ),
           ],
         ));
   }

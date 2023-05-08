@@ -10,14 +10,14 @@ class MainGroupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "CircleBook",
-          style: TextStyle(fontSize: 24),
+        title: SizedBox(
+          height: 50,
+          child: Image.asset('assets/icons/아이콘_흰색(512px).png'),
         ),
         centerTitle: true,
         elevation: 2,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
+        backgroundColor: const Color(0xff6DC4DB),
+        foregroundColor: Colors.white,
 
         //toolbarHeight: 50,
 
@@ -50,6 +50,9 @@ class MainGroupScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             groupListShow(2),
             const SizedBox(
               height: 10,
@@ -65,13 +68,13 @@ class MainGroupScreen extends StatelessWidget {
     );
   }
 
-  StreamBuilder<QuerySnapshot<Object?>> groupListShow(int gsc) {
+  StreamBuilder<QuerySnapshot<Object?>> groupListShow(int gsn) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-          .collection('CircleBookGroupList')
-          .where('GroupMembers',
+          .collection('groups')
+          .where('groupMembers',
               arrayContains: FirebaseAuth.instance.currentUser?.uid)
-          .where('Groupstate', isEqualTo: gsc) // Groupstate가 1인 것만 검색
+          .where('groupStatus', isEqualTo: gsn) // Groupstate가 1인 것만 검색
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -88,27 +91,31 @@ class MainGroupScreen extends StatelessWidget {
               runSpacing: 10.0,
               children: documents.map(
                 (doc) {
-                  String bt = doc['BookData'][2];
-                  String gn = doc['GroupName'];
-                  String bn = doc['BookData'][1];
-                  int nm = doc['numMembers'];
-                  int mc = doc['GroupMembers'].length;
+                  String bt = doc['bookData'][2];
+                  String gn = doc['groupName'];
+                  String bn = doc['bookData'][1];
+                  int mm = doc['maxMembers'];
+                  int mc = doc['groupMembersCount'];
                   int rp = doc['readingPeriod'];
-                  int cp = doc['certificationPeriod'];
+                  int vp = doc['readingStatusVerificationPeriod'];
                   int dc = doc['discussionCount'];
-                  int gs = doc['Groupstate'];
-                  String bi = doc['BookData'][0];
+                  int gs = doc['groupStatus'];
+                  String bi = doc['bookData'][0];
                   String gi = doc['groupId'];
                   Color? buttonColor;
+                  String? gst;
                   switch (gs) {
                     case 1:
-                      buttonColor = Colors.yellow[200];
+                      buttonColor = Colors.yellow[100];
+                      gst = '준비 중';
                       break;
                     case 2:
-                      buttonColor = Colors.green[200];
+                      buttonColor = Colors.green[100];
+                      gst = '독서 중';
                       break;
                     case 3:
-                      buttonColor = Colors.red[200];
+                      buttonColor = Colors.red[100];
+                      gst = '완료';
                       break;
                     default:
                       buttonColor = Colors.grey;
@@ -131,29 +138,47 @@ class MainGroupScreen extends StatelessWidget {
                             fullscreenDialog: true, // 화면 생성 방식
                           ),
                         );
-                        print(gi);
+                        //print(gi);
                       },
                       style: OutlinedButton.styleFrom(
-                        shape: const BeveledRectangleBorder(),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         backgroundColor: buttonColor,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 80,
-                            height: 80,
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.blue[200],
-                            ),
-                            child: Image.network(
-                              bt,
-                              width: 20,
-                              height: 30,
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "[$gst]",
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.black),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Container(
+                                width: 80,
+                                height: 80,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: const Color(0xff6DC4DB),
+                                ),
+                                child: Image.network(
+                                  bt,
+                                  width: 20,
+                                  height: 30,
+                                ),
+                              ),
+                            ],
                           ),
                           const SizedBox(
                             width: 20,
@@ -176,7 +201,7 @@ class MainGroupScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Text(
-                                      "인원 ($mc/$nm)",
+                                      "인원 ($mc/$mm)",
                                       style: const TextStyle(
                                           fontSize: 20, color: Colors.black),
                                     ),
@@ -205,7 +230,7 @@ class MainGroupScreen extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        "토론 (1/$dc)",
+                                        "토론 (0/$dc)",
                                         style: const TextStyle(
                                             fontSize: 20, color: Colors.black),
                                       ),
@@ -222,13 +247,13 @@ class MainGroupScreen extends StatelessWidget {
                                     SizedBox(
                                       width: 170,
                                       child: Text(
-                                        "[독서 기간] (${rp - 1}/$rp)",
+                                        "[독서 기간] (0/$rp)",
                                         style: const TextStyle(
                                             fontSize: 20, color: Colors.black),
                                       ),
                                     ),
                                     Text(
-                                      "[인증 간격] (${cp - 1}/$cp)",
+                                      "[인증 간격] (0/$vp)",
                                       style: const TextStyle(
                                           fontSize: 20, color: Colors.black),
                                     ),
