@@ -5,13 +5,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Messages extends StatelessWidget{
-  const Messages({Key? key}) : super(key: key);
+  const Messages({Key? key, required this.id, required this.title, required this.thumb, required this.groupId, required this.groupname}) : super(key: key);
+  final String id, title, thumb;
+  final String groupId;
+  final String groupname;
 
   @override
   Widget build(BuildContext context){
     final user = FirebaseAuth.instance.currentUser;
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('CircleBookGroupList').doc('Test66').collection('GroupChats')
+      stream: FirebaseFirestore.instance.collection('groups').doc(groupname).collection('GroupChats')
       .orderBy('time', descending: true)
       .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
