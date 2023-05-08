@@ -60,7 +60,11 @@ class Book extends StatelessWidget {
             width: 160,
             child: Text(
               title,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontSize: 12,
+                fontFamily: "SsurroundAir",
+                fontWeight: FontWeight.bold,
+              ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               textAlign: TextAlign.center,
