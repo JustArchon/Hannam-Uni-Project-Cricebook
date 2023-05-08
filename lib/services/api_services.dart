@@ -22,8 +22,8 @@ var filter = [
   'Gift'
 ];
 var category = ['2105', '74', '1', '656', '987'];
-
 //고전, 역사, 소설/시/희곡, 인문학, 과학
+
 //maxResults 말고는 수정하지 마세요.
 class ApiService {
   final String ttbkey = "ttbkimgi06281904001";
@@ -84,6 +84,7 @@ class ApiService {
     return bookInstances;
   }
 
+  //isbn으로 검색해서 이미지 가져오는 기능
   Future<String> getThumb(String bookISBN) async {
     Uri url = Uri.parse(
         'http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=$ttbkey&itemIdType=ISBN&ItemId=$bookISBN&Cover=Big&output=js&Version=20131101');
@@ -93,6 +94,25 @@ class ApiService {
     if (response.statusCode == 200) {
       final book = BookModel.fromJson(jsonDecode(response.body));
       return book.thumb;
+    }
+    throw Error();
+  }
+
+  Future<List<BookModel>> searchByName(String name) async {
+    List<BookModel> bookInstances = [];
+    Uri url = Uri.parse(
+        'https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=$ttbkey&Query=$name&QueryType=Title&MaxResults=$maxResults&Cover=Big&output=js&version=20131101');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(response.body);
+      for (var temp in responseBody['item']) {
+        var book = BookModel.fromJson(temp);
+        book.replaceHTMLEntity();
+        bookInstances.add(book);
+      }
+      return bookInstances;
     }
     throw Error();
   }
