@@ -16,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final _authentication = FirebaseAuth.instance;
-  bool isSignupScreen = true;
+  bool isSignupScreen = false;
   final _formKey = GlobalKey<FormState>();
   String userName = '';
   String userEmail = '';
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext conext) {
+  Widget build(BuildContext context) {
     Get.put(AuthManage());
     return Scaffold(
       backgroundColor: Colors.white,
@@ -45,77 +45,74 @@ class _LoginScreenState extends State<LoginScreen> {
               right: 0,
               left: 0,
               child: Container(
-                height: 300,
-                decoration: const BoxDecoration(),
-                child: Container(
-                  padding: const EdgeInsets.only(top: 90, left: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: const TextSpan(
-                          text: '모두와 함께하는',
-                          style: TextStyle(
-                              letterSpacing: 1.0,
-                              fontSize: 25,
-                              color: Colors.black),
-                          children: [
-                            TextSpan(
-                              text: ' 독서,',
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  fontSize: 25,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                margin: const EdgeInsets.all(10),
+                height: MediaQuery.of(context).size.height - 20,
+                padding: const EdgeInsets.only(
+                  top: 30,
+                  left: 20,
+                  right: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '모두와 함께하는 독서,',
+                      style: TextStyle(
+                        letterSpacing: 1.0,
+                        fontSize: 30,
+                        color: Colors.black,
+                        fontFamily: "SsurroundAir",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 1.0,
+                    ),
+                    RichText(
+                      text: const TextSpan(
+                        text: '지금부터 ',
+                        style: TextStyle(
+                          letterSpacing: 1.0,
+                          fontSize: 30,
+                          color: Colors.black,
+                          fontFamily: "SsurroundAir",
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      const SizedBox(
-                        height: 1.0,
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          text: '지금부터 ',
-                          style: TextStyle(
-                              letterSpacing: 1.0,
-                              fontSize: 25,
-                              color: Colors.black),
-                          children: [
-                            TextSpan(
-                              text: '써클북',
-                              style: TextStyle(
-                                  letterSpacing: 1.0,
-                                  fontSize: 25,
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                            text: '써클북',
+                            style: TextStyle(
+                              color: Color(0xff6DC4DB),
                             ),
-                            TextSpan(
-                              text: '과 함께 하세요.',
-                              style: TextStyle(
-                                letterSpacing: 1.0,
-                                fontSize: 25,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          TextSpan(
+                            text: '과 함께 하세요.',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: Image.asset('assets/icons/아이콘_배경x(512px).png'),
+                    )
+                  ],
                 ),
               ),
             ),
             AnimatedPositioned(
               duration: const Duration(microseconds: 500),
               curve: Curves.easeIn,
-              top: 180,
+              top: 300,
               child: AnimatedContainer(
                 duration: const Duration(microseconds: 500),
                 curve: Curves.easeIn,
                 padding: const EdgeInsets.all(20.0),
-                height: isSignupScreen ? 280.0 : 250.0,
-                width: MediaQuery.of(conext).size.width - 40,
+                height: isSignupScreen ? 470.0 : 400.0,
+                width: MediaQuery.of(context).size.width - 40,
                 margin: const EdgeInsets.symmetric(horizontal: 20.0),
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -142,9 +139,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  'LOGIN',
+                                  '로그인',
                                   style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 20,
+                                      fontFamily: "SsurroundAir",
                                       fontWeight: FontWeight.bold,
                                       color: !isSignupScreen
                                           ? Colors.black
@@ -154,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Container(
                                     height: 2,
                                     width: 55,
-                                    color: Colors.orange,
+                                    color: const Color(0xff6DC4DB),
                                   )
                               ],
                             ),
@@ -168,9 +166,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  'SIGNUP',
+                                  '회원가입',
                                   style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 20,
+                                      fontFamily: "SsurroundAir",
                                       fontWeight: FontWeight.bold,
                                       color: isSignupScreen
                                           ? Colors.black
@@ -181,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     margin: const EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 55,
-                                    color: Colors.orange,
+                                    color: const Color(0xff6DC4DB),
                                   )
                               ],
                             ),
@@ -199,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   key: const ValueKey(1),
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 4) {
-                                      return '최소 4자 이상의 이름을 입력해주십시오.';
+                                      return '최소 4자 이상의 이름을 입력해 주십시오.';
                                     }
                                     return null;
                                   },
@@ -218,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Radius.circular(35.0),
                                         ),
                                       ),
-                                      hintText: 'User name',
+                                      hintText: '닉네임',
                                       hintStyle: TextStyle(
                                           fontSize: 14,
                                           color: Palette.textColor1),
@@ -252,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Radius.circular(35.0),
                                         ),
                                       ),
-                                      hintText: 'email',
+                                      hintText: '이메일 주소',
                                       hintStyle: TextStyle(
                                           fontSize: 14,
                                           color: Palette.textColor1),
@@ -265,8 +264,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   obscureText: true,
                                   key: const ValueKey(3),
                                   validator: (value) {
-                                    if (value!.isEmpty || value.length < 9) {
-                                      return '최소 9자 이상의 비밀번호를 입력해 주십시오.';
+                                    if (value!.isEmpty || value.length < 6) {
+                                      return '최소 6자 이상의 비밀번호를 입력해 주십시오.';
                                     }
                                     return null;
                                   },
@@ -285,7 +284,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Radius.circular(35.0),
                                         ),
                                       ),
-                                      hintText: 'password',
+                                      hintText: '비밀번호',
                                       hintStyle: TextStyle(
                                           fontSize: 14,
                                           color: Palette.textColor1),
@@ -299,208 +298,210 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
-                                    key: const ValueKey(4),
-                                    validator: (value) {
-                                      if (value!.isEmpty ||
-                                          !value.contains('@')) {
-                                        return '정확한 이메일 형식을 입력해 주십시오.';
-                                      }
-                                      return null;
-                                    },
-                                    onSaved: (value) {
-                                      userEmail = value!;
-                                    },
-                                    onChanged: (value) {
-                                      userEmail = value;
-                                    },
-                                    decoration: const InputDecoration(
-                                        prefixIcon: Icon(
-                                          Icons.account_circle,
-                                          color: Palette.iconColor,
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Palette.textColor1),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(35.0),
-                                          ),
-                                        ),
-                                        hintText: 'User name',
-                                        hintStyle: TextStyle(
-                                            fontSize: 14,
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  keyboardType: TextInputType.emailAddress,
+                                  key: const ValueKey(4),
+                                  validator: (value) {
+                                    if (value!.isEmpty ||
+                                        !value.contains('@')) {
+                                      return '정확한 이메일 형식을 입력해 주십시오.';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    userEmail = value!;
+                                  },
+                                  onChanged: (value) {
+                                    userEmail = value;
+                                  },
+                                  decoration: const InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.email,
+                                        color: Palette.iconColor,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
                                             color: Palette.textColor1),
-                                        contentPadding: EdgeInsets.all(10)),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                    obscureText: true,
-                                    key: const ValueKey(5),
-                                    validator: (value) {
-                                      if (value!.isEmpty || value.length < 9) {
-                                        return '최소 9자 이상의 비밀번호를 입력해 주십시오.';
-                                      }
-                                      return null;
-                                    },
-                                    onSaved: (value) {
-                                      userPassword = value!;
-                                    },
-                                    onChanged: (value) {
-                                      userPassword = value;
-                                    },
-                                    decoration: const InputDecoration(
-                                        prefixIcon: Icon(
-                                          Icons.lock,
-                                          color: Palette.iconColor,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(35.0),
                                         ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Palette.textColor1),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(35.0),
-                                          ),
-                                        ),
-                                        hintText: 'password',
-                                        hintStyle: TextStyle(
-                                            fontSize: 14,
+                                      ),
+                                      hintText: '이메일 주소',
+                                      hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          color: Palette.textColor1),
+                                      contentPadding: EdgeInsets.all(10)),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                TextFormField(
+                                  obscureText: true,
+                                  key: const ValueKey(5),
+                                  validator: (value) {
+                                    if (value!.isEmpty || value.length < 6) {
+                                      return '최소 6자 이상의 비밀번호를 입력해 주십시오.';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    userPassword = value!;
+                                  },
+                                  onChanged: (value) {
+                                    userPassword = value;
+                                  },
+                                  decoration: const InputDecoration(
+                                      prefixIcon: Icon(
+                                        Icons.lock,
+                                        color: Palette.iconColor,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
                                             color: Palette.textColor1),
-                                        contentPadding: EdgeInsets.all(10)),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                ],
-                              )),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(35.0),
+                                        ),
+                                      ),
+                                      hintText: '비밀번호',
+                                      hintStyle: TextStyle(
+                                          fontSize: 14,
+                                          color: Palette.textColor1),
+                                      contentPadding: EdgeInsets.all(10)),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(15),
+                          height: 55,
+                          width: 400,
+                          decoration: BoxDecoration(
+                              color: const Color(0xff6DC4DB),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: GestureDetector(
+                            onTap: () async {
+                              if (isSignupScreen) {
+                                _tryValidation();
+                                try {
+                                  final newUser = await _authentication
+                                      .createUserWithEmailAndPassword(
+                                    email: userEmail,
+                                    password: userPassword,
+                                  );
+                                  if (newUser.user != null) {
+                                    firestore
+                                        .collection('users')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser?.uid)
+                                        .set({
+                                      "userName": userName,
+                                      "userEmail": userEmail,
+                                      "userUID":
+                                          FirebaseAuth.instance.currentUser?.uid
+                                    });
+
+                                    var scaffoldContext = context;
+                                    Future.delayed(Duration.zero, () {
+                                      Navigator.push(
+                                        scaffoldContext,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainBaseScreen()),
+                                      );
+                                    });
+                                  }
+                                } catch (e) {
+                                  //print(e);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('이메일 혹은 비밀번호를 체크해주시기 바랍니다.'),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  );
+                                }
+                              }
+                              try {
+                                if (!isSignupScreen) {
+                                  _tryValidation();
+                                  final newUser = await _authentication
+                                      .signInWithEmailAndPassword(
+                                    email: userEmail,
+                                    password: userPassword,
+                                  );
+                                  if (newUser.user != null) {
+                                    var scaffoldContext = context;
+                                    Future.delayed(Duration.zero, () {
+                                      Navigator.push(
+                                        scaffoldContext,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const MainBaseScreen()),
+                                      );
+                                    });
+                                  }
+                                }
+                              } catch (e) {
+                                //print(e);
+                                Future.delayed(Duration.zero, () {
+                                  final scaffoldContext =
+                                      ScaffoldMessenger.of(context);
+                                  scaffoldContext.showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('이메일 혹은 비밀번호를 체크해주시기 바랍니다.'),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  );
+                                });
+                              }
+                            },
+                            child: Center(
+                              child: isSignupScreen
+                                  ? const Text('회원가입 후 로그인',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
+                                      ))
+                                  : const Text('로그인',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Center(
+                        child: SizedBox(
+                          width: 400,
+                          child:
+                              Image.asset('assets/icons/Google로 시작히기(예시).png'),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
-            AnimatedPositioned(
-              duration: const Duration(microseconds: 500),
-              curve: Curves.easeIn,
-              top: isSignupScreen ? 430 : 390,
-              right: 0,
-              left: 0,
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  height: 90,
-                  width: 90,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: GestureDetector(
-                    onTap: () async {
-                      if (isSignupScreen) {
-                        _tryValidation();
-                        try {
-                          final newUser = await _authentication
-                              .createUserWithEmailAndPassword(
-                            email: userEmail,
-                            password: userPassword,
-                          );
-                          if (newUser.user != null) {
-                            firestore
-                                .collection('CircleBookUserList')
-                                .doc(FirebaseAuth.instance.currentUser?.uid)
-                                .set({
-                              "Username": userName,
-                              "Useremail": userEmail,
-                              "UserUID": FirebaseAuth.instance.currentUser?.uid
-                            });
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return const MainBaseScreen();
-                              }),
-                            );
-                          }
-                        } catch (e) {
-                          //print(e);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('이메일 혹은 비밀번호를 체크해주시기 바랍니다.'),
-                              backgroundColor: Colors.blue,
-                            ),
-                          );
-                        }
-                      }
-                      try {
-                        if (!isSignupScreen) {
-                          _tryValidation();
-                          final newUser =
-                              await _authentication.signInWithEmailAndPassword(
-                            email: userEmail,
-                            password: userPassword,
-                          );
-                          if (newUser.user != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return const MainBaseScreen();
-                              }),
-                            );
-                          }
-                        }
-                      } catch (e) {
-                        //print(e);
-                      }
-                    },
-                    child: Container(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                              colors: [Colors.blue, Colors.white],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight),
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                spreadRadius: 1,
-                                blurRadius: 1,
-                                offset: const Offset(0, 1))
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                        )),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-                top: MediaQuery.of(context).size.height - 125,
-                right: 0,
-                left: 0,
-                child: Column(
-                  children: [
-                    Text(isSignupScreen ? 'or Signup with' : 'or Signin with'),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextButton.icon(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          minimumSize: const Size(155, 40),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          backgroundColor: Colors.blue),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Google'),
-                    )
-                  ],
-                ))
           ],
         ),
       ),
