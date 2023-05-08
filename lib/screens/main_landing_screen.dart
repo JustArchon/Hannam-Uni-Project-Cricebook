@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:circle_book/screens/main_login_screen.dart';
+import 'package:circle_book/screens/login_page.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +26,7 @@ class _LandingPageState extends State<LandingPage>{
           Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          child: Image.asset('assets/image/LandingPage.jpg',fit: BoxFit.cover,)
+          child: Image.asset('assets/images/LandingPage.png',fit: BoxFit.cover,)
           ),
           const CircularProgressIndicator()
         ],

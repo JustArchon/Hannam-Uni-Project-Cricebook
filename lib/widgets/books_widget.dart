@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:circle_book/screens/main_books/mb_detail_screen.dart';
+import 'package:circle_book/screens/main/main_books/mb_detail_screen.dart';
 
 class Book extends StatelessWidget {
   final String id, title, thumb, description;
@@ -60,7 +60,11 @@ class Book extends StatelessWidget {
             width: 160,
             child: Text(
               title,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontSize: 12,
+                fontFamily: "SsurroundAir",
+                fontWeight: FontWeight.bold,
+              ),
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               textAlign: TextAlign.center,

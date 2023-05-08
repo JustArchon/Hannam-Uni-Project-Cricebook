@@ -1,67 +1,71 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 
-class AuthManage{
-  bool CreateUserCheck = false;
+class AuthManage {
+  bool createUserCheck = false;
+
   /// 회원가입
-  Future<bool> createUser(String name, String email, String pw,) async{
+  Future<bool> createUser(
+    String name,
+    String email,
+    String pw,
+  ) async {
     try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: pw,
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        CreateUserCheck = false;
+        createUserCheck = false;
         return false;
       } else if (e.code == 'email-already-in-use') {
-        CreateUserCheck = false;
+        createUserCheck = false;
         return false;
       }
     } catch (e) {
-      CreateUserCheck = false;
+      createUserCheck = false;
       return false;
     }
     updateProfileName(name);
-    CreateUserCheck = true;
+    createUserCheck = true;
     // authPersistence(); // 인증 영속
     return true;
   }
 
   /// 로그인
-  Future<bool> signIn(String email, String pw) async{
+  Future<bool> signIn(String email, String pw) async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email,
-          password: pw
-      );
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: pw);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-      } else if (e.code == 'wrong-password') {
-      }
+      } else if (e.code == 'wrong-password') {}
     } catch (e) {
       return false;
     }
     // authPersistence(); // 인증 영속
     return true;
   }
+
   /// 로그아웃
-  void signOut() async{
+  void signOut() async {
     await FirebaseAuth.instance.signOut();
   }
 
   /// 회원가입, 로그인시 사용자 영속
-  void authPersistence() async{
+  void authPersistence() async {
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
   }
+
   /// 유저 삭제
-  Future<void> deleteUser(String email) async{
+  Future<void> deleteUser(String email) async {
     final user = FirebaseAuth.instance.currentUser;
     await user?.delete();
   }
-  
+
   /// 현재 유저 정보 조회
-  User? getUser(){
+  User? getUser() {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       // Name, email address, and profile photo URL
@@ -79,8 +83,9 @@ class AuthManage{
     }
     return user;
   }
+
   /// 공급자로부터 유저 정보 조회
-  User? getUserFromSocial(){
+  User? getUserFromSocial() {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       for (final providerProfile in user.providerData) {
@@ -98,21 +103,22 @@ class AuthManage{
     }
     return user;
   }
+
   /// 유저 이름 업데이트
-  Future<void> updateProfileName(String name) async{
+  Future<void> updateProfileName(String name) async {
     final user = FirebaseAuth.instance.currentUser;
     await user?.updateDisplayName(name);
   }
+
   /// 유저 url 업데이트
-  Future<void> updateProfileUrl(String url) async{
+  Future<void> updateProfileUrl(String url) async {
     final user = FirebaseAuth.instance.currentUser;
     await user?.updatePhotoURL(url);
   }
+
   /// 비밀번호 초기화 메일보내기
-  Future<void> sendPasswordResetEmail(String email) async{
+  Future<void> sendPasswordResetEmail(String email) async {
     await FirebaseAuth.instance.setLanguageCode("kr");
-    await FirebaseAuth.instance.sendPasswordResetEmail(email:email);
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
-
-
 }
