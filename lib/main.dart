@@ -1,6 +1,5 @@
 import 'package:circle_book/screens/login_page.dart';
 //import 'package:circle_book/screens/main/m_base_screen.dart';
-//import 'package:circle_book/test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primaryColor: const Color(0xff6DC4DB),
       ),
       // 웹,앱 모두 드래그 작동하게하는 코드
       scrollBehavior: const MaterialScrollBehavior().copyWith(
@@ -37,7 +36,6 @@ class MyApp extends StatelessWidget {
       ),
       home: //const MainBaseScreen(),
           const LoginScreen(),
-      //const TestScreen(),
     );
   }
 }
