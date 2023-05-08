@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "circlebook" "\0"
+            VALUE "FileDescription", "circle_book" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "circlebook" "\0"
+            VALUE "InternalName", "circle_book" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "circlebook.exe" "\0"
-            VALUE "ProductName", "circlebook" "\0"
+            VALUE "OriginalFilename", "circle_book.exe" "\0"
+            VALUE "ProductName", "circle_book" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
