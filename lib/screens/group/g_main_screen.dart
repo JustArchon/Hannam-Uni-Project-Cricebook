@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 class GroupMainScreen extends StatefulWidget {
   final String id, title, thumb;
   final String groupId;
-  //final String gn, nt;
-  //final int nm, gmc, dc, rp, cp;
-  //final List<String> gmn;
 
   const GroupMainScreen({
     super.key,
@@ -14,16 +11,6 @@ class GroupMainScreen extends StatefulWidget {
     required this.title,
     required this.thumb,
     required this.groupId,
-    /*
-    required this.gn,
-    required this.nt,
-    required this.nm,
-    required this.gmc,
-    required this.dc,
-    required this.rp,
-    required this.cp,
-    required this.gmn,
-    */
   });
 
   @override
@@ -36,9 +23,11 @@ class _GroupMainScreenState extends State<GroupMainScreen> {
     super.initState();
   }
 
+  bool isNoticeScreen = true;
+
   Future<DocumentSnapshot> _getGroupData() async {
     return await FirebaseFirestore.instance
-        .collection('CircleBookGroupList')
+        .collection('groups')
         .where('groupId', isEqualTo: widget.groupId)
         .limit(1)
         .get()
@@ -60,14 +49,16 @@ class _GroupMainScreenState extends State<GroupMainScreen> {
           future: _getGroupData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text('로딩중...');
+              return const Text('...');
             }
             if (snapshot.hasData) {
-              String groupName = snapshot.data!['GroupName'];
+              //String groupName = snapshot.data!['groupName'];
               return Text(
-                groupName,
+                snapshot.data!['groupName'],
                 style: const TextStyle(
                   fontSize: 24,
+                  fontFamily: "Ssurround",
+                  letterSpacing: 1.0,
                 ),
               );
             }
@@ -76,8 +67,8 @@ class _GroupMainScreenState extends State<GroupMainScreen> {
         ),
         centerTitle: true,
         elevation: 2,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
+        backgroundColor: const Color(0xff6DC4DB),
+        foregroundColor: Colors.white,
         actions: <Widget>[
           // 그룹 방 내 상단 메뉴 버튼 예정
           IconButton(
@@ -104,131 +95,458 @@ class _GroupMainScreenState extends State<GroupMainScreen> {
             if (groupData != null) {
               // groupData에서 필요한 정보를 추출하여 사용
 
-              int cp = groupData['certificationPeriod'];
-              int dc = groupData['discussionCount'];
-              int rp = groupData['readingPeriod'];
+              //int vp = groupData['readingStatusVerificationPeriod'];
+              //int dc = groupData['discussionCount'];
+              //int rp = groupData['readingPeriod'];
               String nt = groupData['notice'];
-              int nm = groupData['numMembers'];
-              int mc = groupData['GroupMembers'].length;
+              int mm = groupData['maxMembers'];
+              int mc = groupData['groupMembersCount'];
+              List<dynamic>? gm = groupData['groupMembers'];
+              String gl = groupData['groupLeader'];
+
               return Column(
                 children: [
-                  Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(
-                          color: Colors.lightGreen,
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                  Container(
+                    padding:
+                        const EdgeInsets.only(top: 30, right: 50, left: 50),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
-                              "도서명 : ${widget.title}",
-                              style: const TextStyle(fontSize: 20),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            // 그룹 내 데이터 가져올 예정
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "그룹 인원 ($mc / $nm)",
-                                  style: const TextStyle(fontSize: 20),
+                            Hero(
+                              tag: widget.id,
+                              child: Container(
+                                width: 160,
+                                height: 250,
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 15,
+                                      offset: const Offset(10, 10),
+                                      color: Colors.black.withOpacity(0.1),
+                                    )
+                                  ],
                                 ),
-                                const SizedBox(
-                                  width: 80,
+                                child: Image.network(
+                                  widget.thumb,
+                                  width: 160,
+                                  height: 250,
                                 ),
-                                Text(
-                                  "토론 횟수 (01 / $dc)",
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                              ],
+                              ),
                             ),
                             const SizedBox(
-                              height: 10,
+                              width: 20,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "독서 기간 (11 / $rp)",
-                                  style: const TextStyle(fontSize: 20),
+                                SizedBox(
+                                  width: 220,
+                                  height: 50,
+                                  child: Text(
+                                    widget.title,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: "Ssurround",
+                                        letterSpacing: 1.0,
+                                        color: Color(0xff6DC4DB)),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 const SizedBox(
-                                  width: 80,
+                                  height: 5,
                                 ),
-                                Text(
-                                  "인증 기간 (02 / $cp)",
-                                  style: const TextStyle(fontSize: 20),
+                                const Text(
+                                  "세이노",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: "Ssurround",
+                                      letterSpacing: 1.0,
+                                      color: Colors.grey),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "ISBN ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: "Ssurround",
+                                        letterSpacing: 1.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.id,
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.0,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Row(
+                                  children: [
+                                    Text(
+                                      "출판사 ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: "Ssurround",
+                                        letterSpacing: 1.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      "데이원",
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.0,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Row(
+                                  children: [
+                                    Text(
+                                      "출판일자 ",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: "Ssurround",
+                                        letterSpacing: 1.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      "2023. 03. 02",
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.0,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text(
+                                  "카테고리",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: "Ssurround",
+                                    letterSpacing: 1.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Text(
+                                  "자기계발",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontFamily: "SsurroundAir",
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.0,
+                                  ),
                                 ),
                               ],
                             ),
                           ],
                         ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "기간 ",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: "Ssurround",
+                                    letterSpacing: 1.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  "2023. 05. 07. (일) ~ 2023. 05. 22. (월)",
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontFamily: "SsurroundAir",
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "그룹장 ",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Ssurround",
+                                            letterSpacing: 1.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        FutureBuilder<DocumentSnapshot>(
+                                          future: FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(gl)
+                                              .get(),
+                                          builder: (context, userSnapshot) {
+                                            if (userSnapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            }
+
+                                            if (!userSnapshot.hasData) {
+                                              return const Text('Error');
+                                            }
+
+                                            // 그룹장의 닉네임 출력
+                                            String groupLeaderName =
+                                                userSnapshot
+                                                        .data!['userName'] ??
+                                                    '';
+                                            return Text(
+                                              groupLeaderName,
+                                              style: const TextStyle(
+                                                fontSize: 17,
+                                                fontFamily: "SsurroundAir",
+                                                fontWeight: FontWeight.bold,
+                                                letterSpacing: 1.0,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Text(
+                                          "그룹 인원 ",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Ssurround",
+                                            letterSpacing: 1.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        Text(
+                                          "$mc / $mm",
+                                          style: const TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: "SsurroundAir",
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 2,
+                    width: MediaQuery.of(context).size.width,
+                    color: Colors.black,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isNoticeScreen = true;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  '공지사항',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Ssurround",
+                                      color: isNoticeScreen
+                                          ? const Color(0xff6DC4DB)
+                                          : Colors.black),
+                                ),
+                                if (isNoticeScreen)
+                                  Container(
+                                    height: 2,
+                                    width: 100,
+                                    color: const Color(0xff6DC4DB),
+                                  )
+                                else
+                                  Container(
+                                    height: 2,
+                                    width: 100,
+                                    color: Colors.black,
+                                  ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isNoticeScreen = false;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  '토론',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: "Ssurround",
+                                      color: !isNoticeScreen
+                                          ? const Color(0xff6DC4DB)
+                                          : Colors.black),
+                                ),
+                                if (!isNoticeScreen)
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 3),
+                                    height: 2,
+                                    width: 100,
+                                    color: const Color(0xff6DC4DB),
+                                  )
+                                else
+                                  Container(
+                                    height: 2,
+                                    width: 100,
+                                    color: Colors.black,
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 30,
                   ),
-                  Hero(
-                    tag: widget.id,
-                    child: Container(
-                      height: 250,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 15,
-                            offset: const Offset(10, 10),
-                            color: Colors.black.withOpacity(0.3),
-                          )
-                        ],
-                      ),
-                      child: Image.network(
-                        widget.thumb,
-                        height: 250,
-                      ),
+                  Text(
+                    nt,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: "SsurroundAir",
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 50,
                   ),
                   const Text(
-                    "독서 목표 기간",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  // 그룹 내 독서 목표 기간 데이터 가져올 예정
-                  Text(
-                    "2023-05-08 ~ 2023-05-${rp + 8}",
-                    style: const TextStyle(fontSize: 20),
+                    "그룹원 닉네임",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: "SsurroundAir",
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    "공지사항",
-                    style: TextStyle(fontSize: 30),
+                    height: 5,
                   ),
                   // 그룹 내 공지사항 데이터 가져올 예정
-                  Text(
-                    nt,
-                    style: const TextStyle(fontSize: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: gm?.map((memberUid) {
+                          return FutureBuilder(
+                            future: FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(memberUid)
+                                .get(),
+                            builder: (context, userSnapshot) {
+                              if (userSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+
+                              if (userSnapshot.hasData) {
+                                Map<String, dynamic>? userData =
+                                    userSnapshot.data!.data();
+                                String? userName = userData?['userName'];
+                                return Text(
+                                  '$userName / ',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: "SsurroundAir",
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }
+
+                              return const Text('Error');
+                            },
+                          );
+                        }).toList() ??
+                        [],
                   ),
-                  // ... 다른 위젯들
                 ],
               );
               // ...

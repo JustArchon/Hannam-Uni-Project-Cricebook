@@ -1,6 +1,3 @@
-import 'package:circle_book/screens/group/g_chat_screen.dart';
-import 'package:circle_book/screens/group/g_calendar_screen.dart';
-import 'package:circle_book/screens/group/g_board_screen.dart';
 import 'package:circle_book/screens/group/g_main_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -37,9 +34,27 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
         thumb: widget.thumb,
         groupId: widget.groupId,
       ),
-      GroupChatScreen(title: widget.title, groupId: widget.groupId),
-      GroupCalendarScreen(title: widget.title, groupId: widget.groupId),
-      GroupBoardScreen(title: widget.title, groupId: widget.groupId),
+      GroupMainScreen(
+        id: widget.id,
+        title: widget.title,
+        thumb: widget.thumb,
+        groupId: widget.groupId,
+      ),
+      GroupMainScreen(
+        id: widget.id,
+        title: widget.title,
+        thumb: widget.thumb,
+        groupId: widget.groupId,
+      ),
+      GroupMainScreen(
+        id: widget.id,
+        title: widget.title,
+        thumb: widget.thumb,
+        groupId: widget.groupId,
+      ),
+      //GroupChatScreen(title: widget.title, groupId: widget.groupId),
+      //GroupBoardScreen(title: widget.title, groupId: widget.groupId),
+      //GroupCalendarScreen(title: widget.title, groupId: widget.groupId),
       // 다른 페이지 추가
     ];
   }
@@ -58,15 +73,51 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
 
         currentIndex: _selectedIndex,
 
-        items: const <BottomNavigationBarItem>[
+        selectedItemColor: const Color(0xff6DC4DB),
+        unselectedItemColor: Colors.black,
+        showUnselectedLabels: true,
+
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.groups_rounded), label: "Main"),
+              icon: Image.asset(
+                'assets/icons/house-blank.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/house-blank_selected.png',
+                height: 20,
+              ),
+              label: "그룹홈"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.chat_rounded), label: "Chat"),
+              icon: Image.asset(
+                'assets/icons/messages.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/messages_selected.png',
+                height: 20,
+              ),
+              label: "써클톡"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month_rounded), label: "Calendar"),
+              icon: Image.asset(
+                'assets/icons/calendar-days.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/calendar-days_selected.png',
+                height: 20,
+              ),
+              label: "캘린더"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.note_alt_outlined), label: "Board"),
+              icon: Image.asset(
+                'assets/icons/chalkboard-user.png',
+                height: 20,
+              ),
+              activeIcon: Image.asset(
+                'assets/icons/chalkboard-user_selected.png',
+                height: 20,
+              ),
+              label: "커뮤니티"),
         ],
       ),
     );
