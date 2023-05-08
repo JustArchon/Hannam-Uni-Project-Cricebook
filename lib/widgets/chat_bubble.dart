@@ -25,7 +25,7 @@ class ChatBubbles extends StatelessWidget {
                 clipper: ChatBubbleClipper8(type: BubbleType.sendBubble),
                 alignment: Alignment.topRight,
                 margin: EdgeInsets.only(top: 20),
-                backGroundColor: Colors.green,
+                backGroundColor: const Color(0xff6DC4DB),
                 child: Container(
                   constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.7,
