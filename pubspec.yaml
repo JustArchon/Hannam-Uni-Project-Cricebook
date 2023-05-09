@@ -95,6 +95,7 @@ flutter:
     - assets/icons/calendar-days_selected.png
     - assets/icons/chalkboard-user.png
     - assets/icons/chalkboard-user_selected.png
+    - assets/icons/usericon.png
     - assets/images/LandingPage.png
 
   #   - images/a_dot_burr.jpeg
