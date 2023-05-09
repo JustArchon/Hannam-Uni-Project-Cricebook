@@ -1,4 +1,5 @@
 import 'package:circle_book/screens/main/m_group_screen.dart';
+import 'package:circle_book/screens/main/m_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:circle_book/screens/main/main_books/mb_screen.dart';
 
@@ -29,7 +30,7 @@ class _TabPageState extends State<TabPage> {
   final List _pages = [
     MainBooksScreen(),
     const MainGroupScreen(),
-    MainBooksScreen(),
+    const ProfilePage(),
     MainBooksScreen(),
   ];
 
