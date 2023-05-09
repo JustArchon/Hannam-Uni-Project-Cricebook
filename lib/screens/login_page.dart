@@ -23,14 +23,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _authentication = FirebaseAuth.instance;
   bool isSignupScreen = false;
   final _formKey = GlobalKey<FormState>();
+  String _defalutprofileimage = "https://firebasestorage.googleapis.com/v0/b/circlebook-6963b.appspot.com/o/UserProfile%2Fdefault.png?alt=media&token=0e5b785c-1421-41df-bb1e-424189d8d83f";
   String userName = '';
   String userEmail = '';
   String userPassword = '';
-  File? userPickedImage;
-
-  void pickedImage(File image){
-        userPickedImage = image;
-    }
 
   void _tryValidation() {
     final isValid = _formKey.currentState!.validate();
@@ -38,17 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _formKey.currentState!.save();
     }
   }
-  void showAlert(BuildContext context){
-      showDialog(
-        context: context,
-        builder: (context){
-          return Dialog(
-            backgroundColor: Colors.white,
-            child: ProfilePickImage(pickedImage),
-          );
-        },
-      );
-    }
+
   @override
   Widget build(BuildContext context) {
     Get.put(AuthManage());
@@ -185,34 +171,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: Column(
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      '회원가입',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "SsurroundAir",
-                                          fontWeight: FontWeight.bold,
-                                          color: isSignupScreen
-                                              ? Colors.black
-                                              : Palette.textColor1),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    if(isSignupScreen)
-                                    GestureDetector(
-                                    onTap: () {
-                                    showAlert(context);
-                                  },
-                                  child: Icon(Icons.image,
-                                  color: isSignupScreen ? const Color(0xff6DC4DB) : Colors.grey[300],),
-                                )
-                                  ],
+                                Text(
+                                  '회원가입',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: "SsurroundAir",
+                                      fontWeight: FontWeight.bold,
+                                      color: isSignupScreen
+                                          ? Colors.black
+                                          : Palette.textColor1),
                                 ),
                                 if (isSignupScreen)
                                   Container(
-                                    margin: const EdgeInsets.fromLTRB(0,3,40,0),
+                                    margin: const EdgeInsets.only(top: 3),
                                     height: 2,
                                     width: 75,
                                     color: const Color(0xff6DC4DB),
@@ -435,11 +406,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     password: userPassword,
                                   );
                                   if (newUser.user != null) {
-                                    final refImage = FirebaseStorage.instance.ref()
-                                    .child('UserProfile')
-                                    .child(newUser.user!.uid + '.png');
-                                  await refImage.putFile(userPickedImage!);
-                                    final url = await refImage.getDownloadURL();
                                     firestore
                                         .collection('users')
                                         .doc(FirebaseAuth
@@ -449,7 +415,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       "userEmail": userEmail,
                                       "userUID":
                                           FirebaseAuth.instance.currentUser?.uid,
-                                      "UserProfileImage" : url
+                                      "UserProfileImage" : _defalutprofileimage
                                     });
 
                                     var scaffoldContext = context;
