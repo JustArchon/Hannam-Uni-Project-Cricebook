@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 import 'package:circle_book/palette.dart';
 import 'package:circle_book/screens/main/m_base_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,7 +24,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _authentication = FirebaseAuth.instance;
   bool isSignupScreen = false;
   final _formKey = GlobalKey<FormState>();
-  String _defalutprofileimage = "https://firebasestorage.googleapis.com/v0/b/circlebook-6963b.appspot.com/o/UserProfile%2Fdefault.png?alt=media&token=0e5b785c-1421-41df-bb1e-424189d8d83f";
   String userName = '';
   String userEmail = '';
   String userPassword = '';
@@ -406,6 +406,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                     password: userPassword,
                                   );
                                   if (newUser.user != null) {
+                                  ByteData imageByteData = await rootBundle.load('assets/icons/usericon.png');
+                                  Uint8List imageUint8List = imageByteData.buffer.asUint8List(imageByteData.offsetInBytes, imageByteData.lengthInBytes);
+                                  final tempDir = await getTemporaryDirectory();
+                                  File file = await File('${tempDir.path}/image.png').create();
+                                  file.writeAsBytesSync(imageUint8List);
+                                  final refImage = FirebaseStorage.instance.ref()
+                                    .child('UserProfile')
+                                    .child(newUser.user!.uid + '.png');
+                                  await refImage.putFile(file);
+                                  final url = await refImage.getDownloadURL();
                                     firestore
                                         .collection('users')
                                         .doc(FirebaseAuth
@@ -415,9 +425,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       "userEmail": userEmail,
                                       "userUID":
                                           FirebaseAuth.instance.currentUser?.uid,
-                                      "UserProfileImage" : _defalutprofileimage
+                                      "UserProfileImage" : url
                                     });
-
                                     var scaffoldContext = context;
                                     Future.delayed(Duration.zero, () {
                                       Navigator.push(
