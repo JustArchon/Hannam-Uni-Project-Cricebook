@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late Stream<String> imageUrlStream;
+  String? imageUrl;
   File? userPickedImage;
   void pickedImage(File image){
         userPickedImage = image;
@@ -28,6 +31,8 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       );
     }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,24 +71,38 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: Center(
-            child: Stack(
-        children: [
-          GestureDetector(
-            onTap: () {
-              showAlert(context);
-            },
-            child: CircleAvatar(
-              radius: 100,
-              backgroundImage: AssetImage("assets/icons/usericon.png")
-            ),
+      body: 
+      StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+          return const Center(
+            child: CircularProgressIndicator(), 
+          );
+        }else{
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: Center(
+            child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showAlert(context);
+                },
+                child: CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(snapshot.data!['UserProfileImage']), //AssetImage("assets/icons/usericon.png")
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(snapshot.data!['userName'],style: TextStyle(fontFamily: "Ssurround", fontSize: 30)),
+            ],
+          ),
           )
-        ],
-      ),
-    )
-  )
+        );
+        }
+        }
+      )
   );
   }
 }
