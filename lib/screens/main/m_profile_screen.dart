@@ -95,7 +95,31 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(snapshot.data!['userName'],style: TextStyle(fontFamily: "Ssurround", fontSize: 30)),
+              RichText(
+                text: TextSpan(
+                  text: '닉네임: ',
+                  style: TextStyle(fontFamily: "Ssurround", fontSize: 30, color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: snapshot.data!['userName'],
+                      style: TextStyle(fontFamily: "Ssurround", fontSize: 30, color: Colors.black),
+                    )
+                  ]
+                ),
+              ),
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  text: '이메일: ',
+                  style: TextStyle(fontFamily: "Ssurround", fontSize: 22, color: Colors.black),
+                  children: [
+                    TextSpan(
+                      text: snapshot.data!['userEmail'],
+                      style: TextStyle(fontFamily: "Ssurround", fontSize: 22, color: Colors.black),
+                    )
+                  ]
+                ),
+              ),
             ],
           ),
           )
