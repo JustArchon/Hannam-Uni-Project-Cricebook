@@ -63,13 +63,16 @@ class _ChatScreenState extends State<ChatScreen> {
               return const Text('...');
             }
             if (snapshot.hasData) {
-              //String groupName = snapshot.data!['groupName'];
-              return Text(
-                snapshot.data!['groupName'],
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontFamily: "Ssurround",
-                  letterSpacing: 1.0,
+              return RichText(
+                text: TextSpan(
+                  text: snapshot.data!['groupName'],
+                  style: TextStyle(fontFamily: "Ssurround", fontSize: 24, color: Colors.white, letterSpacing: 1.0),
+                  children: [
+                    TextSpan(
+                      text: ' 그룹 채팅방',
+                      style: TextStyle(fontFamily: "Ssurround", fontSize: 24, color: Colors.white, letterSpacing: 1.0),
+                    )
+                  ]
                 ),
               );
             }
