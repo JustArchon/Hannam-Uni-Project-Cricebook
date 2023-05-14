@@ -26,7 +26,8 @@ class ChatBubbles extends StatelessWidget {
         String userName = '';
         String ProfileLink = '';
         final UserDocs = snapshot.data!.docs;
-        for(int i = 0; i < UserDocs.length-1; i++){
+        final UserDocsSize = UserDocs.length - 1; 
+        for(int i = 0; i < UserDocsSize; i++){
           if(UserDocs[i]['userUID'] == userID){
               userName = UserDocs[i]['userName'];
               ProfileLink = UserDocs[i]['UserProfileImage'];
