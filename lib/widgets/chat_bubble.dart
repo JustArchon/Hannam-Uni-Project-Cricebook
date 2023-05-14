@@ -6,21 +6,32 @@ import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_8.dart';
 
 class ChatBubbles extends StatelessWidget {
-  const ChatBubbles(this.message, this.isMe, {Key? key}) : super(key: key);
+  const ChatBubbles(this.message, this.isMe, this.userID, {Key? key}) : super(key: key);
 
     final String message;
     final bool isMe;
+    final String userID;
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
-      builder: (context, snapshot) {
+
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection('users').snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
         if(snapshot.connectionState == ConnectionState.waiting){
           return const Center(
             child: CircularProgressIndicator(), 
           );
         }else{
+        String userName = '';
+        String ProfileLink = '';
+        final UserDocs = snapshot.data!.docs;
+        for(int i = 0; i < UserDocs.length-1; i++){
+          if(UserDocs[i]['userUID'] == userID){
+              userName = UserDocs[i]['userName'];
+              ProfileLink = UserDocs[i]['UserProfileImage'];
+          }
+        }
         return Stack(
           children: [
           Row(
@@ -43,7 +54,7 @@ class ChatBubbles extends StatelessWidget {
                             isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                         children: [
                           Text(
-                            snapshot.data!['userName'],
+                            userName,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, color: Colors.white),
                           ),
@@ -73,7 +84,7 @@ class ChatBubbles extends StatelessWidget {
                                 : CrossAxisAlignment.start,
                         children: [
                           Text(
-                            snapshot.data!['userName'],
+                            userName,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
@@ -95,7 +106,7 @@ class ChatBubbles extends StatelessWidget {
             right: isMe ? 5 : null,
             left: isMe ? null : 5,
             child: CircleAvatar(
-              backgroundImage: NetworkImage(snapshot.data!['UserProfileImage']),
+              backgroundImage: NetworkImage(ProfileLink),
             ),
             )
           ]
