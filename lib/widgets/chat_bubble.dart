@@ -14,24 +14,30 @@ class ChatBubbles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('users').snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
+    String userName = '';
+    String ProfileLink = '';
+    return FutureBuilder(
+      future: FirebaseFirestore.instance.collection('users').where('userUID', isEqualTo: userID).limit(1)
+        .get().then((querySnapshot) {
+      if (querySnapshot.size > 0) {
+        return querySnapshot.docs[0];
+      } else {
+        throw Exception('유저를 찾을 수 없습니다.');
+      }
+    }),
+      builder: (context, snapshot){
         if(snapshot.connectionState == ConnectionState.waiting){
           return const Center(
             child: CircularProgressIndicator(), 
           );
         }else{
-        String userName = '';
-        String ProfileLink = '';
-        final UserDocs = snapshot.data!.docs;
-        final UserDocsSize = UserDocs.length - 1; 
-        for(int i = 0; i < UserDocsSize; i++){
-          if(UserDocs[i]['userUID'] == userID){
-              userName = UserDocs[i]['userName'];
-              ProfileLink = UserDocs[i]['UserProfileImage'];
-          }
+         if (snapshot.hasData) {
+            Map<String, dynamic>? groupData =
+                snapshot.data!.data() as Map<String, dynamic>?;
+                 if (groupData != null) {
+                  userName = groupData['userName'];
+                  ProfileLink = groupData['UserProfileImage'];
+         }
         }
         return Stack(
           children: [
