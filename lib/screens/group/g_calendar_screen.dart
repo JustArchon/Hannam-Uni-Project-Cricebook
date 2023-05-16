@@ -69,6 +69,7 @@ class _GroupCalendarScreenState extends State<GroupCalendarScreen> {
           IconButton(
             icon: const Icon(Icons.menu_rounded),
             onPressed: () {
+              Scaffold.of(context).openDrawer();
               //print('Group menu button is clicked');
             },
           ),

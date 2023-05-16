@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:circle_book/models/book_model.dart';
 
@@ -84,16 +83,18 @@ class ApiService {
     return bookInstances;
   }
 
-  //isbn으로 검색해서 이미지 가져오는 기능
-  Future<String> getThumb(String bookISBN) async {
+  //isbn으로 검색해서 Book 데이터 가져오기
+  Future<BookModel> searchByISBN(String bookISBN) async {
     Uri url = Uri.parse(
         'http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx?ttbkey=$ttbkey&itemIdType=ISBN&ItemId=$bookISBN&Cover=Big&output=js&Version=20131101');
 
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final book = BookModel.fromJson(jsonDecode(response.body));
-      return book.thumb;
+      var responseBody = jsonDecode(response.body);
+      final book = BookModel.fromJson(responseBody);
+      book.replaceHTMLEntity();
+      return book;
     }
     throw Error();
   }

@@ -1,10 +1,18 @@
+import 'package:circle_book/screens/group/g_boards/g_board_screen.dart';
+import 'package:circle_book/screens/group/g_chat_screen.dart';
 import 'package:circle_book/screens/group/g_main_screen.dart';
-import 'package:circle_book/screens/group/g_group_chat_screen.dart';
 
 import 'package:flutter/material.dart';
 
 class GroupBaseScreen extends StatefulWidget {
-  final String id, title, thumb, groupId, groupname;
+  final String id,
+      title,
+      thumb,
+      groupId,
+      author,
+      pubDate,
+      categoryName,
+      publisher;
 
   const GroupBaseScreen({
     Key? key,
@@ -12,7 +20,10 @@ class GroupBaseScreen extends StatefulWidget {
     required this.title,
     required this.thumb,
     required this.groupId,
-    required this.groupname
+    required this.author,
+    required this.pubDate,
+    required this.categoryName,
+    required this.publisher,
   }) : super(key: key);
 
   @override
@@ -35,18 +46,12 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
         title: widget.title,
         thumb: widget.thumb,
         groupId: widget.groupId,
+        author: widget.author,
+        pubDate: widget.pubDate,
+        categoryName: widget.categoryName,
+        publisher: widget.publisher,
       ),
       ChatScreen(
-      id: widget.id,
-      title: widget.title,
-      thumb: widget.thumb,
-      groupId: widget.groupId,
-      groupname: widget.groupname
-      ),
-      GroupMainScreen(
-        id: widget.id,
-        title: widget.title,
-        thumb: widget.thumb,
         groupId: widget.groupId,
       ),
       GroupMainScreen(
@@ -54,11 +59,15 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
         title: widget.title,
         thumb: widget.thumb,
         groupId: widget.groupId,
+        author: widget.author,
+        pubDate: widget.pubDate,
+        categoryName: widget.categoryName,
+        publisher: widget.publisher,
       ),
-      //GroupChatScreen(title: widget.title, groupId: widget.groupId),
-      //GroupBoardScreen(title: widget.title, groupId: widget.groupId),
-      //GroupCalendarScreen(title: widget.title, groupId: widget.groupId),
-      // 다른 페이지 추가
+      GroupBoardScreen(
+        groupId: widget.groupId,
+        
+      ),
     ];
   }
 

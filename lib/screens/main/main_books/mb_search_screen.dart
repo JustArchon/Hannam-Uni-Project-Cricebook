@@ -116,6 +116,11 @@ Widget makeList(AsyncSnapshot<List<BookModel>> snapshot) {
           title: book.title,
           thumb: book.thumb,
           description: book.description,
+          categoryName: book.categoryName,
+          author: book.author,
+          publisher: book.publisher,
+          pubDate: book.pubDate,
+          link: book.link,
         );
       },
     ),

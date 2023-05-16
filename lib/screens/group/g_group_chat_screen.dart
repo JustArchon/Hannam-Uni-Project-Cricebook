@@ -1,8 +1,8 @@
-import 'package:circle_book/widgets/chat_messagebox.dart';
+import 'package:circle_book/widgets/chat_messagebox_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:circle_book/widgets/chat_message.dart';
+import 'package:circle_book/widgets/chat_message_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key, required this.id, required this.title, required this.thumb, required this.groupId, required this.groupname}) : super(key: key);
@@ -100,19 +100,19 @@ class _ChatScreenState extends State<ChatScreen> {
             children: [
               Expanded(
                 child: Messages(
-                id: widget.id,
-                title: widget.title,
-                thumb: widget.thumb,
+                //id: widget.id,
+                //title: widget.title,
+                //thumb: widget.thumb,
                 groupId: widget.groupId,
-                groupname: widget.groupname,
+                //groupname: widget.groupname,
                 ),
               ),
               NewMessage(
-                id: widget.id,
-                title: widget.title,
-                thumb: widget.thumb,
+                //id: widget.id,
+                //title: widget.title,
+                //thumb: widget.thumb,
                 groupId: widget.groupId,
-                groupname: widget.groupname,
+                //groupname: widget.groupname,
               ),
             ],
           ),

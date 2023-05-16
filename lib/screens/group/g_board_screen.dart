@@ -1,3 +1,4 @@
+import 'package:circle_book/widgets/drawer_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -69,6 +70,7 @@ class _GroupBoardScreenState extends State<GroupBoardScreen> {
           IconButton(
             icon: const Icon(Icons.menu_rounded),
             onPressed: () {
+              Scaffold.of(context).openDrawer();
               //print('Group menu button is clicked');
             },
           ),
@@ -280,6 +282,7 @@ class _GroupBoardScreenState extends State<GroupBoardScreen> {
           );
         },
       ),
+      drawer: Drawerwidget(widget.groupId)
     );
   }
 }
