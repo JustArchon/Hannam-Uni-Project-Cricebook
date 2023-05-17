@@ -88,13 +88,14 @@ class _GroupMainScreenState extends State<GroupMainScreen>
         elevation: 2,
         backgroundColor: const Color(0xff6DC4DB),
         foregroundColor: Colors.white,
-        actions: <Widget>[
+        /*actions: <Widget>[
           // 그룹 방 내 상단 메뉴 버튼 예정
           IconButton(
             icon: const Icon(Icons.menu_rounded),
             onPressed: () {},
           ),
         ],
+        */
       ),
       body: FutureBuilder(
         future: _getGroupData(),
@@ -597,6 +598,7 @@ class _GroupMainScreenState extends State<GroupMainScreen>
           );
         },
       ),
+            drawer: Drawerwidget(widget.groupId)
     );
   }
 }

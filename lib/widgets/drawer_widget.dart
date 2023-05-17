@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:circle_book/screens/group/g_profile_screen.dart';
 
 class Drawerwidget extends StatelessWidget {
   Drawerwidget(this.groupid, {super.key,});
@@ -112,6 +113,9 @@ class Drawerwidget extends StatelessWidget {
                                                       title: Text(snapshot.data!['userName']),
                                                       subtitle: Text(snapshot.data!['userEmail']),
                                                       trailing: gl == snapshot.data!['userUID'] ? Text('그룹장') : Text('그룹원'),
+                                                      onTap: () {
+                                                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => GroupProfilePage(snapshot.data!['userUID'])));
+                                                        },
                                                     );
                                                   }
                                                 }
@@ -122,22 +126,62 @@ class Drawerwidget extends StatelessWidget {
                                     ],
                                   ),
                           ),
-                              Container(
-                                child: Align(
-                                  alignment: FractionalOffset.bottomCenter,
-                                child: Container(
-                                  child: const Column(
-                                    children: <Widget>[
-                                      Divider(),
-                                      ListTile(
-                                        leading: Icon(Icons.exit_to_app_sharp),
-                                        title: Text("그룹 나가기"),
-                                      )
-                                      ],
-                                    ),
+                              Align(
+                                alignment: FractionalOffset.bottomCenter,
+                              child: Column(
+                                children: <Widget>[
+                                  const Divider(),
+                                  ListTile(
+                                    leading: const Icon(Icons.exit_to_app_sharp),
+                                    title: const Text("그룹 나가기"),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        barrierDismissible: true,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text("정말로 그룹을 탈퇴 하시겠습니까?"),
+                                            content: SingleChildScrollView(
+                                            child: ListBody(
+                                            children: <Widget>[
+                                            Text('그룹원만 탈퇴 가능하며,'),
+                                            Text('탈퇴를 원할시 확인 버튼 클릭하세요'),
+                                            ],
+                                        ),
+                                      ),
+                                actions: [
+                                    TextButton(
+                                    child: Text('확인'),
+                                    onPressed: () async {
+                                    DocumentSnapshot groupdata = await FirebaseFirestore.instance.collection('groups').doc(groupid).get();
+                                    int groupmemberscont = groupdata['groupMembersCount'];
+                                    List<String> groupmemberlist = groupdata['groupMembers'].cast<String>();
+                                    groupmemberlist.remove(FirebaseAuth.instance.currentUser?.uid);
+                                    groupmemberscont -= 1;
+                                    FirebaseFirestore.instance.collection('groups').doc(groupid).update({
+                                      "groupMembers" : groupmemberlist,
+                                      "groupMembersCount" : groupmemberscont,
+                                      });
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                    TextButton(
+                                    child: Text('취소'),
+                                    onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                                          );
+                                        }
+                                      );
+                                    },
+                                  )
+                                  ],
                                 )
                               ),
-                            ),
                             ],
                           ),
                           ),
