@@ -112,7 +112,7 @@ class Drawerwidget extends StatelessWidget {
                                                       ),
                                                       title: Text(snapshot.data!['userName']),
                                                       subtitle: Text(snapshot.data!['userEmail']),
-                                                      trailing: gl == snapshot.data!['userUID'] ? Text('그룹장') : Text('그룹원'),
+                                                      trailing: gl == snapshot.data!['userUID'] ? const Text('그룹장') : const Text('그룹원'),
                                                       onTap: () {
                                                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => GroupProfilePage(snapshot.data!['userUID'])));
                                                         },
@@ -140,8 +140,8 @@ class Drawerwidget extends StatelessWidget {
                                         barrierDismissible: true,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
-                                            title: Text("정말로 그룹을 탈퇴 하시겠습니까?"),
-                                            content: SingleChildScrollView(
+                                            title: const Text("정말로 그룹을 탈퇴 하시겠습니까?"),
+                                            content: const SingleChildScrollView(
                                             child: ListBody(
                                             children: <Widget>[
                                             Text('그룹원만 탈퇴 가능하며,'),
@@ -151,9 +151,20 @@ class Drawerwidget extends StatelessWidget {
                                       ),
                                 actions: [
                                     TextButton(
-                                    child: Text('확인'),
+                                    child: const Text('확인'),
                                     onPressed: () async {
                                     DocumentSnapshot groupdata = await FirebaseFirestore.instance.collection('groups').doc(groupid).get();
+                                    if(FirebaseAuth.instance.currentUser?.uid == groupdata['groupLeader']){
+                                      Navigator.of(context).pop();
+                                      ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  '그룹장은 탈퇴가 불가능합니다.'),
+                                              backgroundColor: Colors.blue,
+                                            ),
+                                          );
+                                      }else{
                                     int groupmemberscont = groupdata['groupMembersCount'];
                                     List<String> groupmemberlist = groupdata['groupMembers'].cast<String>();
                                     groupmemberlist.remove(FirebaseAuth.instance.currentUser?.uid);
@@ -165,10 +176,11 @@ class Drawerwidget extends StatelessWidget {
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
+                                    }
                                   },
                                 ),
                                     TextButton(
-                                    child: Text('취소'),
+                                    child: const Text('취소'),
                                     onPressed: () {
                                     Navigator.of(context).pop();
                                   },
