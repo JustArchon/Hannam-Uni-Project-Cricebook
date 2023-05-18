@@ -1,6 +1,6 @@
 {
-    "name": "circlebook",
-    "short_name": "circlebook",
+    "name": "circle_book",
+    "short_name": "circle_book",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
