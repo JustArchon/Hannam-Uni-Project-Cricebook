@@ -1,3 +1,5 @@
+import 'package:circle_book/screens/group/g_member_join_screen.dart';
+import 'package:circle_book/screens/group/g_member_manage_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -95,9 +97,8 @@ class Drawerwidget extends StatelessWidget {
                                   child: Column(
                                     children: [
                                       const Text("그룹 멤버"),
-                                      SizedBox(
-                                        height: 340,
-                                        child: ListView.builder(
+                                        ListView.builder(
+                                          shrinkWrap: true,
                                           itemCount: gm?.length,
                                           itemBuilder: (context, index) {
                                             return StreamBuilder(
@@ -145,7 +146,6 @@ class Drawerwidget extends StatelessWidget {
                                                 });
                                           },
                                         ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -154,6 +154,30 @@ class Drawerwidget extends StatelessWidget {
                                     child: Column(
                                       children: <Widget>[
                                         const Divider(),
+                                        if(gl == FirebaseAuth.instance.currentUser?.uid)
+                                        ListTile(leading: const Icon(
+                                              Icons.people_outline),
+                                          title: const Text("그룹원 관리"),
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    GroupMemberManagePage(
+                                                                        groupid)));
+                                          }
+                                          ),
+                                        if(gl == FirebaseAuth.instance.currentUser?.uid)
+                                        ListTile(leading: const Icon(
+                                              Icons.manage_accounts),
+                                          title: const Text("그룹 가입 관리"),
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    GroupMemberJoinPage(
+                                                                        groupid)));
+                                          }
+                                          ),
                                         ListTile(
                                           leading: const Icon(
                                               Icons.exit_to_app_sharp),
@@ -171,9 +195,10 @@ class Drawerwidget extends StatelessWidget {
                                                         const SingleChildScrollView(
                                                       child: ListBody(
                                                         children: <Widget>[
-                                                          Text('그룹원만 탈퇴 가능하며,'),
+                                                          Text('그룹장 탈퇴시 자동으로 다른사람한테 그룹장이 이전됩니다.'),
+                                                          Text('그룹장이 이전될 그룹원이 없을시, 그룹이 자동으로 해체됩니다.'),
                                                           Text(
-                                                              '탈퇴를 원할시 확인 버튼 클릭하세요'),
+                                                              '정말로 탈퇴를 원할시 확인 버튼 클릭하세요.'),
                                                         ],
                                                       ),
                                                     ),
@@ -189,26 +214,6 @@ class Drawerwidget extends StatelessWidget {
                                                                       'groups')
                                                                   .doc(groupid)
                                                                   .get();
-                                                          if (FirebaseAuth
-                                                                  .instance
-                                                                  .currentUser
-                                                                  ?.uid ==
-                                                              groupdata[
-                                                                  'groupLeader']) {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                              const SnackBar(
-                                                                content: Text(
-                                                                    '그룹장은 탈퇴가 불가능합니다.'),
-                                                                backgroundColor:
-                                                                    Colors.blue,
-                                                              ),
-                                                            );
-                                                          } else {
                                                             int groupmemberscont =
                                                                 groupdata[
                                                                     'groupMembersCount'];
@@ -225,6 +230,68 @@ class Drawerwidget extends StatelessWidget {
                                                                     ?.uid);
                                                             groupmemberscont -=
                                                                 1;
+                                                          if (FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  ?.uid ==
+                                                              groupdata[
+                                                                  'groupLeader']) {
+                                                              if(groupmemberscont == 0){
+                                                                FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'groups')
+                                                                .doc(groupid)
+                                                                .delete();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              }else{
+                                                                FirebaseFirestore
+                                                                .instance
+                                                                .collection(
+                                                                    'groups')
+                                                                .doc(groupid)
+                                                                .update({
+                                                              "groupLeader":
+                                                                  groupmemberlist[0],
+                                                              "groupMembers":
+                                                                  groupmemberlist,
+                                                              "groupMembersCount":
+                                                                  groupmemberscont,
+                                                            });
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              }
+                                                                    /*
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            ScaffoldMessenger
+                                                                    .of(context)
+                                                                .showSnackBar(
+                                                              const SnackBar(
+                                                                content: Text(
+                                                                    '그룹장은 탈퇴가 불가능합니다.'),
+                                                                backgroundColor:
+                                                                    Colors.blue,
+                                                              ),
+                                                            );
+                                                            */
+                                                          }else{
                                                             FirebaseFirestore
                                                                 .instance
                                                                 .collection(
@@ -246,7 +313,7 @@ class Drawerwidget extends StatelessWidget {
                                                                     context)
                                                                 .pop();
                                                           }
-                                                        },
+                                                        }
                                                       ),
                                                       TextButton(
                                                         child: const Text('취소'),
@@ -257,7 +324,8 @@ class Drawerwidget extends StatelessWidget {
                                                       ),
                                                     ],
                                                   );
-                                                });
+                                                }
+                                            );
                                           },
                                         )
                                       ],
