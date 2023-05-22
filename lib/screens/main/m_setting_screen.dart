@@ -22,24 +22,11 @@ class MainSettingsScreen extends StatelessWidget {
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: Text(
-              '공통',
-            ),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: Icon(Icons.language),
-                title: Text('언어'),
-                value: Text('한국어'),
-                onPressed: ((context) {}),
-              ),
-            ],
-          ),
-          SettingsSection(
-            title: Text('계정'),
+            title: const Text('계정'),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: Icon(Icons.logout),
-                title: Text('로그아웃'),
+                title: const Text('로그아웃'),
                 onPressed: ((context) async
                 {
                   try {
@@ -55,18 +42,15 @@ class MainSettingsScreen extends StatelessWidget {
                   }
                 }),
               ),
-            ],
-          ),
-          SettingsSection(
-            title: Text('기타'),
-            tiles: <SettingsTile>[
               SettingsTile.navigation(
-                leading: Icon(Icons.star),
-                title: Text('앱 평가하기'),
-                onPressed: ((context) {}),
+                leading: Icon(Icons.logout),
+                title: const Text('비밀번호 변경'),
+                onPressed: ((context) async
+                {}),
               ),
             ],
           ),
+          
         ],
       ),
     );
