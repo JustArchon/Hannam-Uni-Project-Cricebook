@@ -156,7 +156,7 @@ class Drawerwidget extends StatelessWidget {
                                         const Divider(),
                                         if(gl == FirebaseAuth.instance.currentUser?.uid)
                                         ListTile(leading: const Icon(
-                                              Icons.people_outline),
+                                              Icons.manage_accounts),
                                           title: const Text("그룹원 관리"),
                                           onTap: () {
                                             Navigator.of(context).push(
@@ -168,7 +168,7 @@ class Drawerwidget extends StatelessWidget {
                                           ),
                                         if(gl == FirebaseAuth.instance.currentUser?.uid)
                                         ListTile(leading: const Icon(
-                                              Icons.manage_accounts),
+                                              Icons.how_to_reg),
                                           title: const Text("그룹 가입 관리"),
                                           onTap: () {
                                             Navigator.of(context).push(

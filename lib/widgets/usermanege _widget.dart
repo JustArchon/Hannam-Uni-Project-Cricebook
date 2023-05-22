@@ -39,13 +39,12 @@ Widget build(BuildContext context) {
       return AlertDialog(
       title: const Text(
           "정말로 이 그룹원을 강퇴하겠습니까?"),
-      content: Column(
+      content: const Column(
         mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text('다시한번 그룹원과 상의를 해보기 바랍니다.'),
-            Text('강퇴된 그룹원은 평판 점수가 자동으로 하락합니다.'),
-            Text('정말로 강퇴를 원할시 확인 버튼 클릭하세요.'),
-            
+            Text('독서중인 그룹에서 강퇴된 그룹원은 평판 점수가 자동으로 하락합니다.'),
+            Text('정말로 강퇴를 원할시 확인 버튼 클릭하세요.'), 
           ],
         ),
         actions: [
@@ -117,15 +116,74 @@ Widget build(BuildContext context) {
       }
         );
                     },
-                    icon: const Icon(Icons.close),
+                    icon: const Icon(Icons.person_off),
                     label: const Text('그룹원 강퇴하기'),
                   ),
                   OutlinedButton.icon(
                     onPressed: () {
-                      _Groupleaderassignment(widget.userID);
+                      showDialog(
+      context: context,
+      builder: (context){
+      return AlertDialog(
+      title: const Text(
+          "정말로 이 그룹원을 그룹장으로 변경하시겠습니까?"),
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text('다시한번 그룹원과 상의를 해보기 바랍니다.'),
+            Text('그룹장이 변경될시 현 그룹장은 모든 권한이 박탈됩니다.'),
+            Text('정말로 변경을 원할시 확인 버튼 클릭하세요.'), 
+          ],
+        ),
+        actions: [
+          
+        TextButton(
+          child: const Text('확인'),
+          onPressed: () async {
+                  FirebaseFirestore
+                  .instance
+                  .collection(
+                      'groups')
+                  .doc(widget.groupID)
+                  .update({
+                "groupLeader":
+                    widget.userID,
+              });
+              ScaffoldMessenger
+                .of(context)
+                .showSnackBar(
+                const SnackBar(
+                content: Text(
+                '정상적으로 그룹장변경이 완료되었습니다.'),
+                backgroundColor:
+              Colors.blue,
+                ),
+              );
+              Navigator.of(context)
+                .pop();
+              Navigator.of(context)
+                .pop();
+              Navigator.of(context)
+                .pop();
+              Navigator.of(context)
+                .pop();
+
+                }
+        ),
+        TextButton(
+          child: const Text('취소'),
+          onPressed: () {
+            Navigator.of(context)
+                .pop();
+          },
+        )
+        ]
+      );
+      }
+        );
                     },
-                    icon: const Icon(Icons.camera),
-                    label: const Text('그룹장 위임하기'),
+                    icon: const Icon(Icons.supervisor_account),
+                    label: const Text('그룹장 변경하기'),
                   ),
                 ],
               ),
