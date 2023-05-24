@@ -98,9 +98,6 @@ Widget build(BuildContext context) {
                 .pop();
               Navigator.of(context)
                 .pop();
-              Navigator.of(context)
-                .pop();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => GroupMemberManagePage(widget.groupID)));
 
                 }
         ),
@@ -159,8 +156,6 @@ Widget build(BuildContext context) {
               Colors.blue,
                 ),
               );
-              Navigator.of(context)
-                .pop();
               Navigator.of(context)
                 .pop();
               Navigator.of(context)

@@ -30,6 +30,7 @@ class _GroupMemberManagePageState extends State<GroupMemberManagePage> {
         },
       );
     }
+/*
   Future<DocumentSnapshot> _getGroupData() async {
     return await FirebaseFirestore.instance
         .collection('groups')
@@ -44,6 +45,15 @@ class _GroupMemberManagePageState extends State<GroupMemberManagePage> {
       }
     });
   }
+  */
+  /*
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,22 +67,22 @@ class _GroupMemberManagePageState extends State<GroupMemberManagePage> {
         backgroundColor: const Color(0xff6DC4DB),
         foregroundColor: Colors.white,
       ),
-      body: FutureBuilder(
-          future: _getGroupData(),
-          builder: (context, snapshot) {
+      body: StreamBuilder<DocumentSnapshot>(
+          //future: _getGroupData(),
+          stream: FirebaseFirestore.instance
+                      .collection('groups')
+                      .doc(widget.groupid)
+                      .snapshots(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            }
+            } else {
 
-            if (snapshot.hasData) {
-              Map<String, dynamic>? groupData =
-                  snapshot.data!.data() as Map<String, dynamic>?;
-
-              if (groupData != null) {
-                List<dynamic>? gm = groupData['groupMembers'];
-                String gl = groupData['groupLeader'];
+              if (snapshot.hasData) {
+                List<dynamic>? gm = snapshot.data!['groupMembers'];
+                String gl = snapshot.data!['groupLeader'];
                 return StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('users')
