@@ -1,4 +1,4 @@
-import 'package:circle_book/screens/group/g_member_join_screen.dart';
+
 import 'package:circle_book/screens/group/g_member_manage_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,40 +13,24 @@ class Drawerwidget extends StatelessWidget {
 
   final String groupid;
 
-  Future<DocumentSnapshot> _getGroupData() async {
-    return await FirebaseFirestore.instance
-        .collection('groups')
-        .where('groupId', isEqualTo: groupid)
-        .limit(1)
-        .get()
-        .then((querySnapshot) {
-      if (querySnapshot.size > 0) {
-        return querySnapshot.docs[0];
-      } else {
-        throw Exception('그룹을 찾을 수 없습니다.');
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: FutureBuilder(
-          future: _getGroupData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+      child: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+                      .collection('groups')
+                      .doc(groupid)
+                      .snapshots(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
 
             if (snapshot.hasData) {
-              Map<String, dynamic>? groupData =
-                  snapshot.data!.data() as Map<String, dynamic>?;
-
-              if (groupData != null) {
-                List<dynamic>? gm = groupData['groupMembers'];
-                String gl = groupData['groupLeader'];
+                List<dynamic>? gm = snapshot.data!['groupMembers'];
+                String gl = snapshot.data!['groupLeader'];
                 return StreamBuilder<DocumentSnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('users')
@@ -163,18 +147,6 @@ class Drawerwidget extends StatelessWidget {
                                                             MaterialPageRoute(
                                                                 builder: (context) =>
                                                                     GroupMemberManagePage(
-                                                                        groupid)));
-                                          }
-                                          ),
-                                        if(gl == FirebaseAuth.instance.currentUser?.uid)
-                                        ListTile(leading: const Icon(
-                                              Icons.how_to_reg),
-                                          title: const Text("그룹 가입 관리"),
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    GroupMemberJoinPage(
                                                                         groupid)));
                                           }
                                           ),
@@ -343,7 +315,9 @@ class Drawerwidget extends StatelessWidget {
             return const Center(
               child: Text('데이터를 불러올 수 없습니다.'),
             );
-          }),
+          }
+      )
     );
+          }
+          
   }
-}
