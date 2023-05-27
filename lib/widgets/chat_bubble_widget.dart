@@ -6,11 +6,13 @@ class ChatBubbles extends StatelessWidget {
   final String userId;
   final String message;
   final bool isMe;
+  final String image;
   const ChatBubbles({
     Key? key,
     required this.userId,
     required this.message,
     required this.isMe,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -54,6 +56,11 @@ class ChatBubbles extends StatelessWidget {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
+                              ),
+                              if(image != "noImage")  
+                              Image.network(image, fit: BoxFit.contain),
+                              const SizedBox(
+                                height: 3,
                               ),
                               Text(
                                 message,

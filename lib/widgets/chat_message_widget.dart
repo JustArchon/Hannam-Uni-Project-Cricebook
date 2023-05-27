@@ -37,6 +37,7 @@ class Messages extends StatelessWidget {
               message: chatDocs[index]['text'],
               isMe: chatDocs[index]['userID'].toString() ==
                   FirebaseAuth.instance.currentUser?.uid,
+              image: chatDocs[index]['type'] == 1 ? chatDocs[index]['image'] : 'noImage'
             );
           },
         );

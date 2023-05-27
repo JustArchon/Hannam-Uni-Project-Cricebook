@@ -49,6 +49,8 @@ dependencies:
   flutter_chat_bubble: ^2.0.2
   xml2json: ^5.3.6
   settings_ui: ^2.0.2
+  uuid: ^3.0.7
+  image_picker: ^0.8.7+5
 
 dev_dependencies:
   flutter_test:
