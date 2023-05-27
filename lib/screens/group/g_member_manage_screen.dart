@@ -1,4 +1,4 @@
-import 'package:circle_book/widgets/usermanege%20_widget.dart';
+import 'package:circle_book/widgets/usermanege_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
