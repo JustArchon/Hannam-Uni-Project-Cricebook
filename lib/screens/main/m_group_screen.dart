@@ -19,13 +19,7 @@ class MainGroupScreen extends StatelessWidget {
         elevation: 2,
         backgroundColor: const Color(0xff6DC4DB),
         foregroundColor: Colors.white,
-
-        // 좌측 아이콘 버튼
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.menu_outlined),
-        ),
-
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.search_outlined), // 그룹 검색 아이콘 생성
@@ -35,31 +29,51 @@ class MainGroupScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('testData')
+            .doc('F3Oj2KpFKo5T73ZRE23p')
+            .snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          }
+
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          String testDateString = snapshot.data!['testDateString'];
+
+          return SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  groupListShow(2, testDateString),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  groupListShow(1, testDateString),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  groupListShow(3, testDateString),
+                ],
               ),
-              groupListShow(2),
-              const SizedBox(
-                height: 10,
-              ),
-              groupListShow(1),
-              const SizedBox(
-                height: 10,
-              ),
-              groupListShow(3),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  StreamBuilder<QuerySnapshot<Object?>> groupListShow(int gsn) {
+  StreamBuilder<QuerySnapshot<Object?>> groupListShow(
+      int gsn, String testDateString) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('groups')
@@ -96,6 +110,46 @@ class MainGroupScreen extends StatelessWidget {
                       DateFormat('yyyy. MM. dd').format(pubDate);
                   String categoryName = doc['bookData'][6];
                   String publisher = doc['bookData'][7];
+
+                  bool showReadingPeriodByIndicatorBar = (gs != 1);
+
+                  Timestamp groupStartTimestamp = doc['groupStartTime'];
+                  DateTime groupStartTime = groupStartTimestamp != null
+                      ? groupStartTimestamp.toDate()
+                      : DateTime.now();
+
+                  String formattedgroupStartTime =
+                      DateFormat('yyyy. MM. dd').format(groupStartTime);
+
+                  Timestamp? groupEndTimestamp = doc['groupEndTime'];
+                  DateTime groupEndTime = groupEndTimestamp != null
+                      ? groupEndTimestamp.toDate()
+                      : DateTime.now();
+                  String formattedgroupEndTime =
+                      DateFormat('yyyy. MM. dd').format(groupEndTime);
+
+                  DateTime testDate =
+                      DateFormat('yyyy. MM. dd').parse(testDateString);
+                  DateTime currentDate = DateTime.now();
+                  DateTime endDate =
+                      DateFormat('yyyy. MM. dd').parse(formattedgroupEndTime);
+                  Duration duration = testDate.difference(endDate);
+
+                  Duration currentDuration =
+                      testDate.difference(groupStartTime);
+                  Duration totalDuration = endDate.difference(groupStartTime);
+                  double currentRatio = currentDuration.inMilliseconds /
+                      totalDuration.inMilliseconds;
+
+                  if ((duration.inDays > 0) && (gs == 2)) {
+                    FirebaseFirestore.instance
+                        .collection('groups')
+                        .doc(doc.id)
+                        .update({
+                      'groupStatus': 3,
+                    });
+                  }
+
                   Color? buttonColor;
                   String? gst;
                   switch (gs) {
@@ -137,6 +191,7 @@ class MainGroupScreen extends StatelessWidget {
                                     pubDate: formattedPubDate,
                                     categoryName: categoryName,
                                     publisher: publisher,
+                                    groupStatus: gs,
                                   ),
                                   fullscreenDialog: true,
                                 ),
@@ -219,6 +274,21 @@ class MainGroupScreen extends StatelessWidget {
                                             letterSpacing: 1.0,
                                             fontFamily: "SsurroundAir",
                                             fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Visibility(
+                                          visible:
+                                              showReadingPeriodByIndicatorBar,
+                                          child: LinearProgressIndicator(
+                                            value: currentRatio,
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                const AlwaysStoppedAnimation<
+                                                    Color>(Color(0xff6DC4DB)),
+                                            minHeight: 10,
                                           ),
                                         ),
                                       ],

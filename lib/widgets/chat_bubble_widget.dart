@@ -57,8 +57,8 @@ class ChatBubbles extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
-                              if(image != "noImage")  
-                              Image.network(image, fit: BoxFit.contain),
+                              if (image != "noImage")
+                                Image.network(image, fit: BoxFit.contain),
                               const SizedBox(
                                 height: 3,
                               ),

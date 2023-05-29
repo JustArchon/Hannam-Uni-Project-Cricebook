@@ -24,7 +24,7 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
   void initState() {
     _tabController = TabController(
       length: 2,
-      vsync: this, //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
+      vsync: this,
     );
     super.initState();
     _loadSavedText().then((bookReportContent) {
@@ -68,7 +68,6 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
         'discussionTime': FieldValue.serverTimestamp(),
       });
 
-      // 성공 메시지 표시
       Future.delayed(Duration.zero, () {
         final scaffoldContext = ScaffoldMessenger.of(context);
         scaffoldContext.showSnackBar(
@@ -79,7 +78,6 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
         );
       });
     } catch (e) {
-      // 오류 메시지 표시
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('오류: $e'),
@@ -188,13 +186,6 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
         elevation: 2,
         backgroundColor: const Color(0xff6DC4DB),
         foregroundColor: Colors.white,
-        actions: <Widget>[
-          // 그룹 방 내 상단 메뉴 버튼 예정
-          IconButton(
-            icon: const Icon(Icons.menu_rounded),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(

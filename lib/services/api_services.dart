@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:circle_book/models/book_model.dart';
 
 //카테고리 필터링
-var filter = [
+var categoryFilter = [
   '만화',
   '수험서',
   '대학교재',
@@ -18,11 +18,26 @@ var filter = [
   '유아',
   '전집',
   '컴퓨터',
-  'Gift'
+  'Gift',
 ];
-var category = ['2105', '74', '1', '656', '987'];
-//고전, 역사, 소설/시/희곡, 인문학, 과학
+//제목 필터링
+var nameFilter = ['세트'];
+var category = [
+  '1',
+  '74',
+  '2105',
+  '656',
+  '987',
+  '170',
+  '798',
+  '55889',
+  '517',
+  '336',
+  '112011'
+];
 
+//고전, 역사, 소설/시/희곡, 인문학, 과학, 경제경영, 에세이, 예술/대중문화, 자기계발, 장르소설
+//외국어 제외 (사유 : 외국어 시험 관련 책만 나옴)
 //maxResults 말고는 수정하지 마세요.
 class ApiService {
   final String ttbkey = "ttbkimgi06281904001";
@@ -43,12 +58,20 @@ class ApiService {
         bool isDetected = false;
         var temp = BookModel.fromJson(book);
         //필터링 부분
-        for (String category in filter) {
+        for (String category in categoryFilter) {
           if (temp.categoryName.contains(category)) {
             isDetected = true;
             break;
           }
         }
+
+        for (String category in nameFilter) {
+          if (temp.title.contains(category)) {
+            isDetected = true;
+            break;
+          }
+        }
+
         if (!isDetected) {
           temp.replaceHTMLEntity();
           bookInstances.add(temp);
@@ -102,7 +125,7 @@ class ApiService {
   Future<List<BookModel>> searchByName(String name) async {
     List<BookModel> bookInstances = [];
     Uri url = Uri.parse(
-        'https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=$ttbkey&Query=$name&QueryType=Title&MaxResults=$maxResults&Cover=Big&output=js&version=20131101');
+        'https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=$ttbkey&Query=$name&MaxResults=$maxResults&Cover=Big&output=js&version=20131101');
 
     final response = await http.get(url);
 

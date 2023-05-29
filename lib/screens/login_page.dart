@@ -450,7 +450,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               "groupleadercount": 0,
                                               "reputationscore": 50,
                                               "selfintroduction": "",
-                                              "complete_Achievements" : [],
+                                              "complete_Achievements": [],
                                             });
 
                                             var scaffoldContext = context;

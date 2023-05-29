@@ -27,30 +27,28 @@ class _NewMessageState extends State<NewMessage> {
   bool ImageMessage = false;
 
   Future getImage() async {
-    ImagePicker _picker = ImagePicker();
+    ImagePicker picker = ImagePicker();
 
-    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
+    await picker.pickImage(source: ImageSource.gallery).then((xFile) {
       if (xFile != null) {
         imageFile = File(xFile.path);
         uploadImage();
       }
-    }
-    );
+    });
   }
 
   Future uploadImage() async {
     String fileName = const Uuid().v1();
-    var ref = FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
+    var ref =
+        FirebaseStorage.instance.ref().child('images').child("$fileName.jpg");
     var uploadTask = await ref.putFile(imageFile!);
     ImageLink = await uploadTask.ref.getDownloadURL();
     setState(() {
-    ImageMessage = true;
+      ImageMessage = true;
     });
-    }
+  }
 
-
-
-  void _sendImage() async{
+  void _sendImage() async {
     FocusScope.of(context).unfocus();
     final user = FirebaseAuth.instance.currentUser;
     final userData = await FirebaseFirestore.instance
@@ -63,10 +61,10 @@ class _NewMessageState extends State<NewMessage> {
         .collection('GroupChats')
         .add({
       'image': ImageLink,
-      'text' : _userEnterMessage,
+      'text': _userEnterMessage,
       'time': Timestamp.now(),
       'userID': user.uid,
-      'type' : 1
+      'type': 1
     });
     ImageMessage = false;
   }
@@ -86,7 +84,7 @@ class _NewMessageState extends State<NewMessage> {
       'text': _userEnterMessage,
       'time': Timestamp.now(),
       'userID': user.uid,
-      'type' : 0
+      'type': 0
     });
     _controller.clear();
   }
@@ -116,7 +114,11 @@ class _NewMessageState extends State<NewMessage> {
               ),
             ),
             IconButton(
-              onPressed: ImageMessage == true ? _sendImage : _userEnterMessage.trim().isEmpty ? null : _sendMessage,
+              onPressed: ImageMessage == true
+                  ? _sendImage
+                  : _userEnterMessage.trim().isEmpty
+                      ? null
+                      : _sendMessage,
               icon: const Icon(Icons.send),
               color: const Color(0xff6DC4DB),
             ),

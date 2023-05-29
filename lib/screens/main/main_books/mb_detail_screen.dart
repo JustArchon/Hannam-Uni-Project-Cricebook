@@ -257,7 +257,6 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  // 그룹 검색 버튼 기능 구현 예정
                                   SizedBox(
                                     width: 160,
                                     height: 40,
@@ -330,6 +329,8 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                                   result['passCount'],
                                               'notice': result['notice'],
                                               'groupStatus': 1,
+                                              'groupStartTime': DateTime.now(),
+                                              'groupEndTime': DateTime.now(),
                                             });
                                           }
                                         });
@@ -354,216 +355,7 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('groups')
-                                    .where('bookData', arrayContains: widget.id)
-                                    .where('groupStatus', isEqualTo: 1)
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  }
-
-                                  switch (snapshot.connectionState) {
-                                    case ConnectionState.waiting:
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    default:
-                                      final filteredDocs = snapshot.data!.docs
-                                          .where((doc) => !doc['groupMembers']
-                                              .contains(FirebaseAuth
-                                                  .instance.currentUser!.uid))
-                                          .toList();
-                                      return Expanded(
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            children: filteredDocs.map(
-                                              (doc) {
-                                                String gn = doc['groupName'];
-                                                int rp = doc['readingPeriod'];
-                                                int vp = doc[
-                                                    'readingStatusVerificationPeriod'];
-                                                int pc = doc[
-                                                    'verificationPassCount'];
-                                                String nt = doc['notice'];
-                                                int mc =
-                                                    doc['groupMembersCount'];
-                                                int mm = doc['maxMembers'];
-                                                return SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  child: Column(
-                                                    children: [
-                                                      ExpansionTile(
-                                                        title: Text(
-                                                          "그룹명 : $gn",
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 20,
-                                                            color: Colors.black,
-                                                            letterSpacing: 1.0,
-                                                            fontFamily:
-                                                                "Ssurround",
-                                                          ),
-                                                        ),
-                                                        subtitle: Text(
-                                                          "$rp일동안 / $vp일마다 / 패스권 $pc개",
-                                                          style: const TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  "SsurroundAir",
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color:
-                                                                  Colors.black),
-                                                        ),
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15)),
-                                                        backgroundColor:
-                                                            const Color(
-                                                                0xfff5b7b1),
-                                                        collapsedBackgroundColor:
-                                                            const Color(
-                                                                0xfff5b7b1),
-                                                        collapsedShape:
-                                                            RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15)),
-                                                        children: [
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .stretch,
-                                                            children: [
-                                                              Text(
-                                                                "그룹원 : $mc / $mm\n독서 목표 기간 : $rp일동안\n독서 현황 인증 간격 : $vp일마다\n인증 패수권 : $pc개 \n공지사항 : $nt",
-                                                                style: const TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    fontFamily:
-                                                                        "SsurroundAir",
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 20,
-                                                          ),
-                                                          ElevatedButton(
-                                                            style:
-                                                                ElevatedButton
-                                                                    .styleFrom(
-                                                              backgroundColor:
-                                                                  const Color(
-                                                                      0xff6DC4DB),
-                                                            ),
-                                                            onPressed:
-                                                                () async {
-                                                              String
-                                                                  currentUserUid =
-                                                                  FirebaseAuth
-                                                                      .instance
-                                                                      .currentUser!
-                                                                      .uid;
-                                                              DocumentReference
-                                                                  groupRef =
-                                                                  FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                          'groups')
-                                                                      .doc(doc
-                                                                          .id);
-                                                              groupRef.update({
-                                                                'groupMembers':
-                                                                    FieldValue
-                                                                        .arrayUnion([
-                                                                  currentUserUid
-                                                                ]),
-                                                                'groupMembersCount':
-                                                                    FieldValue
-                                                                        .increment(
-                                                                            1),
-                                                              });
-                                                              DocumentSnapshot
-                                                                  groupDocSnapshot =
-                                                                  await groupRef
-                                                                      .get();
-                                                              int maxMembers =
-                                                                  groupDocSnapshot[
-                                                                      'maxMembers'];
-                                                              int groupMembersCount =
-                                                                  groupDocSnapshot[
-                                                                      'groupMembersCount'];
-
-                                                              if (groupMembersCount >=
-                                                                  maxMembers) {
-                                                                groupRef
-                                                                    .update({
-                                                                  'groupStatus':
-                                                                      2
-                                                                });
-                                                              }
-                                                              Future.delayed(
-                                                                  Duration.zero,
-                                                                  () {
-                                                                final scaffoldContext =
-                                                                    ScaffoldMessenger.of(
-                                                                        context);
-                                                                scaffoldContext
-                                                                    .showSnackBar(
-                                                                  const SnackBar(
-                                                                    content: Text(
-                                                                        '신청이 완료되었습니다.'),
-                                                                    backgroundColor:
-                                                                        Color(
-                                                                            0xff6DC4DB),
-                                                                  ),
-                                                                );
-                                                              });
-
-                                                              setState(() {});
-                                                            },
-                                                            child: const Text(
-                                                              '신청',
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    "Ssurround",
-                                                                letterSpacing:
-                                                                    1.0,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            ).toList(),
-                                          ),
-                                        ),
-                                      );
-                                  }
-                                },
-                              )
+                              showGroupListMethod()
                             ],
                           ),
                         ),
@@ -576,6 +368,290 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  StreamBuilder<QuerySnapshot<Object?>> showGroupListMethod() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('groups')
+          .where('bookData', arrayContains: widget.id)
+          .where('groupStatus', isEqualTo: 1)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        }
+
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Center(child: CircularProgressIndicator());
+          default:
+            final filteredDocs = snapshot.data!.docs
+                .where((doc) => doc['groupMembers']
+                    .contains(FirebaseAuth.instance.currentUser!.uid))
+                .toList();
+            final nonFilteredDocs = snapshot.data!.docs
+                .where((doc) => !doc['groupMembers']
+                    .contains(FirebaseAuth.instance.currentUser!.uid))
+                .toList();
+            return Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ...filteredDocs.map(
+                      (doc) {
+                        String gn = doc['groupName'];
+                        int rp = doc['readingPeriod'];
+                        int vp = doc['readingStatusVerificationPeriod'];
+                        int pc = doc['verificationPassCount'];
+                        String nt = doc['notice'];
+                        int mc = doc['groupMembersCount'];
+                        int mm = doc['maxMembers'];
+
+                        bool showButton = (mc < mm);
+
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            children: [
+                              ExpansionTile(
+                                title: Text(
+                                  "그룹명 : $gn",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    letterSpacing: 1.0,
+                                    fontFamily: "Ssurround",
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  "$rp일동안 / $vp일마다 / 패스권 $pc개",
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: "SsurroundAir",
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                backgroundColor: Colors.yellow[100],
+                                collapsedBackgroundColor: Colors.yellow[100],
+                                collapsedShape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        "그룹원 : $mc / $mm\n독서 목표 기간 : $rp일동안\n독서 현황 인증 간격 : $vp일마다\n인증 패수권 : $pc개 \n공지사항 : $nt",
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: "SsurroundAir",
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Visibility(
+                                    visible: !showButton,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xff6DC4DB),
+                                      ),
+                                      onPressed: () async {
+                                        String currentUserUid = FirebaseAuth
+                                            .instance.currentUser!.uid;
+                                        DocumentReference groupRef =
+                                            FirebaseFirestore.instance
+                                                .collection('groups')
+                                                .doc(doc.id);
+                                        groupRef.update({
+                                          'groupMembers': FieldValue.arrayUnion(
+                                              [currentUserUid]),
+                                          'groupMembersCount':
+                                              FieldValue.increment(1),
+                                        });
+                                        DocumentSnapshot groupDocSnapshot =
+                                            await groupRef.get();
+                                        int maxMembers =
+                                            groupDocSnapshot['maxMembers'];
+                                        int groupMembersCount =
+                                            groupDocSnapshot[
+                                                'groupMembersCount'];
+
+                                        if (groupMembersCount >= maxMembers) {}
+                                        Future.delayed(Duration.zero, () {
+                                          final scaffoldContext =
+                                              ScaffoldMessenger.of(context);
+                                          scaffoldContext.showSnackBar(
+                                            const SnackBar(
+                                              content: Text('신청이 완료되었습니다.'),
+                                              backgroundColor:
+                                                  Color(0xff6DC4DB),
+                                            ),
+                                          );
+                                        });
+
+                                        setState(() {});
+                                      },
+                                      child: const Text(
+                                        '신청',
+                                        style: TextStyle(
+                                          fontFamily: "Ssurround",
+                                          letterSpacing: 1.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    ...nonFilteredDocs.map(
+                      (doc) {
+                        String gn = doc['groupName'];
+                        int rp = doc['readingPeriod'];
+                        int vp = doc['readingStatusVerificationPeriod'];
+                        int pc = doc['verificationPassCount'];
+                        String nt = doc['notice'];
+                        int mc = doc['groupMembersCount'];
+                        int mm = doc['maxMembers'];
+
+                        bool showApplyButton = (mc < mm);
+
+                        return SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            children: [
+                              ExpansionTile(
+                                title: Text(
+                                  "그룹명 : $gn",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    letterSpacing: 1.0,
+                                    fontFamily: "Ssurround",
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  "$rp일동안 / $vp일마다 / 패스권 $pc개",
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: "SsurroundAir",
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                backgroundColor: const Color(0xfff5b7b1),
+                                collapsedBackgroundColor:
+                                    const Color(0xfff5b7b1),
+                                collapsedShape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        "그룹원 : $mc / $mm\n독서 목표 기간 : $rp일동안\n독서 현황 인증 간격 : $vp일마다\n인증 패수권 : $pc개 \n공지사항 : $nt",
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: "SsurroundAir",
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Visibility(
+                                    visible: showApplyButton,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xff6DC4DB),
+                                      ),
+                                      onPressed: () async {
+                                        String currentUserUid = FirebaseAuth
+                                            .instance.currentUser!.uid;
+                                        DocumentReference groupRef =
+                                            FirebaseFirestore.instance
+                                                .collection('groups')
+                                                .doc(doc.id);
+                                        groupRef.update({
+                                          'groupMembers': FieldValue.arrayUnion(
+                                              [currentUserUid]),
+                                          'groupMembersCount':
+                                              FieldValue.increment(1),
+                                        });
+                                        DocumentSnapshot groupDocSnapshot =
+                                            await groupRef.get();
+                                        int maxMembers =
+                                            groupDocSnapshot['maxMembers'];
+                                        int groupMembersCount =
+                                            groupDocSnapshot[
+                                                'groupMembersCount'];
+
+                                        if (groupMembersCount >= maxMembers) {}
+                                        Future.delayed(Duration.zero, () {
+                                          final scaffoldContext =
+                                              ScaffoldMessenger.of(context);
+                                          scaffoldContext.showSnackBar(
+                                            const SnackBar(
+                                              content: Text('신청이 완료되었습니다.'),
+                                              backgroundColor:
+                                                  Color(0xff6DC4DB),
+                                            ),
+                                          );
+                                        });
+
+                                        setState(() {});
+                                      },
+                                      child: const Text(
+                                        '신청',
+                                        style: TextStyle(
+                                          fontFamily: "Ssurround",
+                                          letterSpacing: 1.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ].toList(),
+                ),
+              ),
+            );
+        }
+      },
     );
   }
 }

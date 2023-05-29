@@ -1,6 +1,8 @@
 import 'package:circle_book/screens/group/g_boards/g_board_screen.dart';
 import 'package:circle_book/screens/group/g_chat_screen.dart';
 import 'package:circle_book/screens/group/g_main_screen.dart';
+import 'package:circle_book/screens/group/g_verifications/gv_user_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 
@@ -13,6 +15,7 @@ class GroupBaseScreen extends StatefulWidget {
       pubDate,
       categoryName,
       publisher;
+  final int groupStatus;
 
   const GroupBaseScreen({
     Key? key,
@@ -24,6 +27,7 @@ class GroupBaseScreen extends StatefulWidget {
     required this.pubDate,
     required this.categoryName,
     required this.publisher,
+    required this.groupStatus,
   }) : super(key: key);
 
   @override
@@ -54,15 +58,8 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
       ChatScreen(
         groupId: widget.groupId,
       ),
-      GroupMainScreen(
-        id: widget.id,
-        title: widget.title,
-        thumb: widget.thumb,
+      VerificationUserScreen(
         groupId: widget.groupId,
-        author: widget.author,
-        pubDate: widget.pubDate,
-        categoryName: widget.categoryName,
-        publisher: widget.publisher,
       ),
       GroupBoardScreen(
         groupId: widget.groupId,
@@ -118,7 +115,7 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
                 'assets/icons/calendar-days_selected.png',
                 height: 20,
               ),
-              label: "캘린더"),
+              label: "독서인증"),
           BottomNavigationBarItem(
               icon: Image.asset(
                 'assets/icons/chalkboard-user.png',
@@ -135,9 +132,36 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
   }
 
   void _onItemTapped(int index) {
-    // state 갱신
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (index == 2 || index == 3) {
+      FirebaseFirestore.instance
+          .collection('groups')
+          .doc(widget.groupId)
+          .get()
+          .then((snapshot) {
+        if (snapshot.exists) {
+          Map<String, dynamic> groupData =
+              snapshot.data() as Map<String, dynamic>;
+          int gs = groupData['groupStatus'];
+
+          if (gs == 1) {
+            final scaffoldContext = ScaffoldMessenger.of(context);
+            scaffoldContext.showSnackBar(
+              const SnackBar(
+                content: Text('그룹 독서가 시작되어야 열람 가능합니다.'),
+                backgroundColor: Color(0xff6DC4DB),
+              ),
+            );
+          } else {
+            setState(() {
+              _selectedIndex = index;
+            });
+          }
+        }
+      });
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 }

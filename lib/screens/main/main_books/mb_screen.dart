@@ -22,13 +22,8 @@ class MainBooksScreen extends StatelessWidget {
         elevation: 2,
         backgroundColor: const Color(0xff6DC4DB),
         foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         //toolbarHeight: 50,
-
-        // 좌측 아이콘 버튼
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.menu_outlined),
-        ),
 
         // 우측 아이콘 버튼들
         actions: <Widget>[
