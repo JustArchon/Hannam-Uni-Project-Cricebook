@@ -128,7 +128,7 @@ class MainSettingsScreen extends StatelessWidget {
               ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.exit_to_app),
-                title: const Text('회원탈퇴'),
+                title: const Text('회원탈퇴[불안정한기능, 그룹내 회원정보가 삭제되지않음]'),
                 onPressed: ((context) async
                 {
                   showDialog(
@@ -152,7 +152,6 @@ class MainSettingsScreen extends StatelessWidget {
                               .doc(FirebaseAuth.instance.currentUser?.uid)
                               .delete();
                             await user!.delete();
-
                             Navigator.pop(context);
                             Navigator.pop(context);
                             ScaffoldMessenger
