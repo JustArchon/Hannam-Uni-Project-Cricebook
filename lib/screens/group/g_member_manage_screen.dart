@@ -152,7 +152,8 @@ class _GroupMemberManagePageState extends State<GroupMemberManagePage> {
                                                       },
                                                     );
                                                   }
-                                                });
+                                                }
+                                            );
                                           },
                                         ),
                                     ]
