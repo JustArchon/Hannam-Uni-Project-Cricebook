@@ -446,6 +446,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                               "userEmail": userEmail,
                                               "userUID": FirebaseAuth
                                                   .instance.currentUser?.uid,
+                                              "readingbookcount": 0,
+                                              "groupleadercount": 0,
+                                              "reputationscore": 50,
+                                              "selfintroduction": "",
+                                              "complete_Achievements" : [],
                                             });
 
                                             var scaffoldContext = context;
