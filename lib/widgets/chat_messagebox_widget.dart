@@ -23,11 +23,12 @@ class _NewMessageState extends State<NewMessage> {
   var _userEnterMessage = '';
 
   File? imageFile;
-  String? ImageLink;
-  bool ImageMessage = false;
+  String ImageLink = '';
+  bool ImageUpload = false;
 
   Future getImage() async {
     ImagePicker picker = ImagePicker();
+    ImageUpload = true;
 
     await picker.pickImage(source: ImageSource.gallery).then((xFile) {
       if (xFile != null) {
@@ -44,7 +45,7 @@ class _NewMessageState extends State<NewMessage> {
     var uploadTask = await ref.putFile(imageFile!);
     ImageLink = await uploadTask.ref.getDownloadURL();
     setState(() {
-      ImageMessage = true;
+      ImageUpload = false;
     });
   }
 
@@ -66,7 +67,11 @@ class _NewMessageState extends State<NewMessage> {
       'userID': user.uid,
       'type': 1
     });
-    ImageMessage = false;
+    setState(() {
+      ImageLink = '';
+    });
+    _controller.clear();
+    _userEnterMessage = '';
   }
 
   void _sendMessage() async {
@@ -87,6 +92,7 @@ class _NewMessageState extends State<NewMessage> {
       'type': 0
     });
     _controller.clear();
+    _userEnterMessage = '';
   }
 
   @override
@@ -96,10 +102,28 @@ class _NewMessageState extends State<NewMessage> {
         padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-            IconButton(
-              onPressed: () => getImage(),
-              icon: const Icon(Icons.image),
-              color: const Color(0xff6DC4DB),
+            Ink(
+              decoration: ShapeDecoration(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(
+                  color: const Color(0xff6DC4DB),
+                  width: 2,
+                )),
+          ),
+              child: IconButton(
+                iconSize: 30,
+                onPressed: () {
+                  getImage();
+                  setState(() {
+                  });
+                  },
+                icon: ImageUpload == true ? const CircularProgressIndicator() : ImageLink.trim().isNotEmpty ? Image.network(ImageLink) :const Icon(Icons.image),
+                color: const Color(0xff6DC4DB),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
             ),
             Expanded(
               child: TextField(
@@ -114,7 +138,7 @@ class _NewMessageState extends State<NewMessage> {
               ),
             ),
             IconButton(
-              onPressed: ImageMessage == true
+              onPressed: ImageLink.trim().isNotEmpty
                   ? _sendImage
                   : _userEnterMessage.trim().isEmpty
                       ? null
