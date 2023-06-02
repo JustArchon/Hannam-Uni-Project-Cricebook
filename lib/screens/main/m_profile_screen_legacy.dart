@@ -84,81 +84,87 @@ class _MainProfilePageState extends State<MainProfilePage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    GestureDetector(
-                       onTap: () {
-                        showDialog(
-                         context: context,
-                         builder: (context) {
-                         return AlertDialog(
-                          title: const Text('닉네임 변경'),
-                          content: TextField(
-                          decoration: const InputDecoration(
-                          hintText: "변경할 닉네임을 입력하세요."),
-                          onChanged: (value) {
-                          Newname = value;
-                          },
-                        ),
-                          actions: [
-                          TextButton(
-                          child: const Text('확인'),
-                          onPressed: () {
-                          if (Newname == '') {
-                          Navigator.pop(context);
-                          } else {
-                          FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(FirebaseAuth
-                         .instance
-                         .currentUser
-                         ?.uid)
-                        .update({
-                        "userName": Newname,
-                        });
-                        Navigator.pop(context);
-                        }
-                         },
-                       ),
-                      TextButton(
-                        child: const Text('취소'),
-                        onPressed: () {
-                      Navigator.pop(context);
-                        },
-                      ),
-                       ],
-                        );
-                       });
-                       },
-                      child: RichText(
-                        text: TextSpan(
-                          text: snapshot.data!['userName'],
-                          style: const TextStyle(
-                          fontFamily: "Ssurround",
-                          fontSize: 20,
-                          color: Color(0xff6DC4DB),
-                          ),
-                          children: const <TextSpan>[
-                            TextSpan(text: ' 님', style: TextStyle(fontFamily: "Ssurround",
-                          fontSize: 20, color: Colors.black))
-                          ],
-                          ),
-                      ),
-                    ),
-                    const Text(
-                      "오늘도 좋은 하루가 되기를 바래요!",
-                      style: TextStyle(
+                    Text(
+                      '${snapshot.data!['reputationscore']}점',
+                      style: const TextStyle(
                         fontFamily: "Ssurround",
                         fontSize: 20,
                         color: Colors.black,
-                        ),
+                      ),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
-                            const SizedBox(
-                              height: 10,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  '닉네임 : ',
+                                  style: TextStyle(
+                                    fontFamily: "Ssurround",
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  snapshot.data!['userName'],
+                                  style: const TextStyle(
+                                    fontFamily: "Ssurround",
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  color: const Color(0xff6DC4DB),
+                                  iconSize: 25.0,
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text('닉네임 변경'),
+                                            content: TextField(
+                                              decoration: const InputDecoration(
+                                                  hintText: "변경할 닉네임을 입력하세요."),
+                                              onChanged: (value) {
+                                                Newname = value;
+                                              },
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                child: const Text('확인'),
+                                                onPressed: () {
+                                                  if (Newname == '') {
+                                                    Navigator.pop(context);
+                                                  } else {
+                                                    FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "userName": Newname,
+                                                    });
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: const Text('취소'),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                ),
+                              ],
                             ),
                             const SizedBox(
                               height: 10,
@@ -166,24 +172,46 @@ class _MainProfilePageState extends State<MainProfilePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Image.asset('assets/icons/아이콘_상태표시바용(512px).png',width: 35, height: 35),
-                                const SizedBox(width: 5),
-                                  const Text(
-                                    '개인소개',
-                                    style: TextStyle(
-                                      fontFamily: "Ssurround",
-                                      fontSize: 20,
-                                      color: Color(0xff6DC4DB),
-                                    ),
+                                Text(
+                                  '완주 횟수 : ${snapshot.data!["readingbookcount"].toString()}회',
+                                  style: const TextStyle(
+                                    fontFamily: "Ssurround",
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  ' | 그룹장 역임횟수 : ${snapshot.data!["groupleadercount"].toString()}회',
+                                  style: const TextStyle(
+                                    fontFamily: "Ssurround",
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ],
                             ),
                             const SizedBox(
-                              height: 3,
+                              height: 10,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                showDialog(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    '개인소개 : ${snapshot.data!["selfintroduction"]}',
+                                    style: const TextStyle(
+                                      fontFamily: "Ssurround",
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  color: const Color(0xff6DC4DB),
+                                  iconSize: 25.0,
+                                  onPressed: () {
+                                    showDialog(
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
@@ -226,56 +254,33 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                             ],
                                           );
                                         });
-                              },
-                              child: Text(
-                                 snapshot.data!["selfintroduction"],
-                                  style: const TextStyle(
-                                        fontFamily: "Ssurround",
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                      ),
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              '독서 완료 책',
+                              style: TextStyle(
+                                fontFamily: "Ssurround",
+                                fontSize: 20,
+                                color: Colors.black,
                               ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Image.asset('assets/icons/아이콘_상태표시바용(512px).png',width: 35, height: 35),
-                                const SizedBox(width: 5),
-                                  const Text(
-                                    '완료한 독서 그룹',
-                                    style: TextStyle(
-                                      fontFamily: "Ssurround",
-                                      fontSize: 20,
-                                      color: Color(0xff6DC4DB),
-                                    ),
-                                ),
-                                Text(
-                                  '총',
-                                  textAlign: TextAlign.center,
-                                )
-                              ]
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-    
                             const SizedBox(
                               height: 10,
                             ),
                             Row(
                               children: [
-                                Image.asset('assets/icons/아이콘_상태표시바용(512px).png',width: 35, height: 35),
-                                const SizedBox(width: 5),
-                                  const Text(
-                                    '업적',
-                                    style: TextStyle(
-                                      fontFamily: "Ssurround",
-                                      fontSize: 20,
-                                      color: Color(0xff6DC4DB),
-                                    ),
+                                const Text(
+                                  '달성 업적 리스트',
+                                  style: TextStyle(
+                                    fontFamily: "Ssurround",
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 IconButton(
                                     icon: const Icon(Icons.list),
