@@ -111,8 +111,7 @@ class Drawerwidget extends StatelessWidget {
                                                                   'assets/icons/usericon.png')),
                                                       title: Text(snapshot
                                                           .data!['userName']),
-                                                      subtitle: Text(snapshot
-                                                          .data!['userEmail']),
+                                                      subtitle: null,
                                                       trailing: gl ==
                                                               snapshot.data![
                                                                   'userUID']
@@ -124,7 +123,7 @@ class Drawerwidget extends StatelessWidget {
                                                                 builder: (context) =>
                                                                     GroupProfilePage(
                                                                         snapshot
-                                                                            .data!['userUID'])));
+                                                                            .data!['userUID'],groupid)));
                                                       },
                                                     );
                                                   }
@@ -153,6 +152,17 @@ class Drawerwidget extends StatelessWidget {
                                                               GroupMemberManagePage(
                                                                   groupid)));
                                                 }),
+                                                /*ListTile(leading: const Icon(
+                                              Icons.how_to_vote),
+                                          title: const Text("그룹 투표"),
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    GroupvotePage(
+                                                                        groupid)));
+                                          }
+                                          ),*/
                                           ListTile(
                                             leading: const Icon(
                                                 Icons.exit_to_app_sharp),
