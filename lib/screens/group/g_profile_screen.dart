@@ -1,9 +1,11 @@
+import 'package:circle_book/screens/group/g_report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GroupProfilePage extends StatefulWidget {
-  const GroupProfilePage(this.userId, {super.key});
+  const GroupProfilePage(this.userId, this.groupId, {super.key});
   final String userId;
+  final String groupId;
 
   @override
   State<GroupProfilePage> createState() => _GroupProfilePageState();
@@ -105,6 +107,17 @@ class _GroupProfilePageState extends State<GroupProfilePage> {
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    MemberReportScreen(
+                                                                        userId: widget.userId,groupId: widget.groupId,)));
+        },
+        child: const Icon(Icons.report),
+        backgroundColor: Color(0xff6DC4DB)
       ),
     );
   }
