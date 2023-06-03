@@ -156,7 +156,6 @@ class _MainProfilePageState extends State<MainProfilePage> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-
                             const SizedBox(
                               height: 10,
                             ),
@@ -252,10 +251,17 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                       color: Color(0xff6DC4DB),
                                     ),
                                 ),
+                                const SizedBox(
+                                  width: 60,
+                                ),
                                 Text(
-                                  '총',
-                                  textAlign: TextAlign.center,
-                                )
+                                  "${"총 "+snapshot.data!["readingbookcount"].toString()}건 완료",
+                                  style: const TextStyle(
+                                      fontFamily: "Ssurround",
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  )
                               ]
                             ),
                             const SizedBox(
@@ -301,7 +307,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                   children: List.generate(
                                   snapshot.data!['complete_Achievements'].length,
                                   (index){
-                                      return Image.asset("assets/medal/"+snapshot.data!['complete_Achievements'][index]+".png");
+                                      return Image.asset("${"assets/medal/"+snapshot.data!['complete_Achievements'][index]}.png");
                                       /*Ink(
                                         decoration: ShapeDecoration(
                                         shape: RoundedRectangleBorder(
