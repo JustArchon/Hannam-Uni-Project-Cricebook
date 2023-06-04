@@ -107,6 +107,7 @@ class _MemberReportScreenState extends State<MemberReportScreen> {
                                   FirebaseFirestore.instance
                                       .collection('reports')
                                       .add({
+                                    "reporterType": 'UserReport',
                                     "reportGroupID" : widget.groupId,
                                     "reporterUID": FirebaseAuth.instance.currentUser?.uid,
                                     "reportedmemberUID": widget.userId,
