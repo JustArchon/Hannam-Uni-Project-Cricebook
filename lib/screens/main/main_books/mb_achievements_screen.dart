@@ -54,8 +54,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                 Column(children: [
                                               const Text("독서 횟수 업적"),
                                               ListTile(
-                                                leading: Image.asset(
-                                                'assets/medal/readcount1medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('readcount1') ? Image.asset(
+                                                'assets/medal/readcount1medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서 1회 완료'),
                                                 subtitle: const Text(
@@ -136,8 +136,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                 },
                                               ),
                                                 ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/readcount5medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('readcount5') ? Image.asset(
+                                                'assets/medal/readcount5medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서 5회 완료'),
                                                 subtitle: const Text(
@@ -218,8 +218,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                 },
                                               ),
                                               ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/readcount10medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('readcount10') ? Image.asset(
+                                                'assets/medal/readcount10medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서 10회 완료'),
                                                 subtitle: const Text(
@@ -304,8 +304,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                               color:Colors.black,),
                                               const Text("그룹장 횟수 업적"),
                                               ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/groupleadercount1medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('groupleadercount1') ? Image.asset(
+                                                'assets/medal/groupleadercount1medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서장 1회 완료'),
                                                 subtitle: const Text(
@@ -386,8 +386,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                 },
                                               ),
                                               ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/groupleadercount5medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('groupleadercount5') ? Image.asset(
+                                                'assets/medal/groupleadercount5medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서장 5회 완료'),
                                                 subtitle: const Text(
@@ -468,8 +468,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                 },
                                               ),
                                               ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/groupleadercount10medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('groupleadercount10') ? Image.asset(
+                                                'assets/medal/groupleadercount10medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서장 10회 완료'),
                                                 subtitle: const Text(
@@ -554,8 +554,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                               color:Colors.black,),
                                               const Text("독서인증 횟수 업적"),
                                               ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/certificount1medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('certificount1') ? Image.asset(
+                                                'assets/medal/certificount1medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서 인증 1회 완료'),
                                                 subtitle: const Text(
@@ -636,8 +636,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                 },
                                               ),
                                               ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/certificount5medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('certificount5') ? Image.asset(
+                                                'assets/medal/certificount5medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서 인증 5회 완료'),
                                                 subtitle: const Text(
@@ -718,8 +718,8 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                 },
                                               ),
                                               ListTile(
-                                                leading: Image.asset(
-                                                        'assets/medal/certificount10medal.png'),
+                                                leading: snapshot.data!['complete_Achievements'].contains('certificount10') ? Image.asset(
+                                                'assets/medal/certificount10medal.png') : const Icon(Icons.lock, size:55, color: Color(0xff6DC4DB)),
                                                 title: const Text(
                                                     '그룹 독서 인증 10회 완료'),
                                                 subtitle: const Text(
