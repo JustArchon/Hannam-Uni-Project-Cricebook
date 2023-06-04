@@ -1,4 +1,5 @@
 import 'package:circle_book/screens/group/g_report_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -108,17 +109,20 @@ class _GroupProfilePageState extends State<GroupProfilePage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:
+      FirebaseAuth.instance.currentUser?.uid != widget.userId ?
+      FloatingActionButton(
         onPressed: (){
           Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    MemberReportScreen(
-                                                                        userId: widget.userId,groupId: widget.groupId,)));
+                  MaterialPageRoute(
+                  builder: (context) =>
+                  MemberReportScreen(
+                  userId: widget.userId,groupId: widget.groupId,)));
         },
-        child: const Icon(Icons.report),
-        backgroundColor: Color(0xff6DC4DB)
-      ),
+        backgroundColor: const Color(0xff6DC4DB),
+        child: const Icon(Icons.report)
+      )
+      : null
     );
   }
 }
