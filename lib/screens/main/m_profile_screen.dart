@@ -296,6 +296,17 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                                                             .data!['userUID'])));
                                     }
                                 ),
+                                const SizedBox(
+                                  width: 120,
+                                ),
+                                Text(
+                                  "${"총 "+(snapshot.data!["complete_Achievements"].length).toString()}건 완료",
+                                  style: const TextStyle(
+                                      fontFamily: "Ssurround",
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  )
                               ],
                             ),
                               SizedBox(
@@ -305,9 +316,9 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                   crossAxisSpacing: 10,
                                   mainAxisSpacing: 5,
                                   children: List.generate(
-                                  snapshot.data!['complete_Achievements'].length,
+                                  snapshot.data!['mounted_Achievements'].length,
                                   (index){
-                                      return Image.asset("${"assets/medal/"+snapshot.data!['complete_Achievements'][index]}.png");
+                                      return Image.asset("${"assets/medal/"+snapshot.data!['mounted_Achievements'][index]}.png");
                                       /*Ink(
                                         decoration: ShapeDecoration(
                                         shape: RoundedRectangleBorder(

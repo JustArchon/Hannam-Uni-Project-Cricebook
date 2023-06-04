@@ -43,7 +43,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                 );
               } else {
                 if (snapshot.hasData) {
-                  //List<dynamic>? ca = snapshot.data!['complete_Achievements'];
+                  //List<dynamic>? ca = snapshot.data!['mounted_Achievements'];
                   int Bookcount = snapshot.data!['readingbookcount'];
                   int GroupLeaderCount = snapshot.data!['groupleadercount'];
                   int CertifiCount = snapshot.data!['certificount'];
@@ -75,8 +75,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(Bookcount >= 1){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('readcount1medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('readcount1') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('readcount1');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('readcount1medal')){
                                                       newlist.remove('readcount1medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -85,7 +99,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -102,7 +116,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -143,8 +157,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(Bookcount >= 5){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('readcount5medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('readcount5') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('readcount5');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('readcount5medal')){
                                                       newlist.remove('readcount5medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -153,7 +181,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -170,7 +198,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -211,8 +239,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(Bookcount >= 10){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('readcount10medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('readcount10') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('readcount10');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('readcount10medal')){
                                                       newlist.remove('readcount10medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -221,7 +263,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -238,7 +280,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -283,8 +325,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(GroupLeaderCount >= 1){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('groupleadercount1medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('groupleadercount1') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('groupleadercount1');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('groupleadercount1medal')){
                                                       newlist.remove('groupleadercount1medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -293,7 +349,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -310,7 +366,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -351,8 +407,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(GroupLeaderCount >= 5){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('groupleadercount5medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('groupleadercount5') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('groupleadercount5');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('groupleadercount5medal')){
                                                       newlist.remove('groupleadercount5medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -361,7 +431,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -378,7 +448,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -419,8 +489,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(GroupLeaderCount >= 10){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('groupleadercount10medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('groupleadercount10') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('groupleadercount10');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('groupleadercount10medal')){
                                                       newlist.remove('groupleadercount10medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -429,7 +513,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -446,7 +530,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -491,8 +575,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(CertifiCount >= 1){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('certificount1medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('certificount1') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('certificount1');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('certificount1medal')){
                                                       newlist.remove('certificount1medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -501,7 +599,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -518,7 +616,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -559,8 +657,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(CertifiCount >= 5){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('certificount5medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('certificount5') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('certificount5');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('certificount5medal')){
                                                       newlist.remove('certificount5medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -569,7 +681,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -586,7 +698,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -627,8 +739,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                   ),
                                                 onTap: () {
                                                   if(CertifiCount >= 10){
-                                                    var newlist = snapshot.data!['complete_Achievements'];
-                                                    if(snapshot.data!['complete_Achievements'].contains('certificount10medal')){
+                                                    var newlist = snapshot.data!['mounted_Achievements'];
+                                                    if(snapshot.data!['complete_Achievements'].contains('certificount10') == false)
+                                                    {
+                                                      var comlist = snapshot.data!['complete_Achievements'];
+                                                      comlist.add('certificount10');
+                                                      FirebaseFirestore.instance
+                                                        .collection('users')
+                                                        .doc(FirebaseAuth
+                                                            .instance
+                                                            .currentUser
+                                                            ?.uid)
+                                                        .update({
+                                                      "complete_Achievements": comlist,
+                                                    });
+                                                    }
+                                                    if(snapshot.data!['mounted_Achievements'].contains('certificount10medal')){
                                                       newlist.remove('certificount10medal');
                                                       FirebaseFirestore.instance
                                                         .collection('users')
@@ -637,7 +763,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
@@ -654,7 +780,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                                             .currentUser
                                                             ?.uid)
                                                         .update({
-                                                      "complete_Achievements": newlist,
+                                                      "mounted_Achievements": newlist,
                                                     });
                                                       ScaffoldMessenger.of(context).showSnackBar(
                                                         const SnackBar(
