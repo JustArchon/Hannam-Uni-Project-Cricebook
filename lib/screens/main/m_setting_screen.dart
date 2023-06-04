@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:settings_ui/settings_ui.dart';
 
 class MainSettingsScreen extends StatelessWidget {
   const MainSettingsScreen({super.key});
@@ -23,84 +22,240 @@ class MainSettingsScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
       ),
-      body: SettingsList(
-        sections: [
-          SettingsSection(title: const Text('알림'), tiles: <SettingsTile>[
-            SettingsTile.navigation(
-              leading: const Icon(Icons.notifications),
-              title: const Text('알림 설정'),
-              onPressed: ((context) async {}),
-            ),
-          ]),
-          SettingsSection(
-            title: const Text('계정'),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.password),
-                title: const Text('비밀번호 변경'),
-                onPressed: ((context) async {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('비밀번호 변경'),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text("최소 6자리 이상을 입력하십시오."),
-                              TextField(
-                                decoration: const InputDecoration(
-                                    hintText: "변경할 비밀번호를 입력하세요."),
-                                onChanged: (value) {
-                                  newPassword = value;
-                                },
-                              ),
-                            ],
+      body: SingleChildScrollView(
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser?.uid)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 30,
+                        backgroundImage:
+                            AssetImage("assets/icons/usericon.png"),
+                      ),
+                      const SizedBox(
+                        width: 225,
+                      ),
+                      Image.asset('assets/icons/아이콘_배경x(512px).png',width: 80, height: 80),
+                    ],
+                    ),
+                     RichText(
+                        text: TextSpan(
+                          text: snapshot.data!['userName'],
+                          style: const TextStyle(
+                          fontFamily: "Ssurround",
+                          fontSize: 18,
+                          color: Color(0xff6DC4DB),
                           ),
-                          actions: [
-                            TextButton(
-                              child: const Text('확인'),
-                              onPressed: () async {
-                                if (newPassword == '') {
-                                  Navigator.pop(context);
-                                } else {
-                                  try {
-                                    await user!.updatePassword(newPassword);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('정상적으로 비밀번호가 변경되었습니다.'),
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                    );
-                                    Navigator.pop(context);
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('비밀번호 변경 실패: $e'),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                    Navigator.pop(context);
-                                  }
-                                }
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('취소'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
+                          children: const <TextSpan>[
+                            TextSpan(text: ' 님', style: TextStyle(fontFamily: "Ssurround",
+                          fontSize: 18, color: Colors.black))
                           ],
-                        );
-                      });
-                }),
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.logout),
-                title: const Text('로그아웃'),
-                onPressed: ((context) async {
-                  try {
+                          ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        "서비스 설정",
+                        style: TextStyle(fontFamily: "Ssurround",
+                          fontSize: 18, color: Colors.black
+                      )
+                    ),
+                    const SizedBox(
+                        height: 30,
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                              "내 정보 관리",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.black
+                            )
+                          ),
+                          SizedBox(
+                            width: 250,
+                          ),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 30,
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                              "알림 설정",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.black
+                            )
+                          ),
+                          SizedBox(
+                            width: 271,
+                          ),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 30,
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                              "회원탈퇴",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.black
+                            )
+                          ),
+                          SizedBox(
+                            width: 275,
+                          ),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 40,
+                      ),
+                    const Text(
+                        "서비스 안내",
+                        style: TextStyle(fontFamily: "Ssurround",
+                          fontSize: 18, color: Colors.black
+                      )
+                    ),
+                    const SizedBox(
+                        height: 40,
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                              "공지사항",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.black
+                            )
+                          ),
+                          SizedBox(
+                            width: 275,
+                          ),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 30,
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                              "서비스 문의",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.black
+                            )
+                          ),
+                          SizedBox(
+                            width: 250,
+                          ),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 30,
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                              "버전 정보",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.black
+                            )
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                              "1.0.0",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.grey
+                            )
+                          ),
+                          SizedBox(
+                            width: 88,
+                          ),
+                          Text(
+                              "최신버전입니다.",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.grey
+                            )
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 30,
+                      ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Row(
+                        children: [
+                          Text(
+                              "이용약관 및 정책",
+                              style: TextStyle(fontFamily: "Ssurround",
+                                fontSize: 18, color: Colors.black
+                            )
+                          ),
+                          SizedBox(
+                            width: 210,
+                          ),
+                          Icon(Icons.arrow_forward_ios)
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                        height: 10,
+                      ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsets>(
+                      EdgeInsets.symmetric(horizontal: 156, vertical: 12),
+                      ),
+                    ),
+                      onPressed: () async{
+                         {
+                      try {
                     await FirebaseAuth.instance.signOut();
                     Navigator.pop(context);
                   } catch (e) {
@@ -111,66 +266,17 @@ class MainSettingsScreen extends StatelessWidget {
                       ),
                     );
                   }
-                }),
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.exit_to_app),
-                title: const Text('회원탈퇴[불안정한기능, 그룹내 회원정보가 삭제되지않음]'),
-                onPressed: ((context) async {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text('회원 탈퇴'),
-                          content: const Text(
-                              "정말로 서클북 회원을 탈퇴하시겠습니까? 탈퇴시 모든 정보가 사라집니다."),
-                          actions: [
-                            TextButton(
-                              child: const Text('확인'),
-                              onPressed: () async {
-                                try {
-                                  await FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(FirebaseAuth
-                                          .instance.currentUser?.uid)
-                                      .delete();
-                                  await user!.delete();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('정상적으로 회원탈퇴가 완료되었습니다.'),
-                                      backgroundColor: Colors.blue,
-                                    ),
-                                  );
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('회원탈퇴 실패: $e'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                  Navigator.pop(context);
-                                }
-                              },
-                            ),
-                            TextButton(
-                              child: const Text('취소'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      });
-                }),
-              ),
-            ],
-          ),
-          const SettingsSection(
-              title: Text('개발자 연락처'), tiles: <SettingsTile>[]),
-        ],
-      ),
+                }
+                      },
+                      child: const Text('로그아웃')
+                    )
+                  ]
+                )
+              );
+            }
+          }
+        )
+      )
     );
   }
 }
