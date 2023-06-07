@@ -20,78 +20,76 @@ class MyinformationScreen extends StatelessWidget {
     String newPassword = '';
     User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: SizedBox(
-            height: 50,
-            child: Image.asset('assets/icons/아이콘_흰색(512px).png'),
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: SizedBox(
+              height: 50,
+              child: Image.asset('assets/icons/아이콘_흰색(512px).png'),
+            ),
+            centerTitle: true,
+            elevation: 2,
+            backgroundColor: const Color(0xff6DC4DB),
+            foregroundColor: Colors.white,
           ),
-          centerTitle: true,
-          elevation: 2,
-          backgroundColor: const Color(0xff6DC4DB),
-          foregroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-        ),
-        body: SingleChildScrollView(
-            child: FutureBuilder<DocumentSnapshot>(
-                future: _getUsername(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 20),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage:
-                                      AssetImage("assets/icons/usericon.png"),
-                                ),
-                                const SizedBox(
-                                  width: 225,
-                                ),
-                                Image.asset('assets/icons/아이콘_배경x(512px).png',
-                                    width: 80, height: 80),
-                              ],
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: snapshot.data!['userName'],
-                                style: const TextStyle(
-                                  fontFamily: "Ssurround",
-                                  fontSize: 18,
-                                  color: Color(0xff6DC4DB),
-                                ),
-                                children: const <TextSpan>[
-                                  TextSpan(
-                                      text: ' 님',
-                                      style: TextStyle(
-                                          fontFamily: "Ssurround",
-                                          fontSize: 18,
-                                          color: Colors.black))
+          body: SingleChildScrollView(
+              child: FutureBuilder<DocumentSnapshot>(
+                  future: _getUsername(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 20),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage:
+                                        AssetImage("assets/icons/usericon.png"),
+                                  ),
+                                  Image.asset('assets/icons/아이콘_배경x(512px).png',
+                                      width: 80, height: 80),
                                 ],
                               ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            const Text("내 정보 관리",
+                              RichText(
+                                text: TextSpan(
+                                  text: snapshot.data!['userName'],
+                                  style: const TextStyle(
+                                    fontFamily: "Ssurround",
+                                    fontSize: 18,
+                                    color: Color(0xff6DC4DB),
+                                  ),
+                                  children: const <TextSpan>[
+                                    TextSpan(
+                                        text: ' 님',
+                                        style: TextStyle(
+                                            fontFamily: "Ssurround",
+                                            fontSize: 18,
+                                            color: Colors.black))
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const Text("알람 설정",
                                 style: TextStyle(
                                     fontFamily: "Ssurround",
                                     fontSize: 18,
                                     color: Colors.black)),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            GestureDetector(
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              GestureDetector(
                               onTap: () {
                                 showDialog(
                                     context: context,
@@ -170,10 +168,7 @@ class MyinformationScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            const SizedBox(
-                              height: 30,
-                            ),
-                          ]));
-                })));
+                            ]));
+                  })));
   }
 }

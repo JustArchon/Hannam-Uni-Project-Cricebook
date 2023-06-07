@@ -2,9 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
   Future<DocumentSnapshot> _getUsername() async {
     return await FirebaseFirestore.instance
         .collection('users')
@@ -14,10 +19,11 @@ class NotificationScreen extends StatelessWidget {
       return querySnapshot;
     });
   }
-
+    bool certalarm = true;
+    bool bookreadstartendalarm = true;
+    bool sharebookreportalarm = true;
   @override
   Widget build(BuildContext context) {
-    String newPassword = '';
     User? user = FirebaseAuth.instance.currentUser;
     return Scaffold(
         backgroundColor: Colors.white,
@@ -30,7 +36,6 @@ class NotificationScreen extends StatelessWidget {
           elevation: 2,
           backgroundColor: const Color(0xff6DC4DB),
           foregroundColor: Colors.white,
-          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
             child: FutureBuilder<DocumentSnapshot>(
@@ -91,24 +96,68 @@ class NotificationScreen extends StatelessWidget {
                             const SizedBox(
                               height: 30,
                             ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Row(
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("비밀번호 변경",
+                                  const Text("독서현황 인증 알림",
                                       style: TextStyle(
                                           fontFamily: "Ssurround",
                                           fontSize: 18,
                                           color: Colors.black)),
-                                  SizedBox(
-                                    width: 220,
+                                  Switch(
+                                    value: certalarm,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        certalarm = value;
+                                      });
+                                    },
+                                    activeColor: const Color(0xff6DC4DB),
                                   ),
-                                  Icon(Icons.arrow_forward_ios)
                                 ],
                               ),
-                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("그룹독서 시작 및 종료 알림",
+                                      style: TextStyle(
+                                          fontFamily: "Ssurround",
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  Switch(
+                                    value: bookreadstartendalarm,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        bookreadstartendalarm = value;
+                                      });
+                                    },
+                                    activeColor: const Color(0xff6DC4DB),
+                                  ),
+                                ],
+                              ),
+                          Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("독후감 공유 알림",
+                                      style: TextStyle(
+                                          fontFamily: "Ssurround",
+                                          fontSize: 18,
+                                          color: Colors.black)),
+                                  Switch(
+                                    value: sharebookreportalarm,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        sharebookreportalarm = value;
+                                      });
+                                    },
+                                    activeColor: const Color(0xff6DC4DB),
+                                  ),
+                                ],
+                              ),
                             const SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
                           ]));
                 })));
