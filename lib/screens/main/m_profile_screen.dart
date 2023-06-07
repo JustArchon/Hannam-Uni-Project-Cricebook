@@ -165,22 +165,9 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                     width: 35,
                                     height: 35),
                                 const SizedBox(width: 5),
-                                const Text(
-                                  '개인소개',
-                                  style: TextStyle(
-                                    fontFamily: "Ssurround",
-                                    fontSize: 20,
-                                    color: Color(0xff6DC4DB),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 3,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                showDialog(
+                                GestureDetector(
+                                  onTap: () {
+                                    showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
@@ -220,8 +207,22 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                         ],
                                       );
                                     });
-                              },
-                              child: Text(
+                                  },
+                                  child: const Text(
+                                    '개인소개',
+                                    style: TextStyle(
+                                      fontFamily: "Ssurround",
+                                      fontSize: 20,
+                                      color: Color(0xff6DC4DB),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                              Text(
                                 snapshot.data!["selfintroduction"],
                                 style: const TextStyle(
                                   fontFamily: "Ssurround",
@@ -229,7 +230,6 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                   color: Colors.black,
                                 ),
                               ),
-                            ),
                             const SizedBox(
                               height: 5,
                             ),
