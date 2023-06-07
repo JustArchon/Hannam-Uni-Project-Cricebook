@@ -4,7 +4,7 @@ import 'package:circle_book/screens/main/settings/s_report_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+// I"m trash.. of course JustArchon you fucking
 class MainSettingsScreen extends StatelessWidget {
   const MainSettingsScreen({super.key});
 
@@ -20,7 +20,6 @@ class MainSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String newPassword = '';
     User? user = FirebaseAuth.instance.currentUser;
     return WillPopScope(
       onWillPop: () {
@@ -56,14 +55,13 @@ class MainSettingsScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const CircleAvatar(
                                     radius: 30,
                                     backgroundImage:
                                         AssetImage("assets/icons/usericon.png"),
-                                  ),
-                                  const SizedBox(
-                                    width: 225,
                                   ),
                                   Image.asset('assets/icons/아이콘_배경x(512px).png',
                                       width: 80, height: 80),
@@ -105,15 +103,14 @@ class MainSettingsScreen extends StatelessWidget {
                                           const MyinformationScreen()));
                                 },
                                 child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("내 정보 관리",
                                         style: TextStyle(
                                             fontFamily: "Ssurround",
                                             fontSize: 18,
                                             color: Colors.black)),
-                                    SizedBox(
-                                      width: 250,
-                                    ),
                                     Icon(Icons.arrow_forward_ios)
                                   ],
                                 ),
@@ -123,20 +120,22 @@ class MainSettingsScreen extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const NotificationScreen()));
+                                  Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const NotificationScreen(),
+                                ),
+                              );
                                 },
                                 child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("알림 설정",
                                         style: TextStyle(
                                             fontFamily: "Ssurround",
                                             fontSize: 18,
                                             color: Colors.black)),
-                                    SizedBox(
-                                      width: 271,
-                                    ),
                                     Icon(Icons.arrow_forward_ios)
                                   ],
                                 ),
@@ -201,15 +200,14 @@ class MainSettingsScreen extends StatelessWidget {
                                       });
                                 },
                                 child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("회원탈퇴",
                                         style: TextStyle(
                                             fontFamily: "Ssurround",
                                             fontSize: 18,
                                             color: Colors.black)),
-                                    SizedBox(
-                                      width: 275,
-                                    ),
                                     Icon(Icons.arrow_forward_ios)
                                   ],
                                 ),
@@ -228,15 +226,14 @@ class MainSettingsScreen extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {},
                                 child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("공지사항",
                                         style: TextStyle(
                                             fontFamily: "Ssurround",
                                             fontSize: 18,
                                             color: Colors.black)),
-                                    SizedBox(
-                                      width: 275,
-                                    ),
                                     Icon(Icons.arrow_forward_ios)
                                   ],
                                 ),
@@ -251,15 +248,14 @@ class MainSettingsScreen extends StatelessWidget {
                                           const AppReportScreen()));
                                 },
                                 child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("서비스 문의",
                                         style: TextStyle(
                                             fontFamily: "Ssurround",
                                             fontSize: 18,
                                             color: Colors.black)),
-                                    SizedBox(
-                                      width: 250,
-                                    ),
                                     Icon(Icons.arrow_forward_ios)
                                   ],
                                 ),
@@ -270,32 +266,39 @@ class MainSettingsScreen extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {},
                                 child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("버전 정보",
-                                        style: TextStyle(
-                                            fontFamily: "Ssurround",
-                                            fontSize: 18,
-                                            color: Colors.black)),
-                                    SizedBox(
-                                      width: 5,
+                                    Row(
+                                      children: [
+                                        Text("버전 정보",
+                                            style: TextStyle(
+                                                fontFamily: "Ssurround",
+                                                fontSize: 18,
+                                                color: Colors.black)),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text("1.0.0",
+                                            style: TextStyle(
+                                                fontFamily: "Ssurround",
+                                                fontSize: 18,
+                                                color: Colors.grey)),
+                                      ],
                                     ),
-                                    Text("1.0.0",
-                                        style: TextStyle(
-                                            fontFamily: "Ssurround",
-                                            fontSize: 18,
-                                            color: Colors.grey)),
-                                    SizedBox(
-                                      width: 88,
+                                    Row(
+                                      children: [
+                                        Text("최신버전입니다.",
+                                            style: TextStyle(
+                                                fontFamily: "Ssurround",
+                                                fontSize: 18,
+                                                color: Colors.grey)),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Icon(Icons.arrow_forward_ios)
+                                      ],
                                     ),
-                                    Text("최신버전입니다.",
-                                        style: TextStyle(
-                                            fontFamily: "Ssurround",
-                                            fontSize: 18,
-                                            color: Colors.grey)),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Icon(Icons.arrow_forward_ios)
                                   ],
                                 ),
                               ),
@@ -305,15 +308,14 @@ class MainSettingsScreen extends StatelessWidget {
                               GestureDetector(
                                 onTap: () {},
                                 child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text("이용약관 및 정책",
                                         style: TextStyle(
                                             fontFamily: "Ssurround",
                                             fontSize: 18,
                                             color: Colors.black)),
-                                    SizedBox(
-                                      width: 210,
-                                    ),
                                     Icon(Icons.arrow_forward_ios)
                                   ],
                                 ),
@@ -322,32 +324,49 @@ class MainSettingsScreen extends StatelessWidget {
                                 height: 10,
                               ),
                               ElevatedButton(
-                                  style: ButtonStyle(
-                                    padding:
-                                        MaterialStateProperty.all<EdgeInsets>(
-                                      const EdgeInsets.symmetric(
-                                          horizontal: 156, vertical: 12),
+                                onPressed: () async {
+                                  {
+                                    try {
+                                      await FirebaseAuth.instance.signOut();
+                                      Navigator.pop(context);
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text('로그아웃 실패: $e'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 5,
+                                  backgroundColor: const Color(0xff6DC4DB),
+                                ),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: const Center(
+                                    child: Text(
+                                      "로그아웃",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.0,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                  onPressed: () async {
-                                    {
-                                      try {
-                                        await FirebaseAuth.instance.signOut();
-                                        Navigator.pop(context);
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text('로그아웃 실패: $e'),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  },
-                                  child: const Text('로그아웃'))
-                            ]));
-                  }))),
+                                ),
+                              ),
+                            ]
+                      )
+                  );
+            }
+          )
+        )
+      ),
     );
   }
 }
