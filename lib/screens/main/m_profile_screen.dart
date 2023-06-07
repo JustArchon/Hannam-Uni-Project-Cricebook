@@ -233,7 +233,45 @@ class _MainProfilePageState extends State<MainProfilePage> {
                             const SizedBox(
                               height: 5,
                             ),
-                            Row(
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                        'assets/icons/아이콘_상태표시바용(512px).png',
+                                        width: 35,
+                                        height: 35),
+                                    const SizedBox(width: 5),
+                                    const Expanded(
+                                      child: Text(
+                                        '완료한 독서 그룹',
+                                        style: TextStyle(
+                                          fontFamily: "Ssurround",
+                                          fontSize: 20,
+                                          color: Color(0xff6DC4DB),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      "${"총 ${snapshot.data!["readingbookcount"]}"}건 완료",
+                                      style: const TextStyle(
+                                        fontFamily: "Ssurround",
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    )
+                                  ]),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Image.asset(
@@ -242,72 +280,40 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                       height: 35),
                                   const SizedBox(width: 5),
                                   const Text(
-                                    '완료한 독서 그룹',
+                                    '업적',
                                     style: TextStyle(
                                       fontFamily: "Ssurround",
                                       fontSize: 20,
                                       color: Color(0xff6DC4DB),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 60,
-                                  ),
-                                  Text(
-                                    "${"총 ${snapshot.data!["readingbookcount"]}"}건 완료",
-                                    style: const TextStyle(
-                                      fontFamily: "Ssurround",
-                                      fontSize: 16,
-                                      color: Colors.black,
+                                  IconButton(
+                                      icon: const Icon(Icons.list),
+                                      color: const Color(0xff6DC4DB),
+                                      iconSize: 25.0,
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AchievementsScreen(snapshot
+                                                        .data!['userUID'])));
+                                      }),
+                                    const Expanded(
+                                      child: SizedBox(width: 1)
                                     ),
-                                  )
-                                ]),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Image.asset(
-                                    'assets/icons/아이콘_상태표시바용(512px).png',
-                                    width: 35,
-                                    height: 35),
-                                const SizedBox(width: 5),
-                                const Text(
-                                  '업적',
-                                  style: TextStyle(
-                                    fontFamily: "Ssurround",
-                                    fontSize: 20,
-                                    color: Color(0xff6DC4DB),
-                                  ),
-                                ),
-                                IconButton(
-                                    icon: const Icon(Icons.list),
-                                    color: const Color(0xff6DC4DB),
-                                    iconSize: 25.0,
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AchievementsScreen(snapshot
-                                                      .data!['userUID'])));
-                                    }),
-                                const SizedBox(
-                                  width: 120,
-                                ),
-                                Text(
-                                  "${"총 ${snapshot.data!["complete_Achievements"].length}"}건 완료",
-                                  style: const TextStyle(
-                                    fontFamily: "Ssurround",
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                )
-                              ],
+                                    Text(
+                                      "${"총 ${snapshot.data!["complete_Achievements"].length}"}건 완료",
+                                      style: const TextStyle(
+                                        fontFamily: "Ssurround",
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                ],
+                              ),
                             ),
                             SizedBox(
-                              height: 200,
+                              height: MediaQuery.of(context).size.height * 0.2,
                               child: GridView.count(
                                   crossAxisCount: 6,
                                   crossAxisSpacing: 10,
