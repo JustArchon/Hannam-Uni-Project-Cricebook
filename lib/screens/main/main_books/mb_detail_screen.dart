@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:circle_book/models/book_model.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:circle_book/screens/main/main_books/mb_library_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BooksDetailScreen extends StatefulWidget {
   final String id,
@@ -36,6 +36,7 @@ class BooksDetailScreen extends StatefulWidget {
 class _BooksDetailScreenState extends State<BooksDetailScreen> {
   late Future<BookModel> book;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +83,8 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                               tag: widget.id,
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.3,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.27,
                                 clipBehavior: Clip.hardEdge,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
@@ -109,128 +112,241 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.65,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.2,
+                                      MediaQuery.of(context).size.height * 0.27,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         color: const Color(0xff6DC4DB)),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.05,
+                                        child: Text(
                                           widget.title,
                                           style: const TextStyle(
                                             fontSize: 15,
                                             letterSpacing: 1.0,
                                             fontFamily: "Ssurround",
                                           ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
                                         ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.only(top: 3),
-                                          height: 2,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          color: Colors.grey,
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          "저자 : ${widget.author}",
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            letterSpacing: 1.0,
-                                            fontFamily: "Ssurround",
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "카테고리 : ${widget.categoryName}",
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            letterSpacing: 1.0,
-                                            fontFamily: "Ssurround",
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        launchUrl(Uri.parse(widget.link));
-                                      },
-                                      icon: const Icon(
-                                        Icons.travel_explore_outlined,
                                       ),
-                                    ),
-                                    OutlinedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => LibraryScreen(
-                                              id: widget.id,
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 1.5, bottom: 1.5),
+                                        height: 2,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        color: Colors.grey,
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.082,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "저자 : ${widget.author}",
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                letterSpacing: 1.0,
+                                                fontFamily: "Ssurround",
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      style: OutlinedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xff6DC4DB),
-                                      ),
-                                      child: const Text(
-                                        "소장 도서관 확인",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Ssurround",
-                                          letterSpacing: 1.0,
-                                          color: Colors.white,
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              "카테고리 : ${widget.categoryName}",
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                letterSpacing: 1.0,
+                                                fontFamily: "Ssurround",
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 1.5, bottom: 1.5),
+                                        height: 2,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        content: Text(
+                                                          widget.description,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15,
+                                                            letterSpacing: 1.0,
+                                                            fontFamily:
+                                                                "SsurroundAir",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          IconButton(
+                                                            icon: const Icon(
+                                                                Icons.close),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 5,
+                                                  backgroundColor: Colors.white,
+                                                ),
+                                                child: const Text(
+                                                  "책소개",
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: "Ssurround",
+                                                    letterSpacing: 1.0,
+                                                    color: Color(0xff6DC4DB),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LibraryScreen(
+                                                        id: widget.id,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 5,
+                                                  backgroundColor: Colors.white,
+                                                ),
+                                                child: const Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "소장",
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontFamily: "Ssurround",
+                                                        letterSpacing: 1.0,
+                                                        color:
+                                                            Color(0xff6DC4DB),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "도서관",
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontFamily: "Ssurround",
+                                                        letterSpacing: 1.0,
+                                                        color:
+                                                            Color(0xff6DC4DB),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  launchUrl(
+                                                      Uri.parse(widget.link));
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  elevation: 5,
+                                                  backgroundColor: Colors.white,
+                                                ),
+                                                child: const Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      "링크로",
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontFamily: "Ssurround",
+                                                        letterSpacing: 1.0,
+                                                        color:
+                                                            Color(0xff6DC4DB),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "이동",
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontFamily: "Ssurround",
+                                                        letterSpacing: 1.0,
+                                                        color:
+                                                            Color(0xff6DC4DB),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.12,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xff6DC4DB)),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Text(
-                            widget.description,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              letterSpacing: 1.0,
-                              fontFamily: "SsurroundAir",
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                   const SizedBox(
@@ -243,14 +359,14 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                       Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.45,
+                        height: MediaQuery.of(context).size.height * 0.6,
                         decoration: BoxDecoration(
                           border: Border.all(color: const Color(0xff6DC4DB)),
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Container(
                           padding: const EdgeInsets.only(
-                              left: 10, right: 10, top: 10, bottom: 10),
+                              left: 20, right: 20, top: 10, bottom: 10),
                           child: Column(
                             children: [
                               Row(
@@ -260,27 +376,7 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                   SizedBox(
                                     width: 160,
                                     height: 40,
-                                    child: OutlinedButton(
-                                      onPressed: () {},
-                                      style: OutlinedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xff6DC4DB),
-                                      ),
-                                      child: const Text(
-                                        "그룹 검색",
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Ssurround",
-                                          letterSpacing: 1.0,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 160,
-                                    height: 40,
-                                    child: OutlinedButton(
+                                    child: ElevatedButton(
                                       onPressed: () {
                                         showDialog(
                                           context: context,
@@ -335,7 +431,8 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                           }
                                         });
                                       },
-                                      style: OutlinedButton.styleFrom(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 5,
                                         backgroundColor:
                                             const Color(0xff6DC4DB),
                                       ),
@@ -352,8 +449,14 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                   ),
                                 ],
                               ),
+                              Container(
+                                margin: const EdgeInsets.only(top: 10),
+                                height: 2,
+                                width: MediaQuery.of(context).size.width,
+                                color: Colors.grey,
+                              ),
                               const SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               showGroupListMethod()
                             ],
@@ -388,11 +491,11 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
             return const Center(child: CircularProgressIndicator());
           default:
             final filteredDocs = snapshot.data!.docs
-                .where((doc) => doc['groupMembers']
+                .where((doc) => !doc['groupMembers']
                     .contains(FirebaseAuth.instance.currentUser!.uid))
                 .toList();
             final nonFilteredDocs = snapshot.data!.docs
-                .where((doc) => !doc['groupMembers']
+                .where((doc) => doc['groupMembers']
                     .contains(FirebaseAuth.instance.currentUser!.uid))
                 .toList();
             return Expanded(
@@ -408,8 +511,9 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                         String nt = doc['notice'];
                         int mc = doc['groupMembersCount'];
                         int mm = doc['maxMembers'];
+                        String gl = doc['groupLeader'];
 
-                        bool showButton = (mc < mm);
+                        bool showApplyButton = (mc < mm);
 
                         return SizedBox(
                           width: MediaQuery.of(context).size.width,
@@ -420,7 +524,7 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                   "그룹명 : $gn",
                                   style: const TextStyle(
                                     fontSize: 20,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     letterSpacing: 1.0,
                                     fontFamily: "Ssurround",
                                   ),
@@ -431,86 +535,198 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                       fontSize: 15,
                                       fontFamily: "SsurroundAir",
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: Colors.white),
                                 ),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                backgroundColor: Colors.yellow[100],
-                                collapsedBackgroundColor: Colors.yellow[100],
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: const Color(0xff6DC4DB),
+                                collapsedBackgroundColor:
+                                    const Color(0xff6DC4DB),
+                                iconColor: Colors.white,
+                                collapsedIconColor: Colors.white,
                                 collapsedShape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
+                                    borderRadius: BorderRadius.circular(10)),
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        "그룹원 : $mc / $mm\n독서 목표 기간 : $rp일동안\n독서 현황 인증 간격 : $vp일마다\n인증 패수권 : $pc개 \n공지사항 : $nt",
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: "SsurroundAir",
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Visibility(
-                                    visible: !showButton,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xff6DC4DB),
-                                      ),
-                                      onPressed: () async {
-                                        String currentUserUid = FirebaseAuth
-                                            .instance.currentUser!.uid;
-                                        DocumentReference groupRef =
-                                            FirebaseFirestore.instance
-                                                .collection('groups')
-                                                .doc(doc.id);
-                                        groupRef.update({
-                                          'groupMembers': FieldValue.arrayUnion(
-                                              [currentUserUid]),
-                                          'groupMembersCount':
-                                              FieldValue.increment(1),
-                                        });
-                                        DocumentSnapshot groupDocSnapshot =
-                                            await groupRef.get();
-                                        int maxMembers =
-                                            groupDocSnapshot['maxMembers'];
-                                        int groupMembersCount =
-                                            groupDocSnapshot[
-                                                'groupMembersCount'];
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 165,
+                                    margin: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.only(
+                                      top: 10,
+                                      bottom: 10,
+                                      left: 30,
+                                      right: 30,
+                                    ),
+                                    color: Colors.white,
+                                    child: FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                FutureBuilder<DocumentSnapshot>(
+                                                  future: FirebaseFirestore
+                                                      .instance
+                                                      .collection('users')
+                                                      .doc(gl)
+                                                      .get(),
+                                                  builder:
+                                                      (context, userSnapshot) {
+                                                    if (userSnapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    }
 
-                                        if (groupMembersCount >= maxMembers) {}
-                                        Future.delayed(Duration.zero, () {
-                                          final scaffoldContext =
-                                              ScaffoldMessenger.of(context);
-                                          scaffoldContext.showSnackBar(
-                                            const SnackBar(
-                                              content: Text('신청이 완료되었습니다.'),
-                                              backgroundColor:
-                                                  Color(0xff6DC4DB),
+                                                    if (!userSnapshot.hasData) {
+                                                      return const Text(
+                                                          'Error');
+                                                    }
+
+                                                    String groupLeaderName =
+                                                        userSnapshot.data![
+                                                                'userName'] ??
+                                                            '';
+                                                    return Text(
+                                                      "그룹장 : $groupLeaderName",
+                                                      style: const TextStyle(
+                                                        fontSize: 15,
+                                                        fontFamily:
+                                                            "SsurroundAir",
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        letterSpacing: 1.0,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                Text(
+                                                  "그룹원 : $mc / $mm\n목표 기간 : $rp일동안\n현황 인증 : $vp일마다\n인증 패스권 : $pc개",
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: "SsurroundAir",
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "공지사항 : $nt",
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: "SsurroundAir",
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                ),
+                                              ],
                                             ),
-                                          );
-                                        });
+                                          ),
+                                          if (showApplyButton)
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    const Color(0xff6DC4DB),
+                                              ),
+                                              onPressed: () async {
+                                                String currentUserUid =
+                                                    FirebaseAuth.instance
+                                                        .currentUser!.uid;
+                                                DocumentReference groupRef =
+                                                    FirebaseFirestore.instance
+                                                        .collection('groups')
+                                                        .doc(doc.id);
+                                                groupRef.update({
+                                                  'groupMembers':
+                                                      FieldValue.arrayUnion(
+                                                          [currentUserUid]),
+                                                  'groupMembersCount':
+                                                      FieldValue.increment(1),
+                                                });
+                                                DocumentSnapshot
+                                                    groupDocSnapshot =
+                                                    await groupRef.get();
+                                                int maxMembers =
+                                                    groupDocSnapshot[
+                                                        'maxMembers'];
+                                                int groupMembersCount =
+                                                    groupDocSnapshot[
+                                                        'groupMembersCount'];
 
-                                        setState(() {});
-                                      },
-                                      child: const Text(
-                                        '신청',
-                                        style: TextStyle(
-                                          fontFamily: "Ssurround",
-                                          letterSpacing: 1.0,
-                                        ),
+                                                Future.delayed(Duration.zero,
+                                                    () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        content: const Text(
+                                                          '가입이 완료되었습니다.',
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            letterSpacing: 1.0,
+                                                            fontFamily:
+                                                                "SsurroundAir",
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          IconButton(
+                                                            icon: const Icon(
+                                                                Icons.close),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                });
+                                              },
+                                              child: const Text(
+                                                '가입',
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: "Ssurround",
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                            )
+                                          else if (!showApplyButton)
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.grey,
+                                              ),
+                                              onPressed: () {},
+                                              child: const Text(
+                                                '만석',
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: "Ssurround",
+                                                  letterSpacing: 1.0,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
                                   ),
                                 ],
                               ),
@@ -531,8 +747,7 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                         String nt = doc['notice'];
                         int mc = doc['groupMembersCount'];
                         int mm = doc['maxMembers'];
-
-                        bool showApplyButton = (mc < mm);
+                        String gl = doc['groupLeader'];
 
                         return SizedBox(
                           width: MediaQuery.of(context).size.width,
@@ -543,7 +758,7 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                   "그룹명 : $gn",
                                   style: const TextStyle(
                                     fontSize: 20,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     letterSpacing: 1.0,
                                     fontFamily: "Ssurround",
                                   ),
@@ -554,87 +769,234 @@ class _BooksDetailScreenState extends State<BooksDetailScreen> {
                                       fontSize: 15,
                                       fontFamily: "SsurroundAir",
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: Colors.white),
                                 ),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                backgroundColor: const Color(0xfff5b7b1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor: const Color(0xff6DC4DB),
                                 collapsedBackgroundColor:
-                                    const Color(0xfff5b7b1),
+                                    const Color(0xff6DC4DB),
+                                iconColor: Colors.white,
+                                collapsedIconColor: Colors.white,
                                 collapsedShape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
+                                    borderRadius: BorderRadius.circular(10)),
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Text(
-                                        "그룹원 : $mc / $mm\n독서 목표 기간 : $rp일동안\n독서 현황 인증 간격 : $vp일마다\n인증 패수권 : $pc개 \n공지사항 : $nt",
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: "SsurroundAir",
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Visibility(
-                                    visible: showApplyButton,
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xff6DC4DB),
-                                      ),
-                                      onPressed: () async {
-                                        String currentUserUid = FirebaseAuth
-                                            .instance.currentUser!.uid;
-                                        DocumentReference groupRef =
-                                            FirebaseFirestore.instance
-                                                .collection('groups')
-                                                .doc(doc.id);
-                                        groupRef.update({
-                                          'groupMembers': FieldValue.arrayUnion(
-                                              [currentUserUid]),
-                                          'groupMembersCount':
-                                              FieldValue.increment(1),
-                                        });
-                                        DocumentSnapshot groupDocSnapshot =
-                                            await groupRef.get();
-                                        int maxMembers =
-                                            groupDocSnapshot['maxMembers'];
-                                        int groupMembersCount =
-                                            groupDocSnapshot[
-                                                'groupMembersCount'];
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 165,
+                                    margin: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.only(
+                                      top: 10,
+                                      bottom: 10,
+                                      left: 30,
+                                      right: 30,
+                                    ),
+                                    color: Colors.white,
+                                    child: FittedBox(
+                                      fit: BoxFit.fitWidth,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.5,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                FutureBuilder<DocumentSnapshot>(
+                                                  future: FirebaseFirestore
+                                                      .instance
+                                                      .collection('users')
+                                                      .doc(gl)
+                                                      .get(),
+                                                  builder:
+                                                      (context, userSnapshot) {
+                                                    if (userSnapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                                    }
 
-                                        if (groupMembersCount >= maxMembers) {}
-                                        Future.delayed(Duration.zero, () {
-                                          final scaffoldContext =
-                                              ScaffoldMessenger.of(context);
-                                          scaffoldContext.showSnackBar(
-                                            const SnackBar(
-                                              content: Text('신청이 완료되었습니다.'),
-                                              backgroundColor:
-                                                  Color(0xff6DC4DB),
+                                                    if (!userSnapshot.hasData) {
+                                                      return const Text(
+                                                          'Error');
+                                                    }
+
+                                                    String groupLeaderName =
+                                                        userSnapshot.data![
+                                                                'userName'] ??
+                                                            '';
+                                                    return Text(
+                                                      "그룹장 : $groupLeaderName",
+                                                      style: const TextStyle(
+                                                        fontSize: 15,
+                                                        fontFamily:
+                                                            "SsurroundAir",
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        letterSpacing: 1.0,
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                Text(
+                                                  "그룹원 : $mc / $mm\n목표 기간 : $rp일동안\n현황 인증 : $vp일마다\n인증 패스권 : $pc개",
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: "SsurroundAir",
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "공지사항 : $nt",
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: "SsurroundAir",
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 2,
+                                                ),
+                                              ],
                                             ),
-                                          );
-                                        });
+                                          ),
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red,
+                                            ),
+                                            onPressed: () async {
+                                              FirebaseFirestore.instance
+                                                  .collection('groups')
+                                                  .doc(doc.id)
+                                                  .get()
+                                                  .then(
+                                                (DocumentSnapshot
+                                                    groupSnapshot) {
+                                                  if (groupSnapshot.exists) {
+                                                    Map<String, dynamic>
+                                                        groupData =
+                                                        groupSnapshot.data()
+                                                            as Map<String,
+                                                                dynamic>;
+                                                    List<String> groupMembers =
+                                                        List<String>.from(
+                                                            groupData[
+                                                                'groupMembers']);
+                                                    String groupLeader =
+                                                        groupData[
+                                                            'groupLeader'];
+                                                    int groupMembersCount =
+                                                        groupData[
+                                                            'groupMembersCount'];
 
-                                        setState(() {});
-                                      },
-                                      child: const Text(
-                                        '신청',
-                                        style: TextStyle(
-                                          fontFamily: "Ssurround",
-                                          letterSpacing: 1.0,
-                                        ),
+                                                    if (groupLeader ==
+                                                        FirebaseAuth.instance
+                                                            .currentUser?.uid) {
+                                                      if (groupMembersCount !=
+                                                          1) {
+                                                        groupMembers.remove(
+                                                            FirebaseAuth
+                                                                .instance
+                                                                .currentUser
+                                                                ?.uid);
+                                                        groupLeader =
+                                                            groupMembers[0];
+                                                        groupMembersCount -= 1;
+                                                      } else {
+                                                        FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'groups')
+                                                            .doc(doc.id)
+                                                            .delete();
+                                                        return;
+                                                      }
+                                                    } else {
+                                                      groupMembers.remove(
+                                                          FirebaseAuth
+                                                              .instance
+                                                              .currentUser
+                                                              ?.uid);
+                                                      groupMembersCount -= 1;
+                                                    }
+
+                                                    FirebaseFirestore.instance
+                                                        .collection('groups')
+                                                        .doc(doc.id)
+                                                        .update({
+                                                          'groupMembers':
+                                                              groupMembers,
+                                                          'groupLeader':
+                                                              groupLeader,
+                                                          'groupMembersCount':
+                                                              groupMembersCount,
+                                                        })
+                                                        .then((_) {})
+                                                        .catchError((error) {
+                                                          print(
+                                                              'Error updating group members: $error');
+                                                        });
+                                                  }
+                                                },
+                                              ).catchError((error) {
+                                                print(
+                                                    'Error getting group document: $error');
+                                              });
+
+                                              Future.delayed(Duration.zero, () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      content: const Text(
+                                                        '탈퇴가 완료되었습니다.',
+                                                        style: TextStyle(
+                                                          fontSize: 15,
+                                                          letterSpacing: 1.0,
+                                                          fontFamily:
+                                                              "SsurroundAir",
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        IconButton(
+                                                          icon: const Icon(
+                                                              Icons.close),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              });
+                                            },
+                                            child: const Text(
+                                              '탈퇴',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: "Ssurround",
+                                                letterSpacing: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
                                   ),
                                 ],
                               ),
@@ -706,6 +1068,7 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFormField(
+                textInputAction: TextInputAction.next,
                 controller: _groupNameController,
                 decoration: const InputDecoration(
                   labelText: '그룹명',
@@ -721,6 +1084,7 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                 },
               ),
               TextFormField(
+                textInputAction: TextInputAction.next,
                 controller: _maxMembersController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
@@ -736,6 +1100,7 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                 },
               ),
               TextFormField(
+                textInputAction: TextInputAction.next,
                 controller: _readingPeriodController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
@@ -751,6 +1116,7 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                 },
               ),
               TextFormField(
+                textInputAction: TextInputAction.next,
                 controller: _readingStatusVerificationPeriodController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
@@ -766,6 +1132,7 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                 },
               ),
               TextFormField(
+                textInputAction: TextInputAction.next,
                 controller: _verificationPassCountController,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
@@ -781,6 +1148,21 @@ class _GroupCreationPopupState extends State<GroupCreationPopup> {
                 },
               ),
               TextFormField(
+                textInputAction: TextInputAction.done,
+                onEditingComplete: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.pop(context, {
+                      'groupName': _groupNameController.text,
+                      'numMembers': int.parse(_maxMembersController.text),
+                      'readingPeriod': int.parse(_readingPeriodController.text),
+                      'certificationPeriod': int.parse(
+                          _readingStatusVerificationPeriodController.text),
+                      'passCount':
+                          int.parse(_verificationPassCountController.text),
+                      'notice': _noticeController.text,
+                    });
+                  }
+                },
                 controller: _noticeController,
                 decoration: const InputDecoration(
                   labelText: '공지사항',

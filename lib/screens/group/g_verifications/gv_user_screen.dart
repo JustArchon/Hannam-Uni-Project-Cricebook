@@ -18,60 +18,7 @@ class VerificationUserScreen extends StatefulWidget {
 class _VerificationUserScreenState extends State<VerificationUserScreen> {
   final TextEditingController _contentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  Future<void> updateVerificationStatus(DateTime testDate) async {
-    QuerySnapshot<Map<String, dynamic>> groupDocsSnapshot =
-        await FirebaseFirestore.instance
-            .collection('groups')
-            .doc(widget.groupId)
-            .collection('readingStatusVerifications')
-            .get();
-
-    for (QueryDocumentSnapshot<Map<String, dynamic>> groupDoc
-        in groupDocsSnapshot.docs) {
-      QuerySnapshot<Map<String, dynamic>> userVerificationDocsSnapshot =
-          await groupDoc.reference.collection('userVerifications').get();
-
-      DateTime currentDate = DateTime.now();
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> filteredDocs =
-          userVerificationDocsSnapshot.docs.where((doc) {
-        DateTime docDate = DateTime.parse(doc.id.replaceAll('. ', '-'));
-        return docDate.isBefore(testDate);
-      }).toList();
-
-      WriteBatch batch = FirebaseFirestore.instance.batch();
-      int rvRemainedPassCount = groupDoc.data()['rvRemainedPassCount'];
-      int rvUsedPassCount = groupDoc.data()['rvUsedPassCount'];
-      int rvFailCount = groupDoc.data()['rvFailCount'];
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> doc in filteredDocs) {
-        int verificationStatus = doc.data()['verificationStatus'];
-
-        if (verificationStatus == 0) {
-          if (rvRemainedPassCount > 0) {
-            batch.update(doc.reference, {
-              'verificationStatus': 2,
-            });
-            rvRemainedPassCount--;
-            rvUsedPassCount++;
-          } else {
-            batch.update(doc.reference, {
-              'verificationStatus': 3,
-            });
-            rvFailCount++;
-          }
-        }
-      }
-
-      batch.update(groupDoc.reference, {
-        'rvRemainedPassCount': rvRemainedPassCount,
-        'rvUsedPassCount': rvUsedPassCount,
-        'rvFailCount': rvFailCount,
-      });
-
-      await batch.commit();
-    }
-  }
+  Map<String, DocumentSnapshot> cachedData = {};
 
   @override
   Widget build(BuildContext context) {
@@ -100,14 +47,20 @@ class _VerificationUserScreenState extends State<VerificationUserScreen> {
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
-
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           }
 
+          if (!snapshot.hasData) {
+            return const Text('No data available');
+          }
+
           String testDateString = snapshot.data!['testDateString'];
+          DateTime testDate = DateFormat('yyyy. MM. dd').parse(testDateString);
 
           return StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
@@ -129,11 +82,7 @@ class _VerificationUserScreenState extends State<VerificationUserScreen> {
               int remainedPassCount = snapshot.data!['rvRemainedPassCount'];
               int rvReadingPage = snapshot.data!['rvReadingPage'];
               int rvSuccessCount = snapshot.data!['rvSuccessCount'];
-
-              DateTime testDate =
-                  DateFormat('yyyy. MM. dd').parse(testDateString);
-
-              updateVerificationStatus(testDate);
+              int usedPassCount = snapshot.data!['rvUsedPassCount'];
 
               return Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -187,272 +136,404 @@ class _VerificationUserScreenState extends State<VerificationUserScreen> {
                         );
                       },
                     ),
-                    StreamBuilder<QuerySnapshot>(
+                    StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('groups')
                           .doc(widget.groupId)
-                          .collection('readingStatusVerifications')
-                          .doc(FirebaseAuth.instance.currentUser?.uid)
-                          .collection('userVerifications')
                           .snapshots(),
-                      builder: (context, snapshot) {
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
                         if (snapshot.hasData) {
-                          final documentsData = snapshot.data!.docs.map((doc) {
-                            final verificationDate =
-                                (doc['verificationDate'] as Timestamp).toDate();
-                            final formattedDate =
-                                '${verificationDate.month}/${verificationDate.day}';
-                            final formattedDateFull = DateFormat('yyyy. MM. dd')
-                                .format(verificationDate);
-                            DateTime currentDate = DateTime.now();
-                            Duration duration =
-                                testDate.difference(verificationDate);
+                          Map<String, dynamic>? groupData =
+                              snapshot.data!.data() as Map<String, dynamic>?;
 
-                            return {
-                              'verificationDate': formattedDate,
-                              'verificationContent': doc['verificationContent'],
-                              'verificationStatus': doc['verificationStatus'],
-                              'verificationDuration': duration,
-                              'formattedDateFull': formattedDateFull,
-                            };
-                          }).toList();
+                          if (groupData != null) {
+                            int rp = groupData['readingPeriod'];
+                            int rvp =
+                                groupData['readingStatusVerificationPeriod'];
+                            int remainedVerification =
+                                (rp / rvp).toDouble().truncate();
 
-                          return Expanded(
-                            child: GridView.builder(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 4,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 10,
-                              ),
-                              itemCount: documentsData.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final documentData = documentsData[index];
+                            Timestamp? groupStartTimestamp =
+                                groupData['groupStartTime'];
+                            DateTime groupStartTime =
+                                groupStartTimestamp != null
+                                    ? groupStartTimestamp.toDate()
+                                    : DateTime.now();
 
-                                final verificationDate =
-                                    documentData['verificationDate'];
-                                final verificationContent =
-                                    documentData['verificationContent'];
-                                final verificationStatus =
-                                    documentData['verificationStatus'];
-                                final verificationDuration =
-                                    documentData['verificationDuration'];
-                                final formattedDateFull =
-                                    documentData['formattedDateFull'];
+                            Duration vd = Duration(days: rvp);
 
-                                String vContent = '';
-                                Color? vColor, vBorderColor;
-                                double vBorderWidth = 0.0;
+                            return Expanded(
+                              child: GridView.builder(
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 4,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 0.6,
+                                ),
+                                itemCount: remainedVerification,
+                                itemBuilder: (BuildContext context, int index) {
+                                  DateTime verificationDate =
+                                      groupStartTime.add(vd * (index + 1));
 
-                                if (verificationStatus == 0) {
-                                  if (verificationDuration.inDays == 0) {
-                                    vContent = '인증하기';
-                                    vColor = Colors.yellow[400];
-                                  } else {
-                                    vContent = '인증예정';
-                                    vColor = Colors.grey[400];
-                                  }
-                                } else if (verificationStatus == 1) {
-                                  vContent = '$verificationContent';
-                                  vColor = Colors.green[400];
-                                } else if (verificationStatus == 2) {
-                                  vContent = 'PASS';
-                                  vColor = Colors.blue[400];
-                                } else if (verificationStatus == 3) {
-                                  vContent = '미인증';
-                                  vColor = Colors.red[400];
-                                }
+                                  String formattedVerificationDate =
+                                      DateFormat('yyyy. MM. dd')
+                                          .format(verificationDate);
+                                  final formattedDateYear =
+                                      '${verificationDate.year}';
+                                  final formattedDate =
+                                      '${verificationDate.month}. ${verificationDate.day}';
 
-                                if (verificationDuration.inDays == 0) {
-                                  vBorderColor = Colors.amber;
-                                  vBorderWidth = 3;
-                                } else {
-                                  vBorderColor = Colors.grey;
-                                  vBorderWidth = 1;
-                                }
+                                  return FutureBuilder<DocumentSnapshot>(
+                                    future: FirebaseFirestore.instance
+                                        .collection('groups')
+                                        .doc(widget.groupId)
+                                        .collection(
+                                            'readingStatusVerifications')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser?.uid)
+                                        .collection('userVerifications')
+                                        .doc(formattedVerificationDate)
+                                        .get(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<DocumentSnapshot>
+                                            snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      }
 
-                                return GestureDetector(
-                                  onTap: () {
-                                    if (verificationDuration.inDays == 0 &&
-                                        verificationStatus == 0) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: Row(
-                                              children: [
-                                                const Text(
-                                                    '독서 현황 인증\n(다 읽었으면 0 입력)'),
-                                                const Spacer(),
-                                                IconButton(
-                                                  icon: const Icon(Icons.close),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                    _contentController.clear();
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                            content: Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                  border: Border.all(
-                                                      color: const Color(
-                                                          0xff6DC4DB),
-                                                      width: 3)),
-                                              child: Row(
-                                                children: [
-                                                  const SizedBox(
-                                                    width: 5,
-                                                  ),
-                                                  Expanded(
-                                                    child: Form(
-                                                      key: _formKey,
-                                                      child: TextFormField(
-                                                        controller:
-                                                            _contentController,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .number,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          border:
-                                                              InputBorder.none,
-                                                          focusedBorder:
-                                                              InputBorder.none,
-                                                          hintText:
-                                                              '페이지 번호를 입력하시오.',
-                                                        ),
-                                                        validator: (value) {
-                                                          if (value == null ||
-                                                              value.isEmpty) {
-                                                            return '페이지 번호를 입력해주세요.';
-                                                          }
-                                                          if (int.parse(
-                                                                  value) <=
-                                                              rvReadingPage) {
-                                                            return '이전에 인증한 페이지보다 높아야 합니다.';
-                                                          }
-                                                          return null;
+                                      if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      }
+
+                                      String vContent = '-';
+                                      int verificationStatus = 0;
+
+                                      ValueNotifier<String> vStateString =
+                                          ValueNotifier<String>('인증예정');
+                                      ValueNotifier<Color?> vColor =
+                                          ValueNotifier<Color?>(
+                                              Colors.grey[400]);
+
+                                      if (snapshot.hasData &&
+                                          snapshot.data!.exists) {
+                                        final verificationContent = snapshot
+                                            .data!['verificationContent'];
+                                        if (verificationContent != 0) {
+                                          vContent = '$verificationContent';
+                                          vStateString.value = '인증완료';
+                                          vColor.value = Colors.green[400];
+                                        } else if (verificationContent == 0) {
+                                          vStateString.value = 'PASS';
+                                          vColor.value = Colors.blue[400];
+                                        }
+                                      } else {
+                                        if (verificationDate
+                                                .compareTo(testDate) ==
+                                            0) {
+                                          vStateString.value = '인증하기';
+                                          vColor.value = Colors.yellow[400];
+                                          verificationStatus = 1;
+                                        } else if (verificationDate
+                                                .compareTo(testDate) <
+                                            0) {
+                                          vStateString.value = '미인증';
+                                          vColor.value = Colors.red[400];
+                                        }
+                                      }
+
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (verificationDate
+                                                      .compareTo(testDate) ==
+                                                  0 &&
+                                              verificationStatus == 1) {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Row(
+                                                    children: [
+                                                      const Text(
+                                                          '독서 현황 인증\n(다 읽었으면 0 입력)'),
+                                                      const Spacer(),
+                                                      IconButton(
+                                                        icon: const Icon(
+                                                            Icons.close),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          _contentController
+                                                              .clear();
                                                         },
                                                       ),
+                                                    ],
+                                                  ),
+                                                  content: Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                        border: Border.all(
+                                                            color: const Color(
+                                                                0xff6DC4DB),
+                                                            width: 3)),
+                                                    child: Row(
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Expanded(
+                                                          child: Form(
+                                                            key: _formKey,
+                                                            child:
+                                                                TextFormField(
+                                                              controller:
+                                                                  _contentController,
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                              decoration:
+                                                                  const InputDecoration(
+                                                                border:
+                                                                    InputBorder
+                                                                        .none,
+                                                                focusedBorder:
+                                                                    InputBorder
+                                                                        .none,
+                                                                hintText:
+                                                                    '페이지 번호를 입력하시오.',
+                                                              ),
+                                                              validator:
+                                                                  (value) {
+                                                                if (value ==
+                                                                        null ||
+                                                                    value
+                                                                        .isEmpty) {
+                                                                  return '페이지 번호를 입력해주세요.';
+                                                                }
+                                                                if (int.parse(
+                                                                        value) <=
+                                                                    rvReadingPage) {
+                                                                  return '이전에 인증한 페이지보다 높아야 합니다.';
+                                                                }
+                                                                return null;
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: const Text('인증'),
-                                                onPressed: () async {
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    int pageNumber = int.parse(
-                                                        _contentController
-                                                            .text);
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('groups')
-                                                        .doc(widget.groupId)
-                                                        .collection(
-                                                            'readingStatusVerifications')
-                                                        .doc(FirebaseAuth
-                                                            .instance
-                                                            .currentUser
-                                                            ?.uid)
-                                                        .collection(
-                                                            'userVerifications')
-                                                        .doc(formattedDateFull)
-                                                        .update({
-                                                      'verificationContent':
-                                                          pageNumber,
-                                                      'verificationStatus': 1,
-                                                    });
+                                                  actions: <Widget>[
+                                                    if (remainedPassCount != 0)
+                                                      TextButton(
+                                                        child: const Text('패스'),
+                                                        onPressed: () async {
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'groups')
+                                                              .doc(widget
+                                                                  .groupId)
+                                                              .collection(
+                                                                  'readingStatusVerifications')
+                                                              .doc(FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  ?.uid)
+                                                              .collection(
+                                                                  'userVerifications')
+                                                              .doc(
+                                                                  formattedVerificationDate)
+                                                              .set({
+                                                            'verificationContent':
+                                                                0,
+                                                          });
 
-                                                    await FirebaseFirestore
-                                                        .instance
-                                                        .collection('groups')
-                                                        .doc(widget.groupId)
-                                                        .collection(
-                                                            'readingStatusVerifications')
-                                                        .doc(FirebaseAuth
-                                                            .instance
-                                                            .currentUser
-                                                            ?.uid)
-                                                        .update({
-                                                      'rvReadingPage':
-                                                          pageNumber,
-                                                      'rvSuccessCount':
-                                                          rvSuccessCount + 1,
-                                                    });
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'groups')
+                                                              .doc(widget
+                                                                  .groupId)
+                                                              .collection(
+                                                                  'readingStatusVerifications')
+                                                              .doc(FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  ?.uid)
+                                                              .update({
+                                                            'rvRemainedPassCount':
+                                                                remainedPassCount -
+                                                                    1,
+                                                            'rvUsedPassCount':
+                                                                usedPassCount +
+                                                                    1,
+                                                          });
 
-                                                    Navigator.of(context).pop();
-                                                    _contentController.clear();
-                                                  }
-                                                },
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          _contentController
+                                                              .clear();
+                                                        },
+                                                      ),
+                                                    TextButton(
+                                                      child: const Text('인증'),
+                                                      onPressed: () async {
+                                                        if (_formKey
+                                                            .currentState!
+                                                            .validate()) {
+                                                          int pageNumber =
+                                                              int.parse(
+                                                                  _contentController
+                                                                      .text);
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'groups')
+                                                              .doc(widget
+                                                                  .groupId)
+                                                              .collection(
+                                                                  'readingStatusVerifications')
+                                                              .doc(FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  ?.uid)
+                                                              .collection(
+                                                                  'userVerifications')
+                                                              .doc(
+                                                                  formattedVerificationDate)
+                                                              .set({
+                                                            'verificationContent':
+                                                                pageNumber,
+                                                          });
+
+                                                          await FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'groups')
+                                                              .doc(widget
+                                                                  .groupId)
+                                                              .collection(
+                                                                  'readingStatusVerifications')
+                                                              .doc(FirebaseAuth
+                                                                  .instance
+                                                                  .currentUser
+                                                                  ?.uid)
+                                                              .update({
+                                                            'rvReadingPage':
+                                                                pageNumber,
+                                                            'rvSuccessCount':
+                                                                rvSuccessCount +
+                                                                    1,
+                                                          });
+
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          _contentController
+                                                              .clear();
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                        },
+                                        child: Container(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          decoration: BoxDecoration(
+                                            color: vColor.value,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.7),
+                                                spreadRadius: 0,
+                                                blurRadius: 5.0,
+                                                offset: const Offset(0, 3),
                                               ),
                                             ],
-                                          );
-                                        },
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                formattedDateYear,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: "SsurroundAir",
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                formattedDate,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: "SsurroundAir",
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Container(
+                                                height: 2,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                color: Colors.white,
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                vStateString.value,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: "SsurroundAir",
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                vContent,
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: "SsurroundAir",
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       );
-                                    }
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    decoration: BoxDecoration(
-                                      color: vColor,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.7),
-                                          spreadRadius: 0,
-                                          blurRadius: 5.0,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          verificationDate,
-                                          style: const TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: "Ssurround",
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                          height: 2,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          color: Colors.black,
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          vContent,
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            fontFamily: "Ssurround",
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('Error: ${snapshot.error}');
-                        } else {
-                          return const CircularProgressIndicator();
+                                    },
+                                  );
+                                },
+                              ),
+                            );
+                          }
                         }
+
+                        return const Center(
+                          child: Text('데이터를 불러올 수 없습니다.'),
+                        );
                       },
                     ),
                   ],

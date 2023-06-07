@@ -53,6 +53,9 @@ dependencies:
   image_picker: ^0.8.7+5
   percent_indicator: ^4.2.3
 
+dependency_overrides:
+  url_launcher_android: "<=6.0.35"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -103,15 +106,24 @@ flutter:
     - assets/icons/chalkboard-user_selected.png
     - assets/icons/usericon.png
     - assets/images/LandingPage.png
-    - assets/medal/readcount1medal.png
-    - assets/medal/readcount5medal.png
-    - assets/medal/readcount10medal.png
-    - assets/medal/groupleadercount1medal.png
-    - assets/medal/groupleadercount5medal.png
-    - assets/medal/groupleadercount10medal.png
-    - assets/medal/certificount1medal.png
-    - assets/medal/certificount5medal.png
-    - assets/medal/certificount10medal.png
+    - assets/icons/ballot-check.png
+    - assets/icons/ballot-check_selected.png
+    - assets/icons/face-disappointed.png
+    - assets/icons/Heart.png
+    - assets/icons/Heart_Red.png
+    - assets/icons/Map_sky blue.png
+    - assets/icons/Warning.png
+    - assets/icons/Write.png
+    - assets/medals/readcount1medal.png
+    - assets/medals/readcount5medal.png
+    - assets/medals/readcount10medal.png
+    - assets/medals/groupleadercount1medal.png
+    - assets/medals/groupleadercount5medal.png
+    - assets/medals/groupleadercount10medal.png
+    - assets/medals/certificount1medal.png
+    - assets/medals/certificount5medal.png
+    - assets/medals/certificount10medal.png
+
 
 
   #   - images/a_dot_burr.jpeg

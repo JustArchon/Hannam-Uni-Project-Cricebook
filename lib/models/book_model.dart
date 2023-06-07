@@ -52,5 +52,6 @@ class BookModel {
     author = author.substring(0, author.indexOf('('));
     categoryName = categoryName.substring(
         categoryName.indexOf('>') + 1, categoryName.indexOf('>', 6));
+    link = link.replaceAll("http://", "https://");
   }
 }

@@ -118,12 +118,12 @@ class Drawerwidget extends StatelessWidget {
                                                           ? const Text('그룹장')
                                                           : const Text('그룹원'),
                                                       onTap: () {
-                                                        Navigator.of(context).push(
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    GroupProfilePage(
-                                                                        snapshot
-                                                                            .data!['userUID'],groupid)));
+                                                        Navigator.of(context).push(MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                GroupProfilePage(
+                                                                    snapshot.data![
+                                                                        'userUID'],
+                                                                    groupid)));
                                                       },
                                                     );
                                                   }
@@ -152,7 +152,7 @@ class Drawerwidget extends StatelessWidget {
                                                               GroupMemberManagePage(
                                                                   groupid)));
                                                 }),
-                                                /*ListTile(leading: const Icon(
+                                          /*ListTile(leading: const Icon(
                                               Icons.how_to_vote),
                                           title: const Text("그룹 투표"),
                                           onTap: () {

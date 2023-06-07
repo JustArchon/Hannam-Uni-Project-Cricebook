@@ -11,96 +11,101 @@ class MainBooksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: SizedBox(
-          height: 50,
-          child: Image.asset('assets/icons/아이콘_흰색(512px).png'),
-        ),
-        centerTitle: true,
-        elevation: 2,
-        backgroundColor: const Color(0xff6DC4DB),
-        foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        //toolbarHeight: 50,
-
-        // 우측 아이콘 버튼들
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.search_outlined), // 책 검색 아이콘 생성
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
-            },
+    return WillPopScope(
+      onWillPop: () {
+        return Future(() => false); //뒤로가기 막음
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: SizedBox(
+            height: 50,
+            child: Image.asset('assets/icons/아이콘_흰색(512px).png'),
           ),
-        ],
-      ),
-      body: FutureBuilder(
-        future: bestSeller,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                  right: 10,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    const Text(
-                      '주간 베스트셀러',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: "Ssurround",
-                        color: Colors.black,
+          centerTitle: true,
+          elevation: 2,
+          backgroundColor: const Color(0xff6DC4DB),
+          foregroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          //toolbarHeight: 50,
+
+          // 우측 아이콘 버튼들
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.search_outlined), // 책 검색 아이콘 생성
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SearchScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+        body: FutureBuilder(
+          future: bestSeller,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Expanded(
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 0.8,
-                        children: List.generate(
-                          snapshot.data!.length,
-                          (index) {
-                            var book = snapshot.data![index];
-                            return Book(
-                              id: book.id,
-                              title: book.title,
-                              thumb: book.thumb,
-                              description: book.description,
-                              categoryName: book.categoryName,
-                              author: book.author,
-                              publisher: book.publisher,
-                              pubDate: book.pubDate,
-                              link: book.link,
-                            );
-                          },
+                      const Text(
+                        '주간 베스트셀러',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: "Ssurround",
+                          color: Colors.black,
                         ),
                       ),
-                    )
-                  ],
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Expanded(
+                        child: GridView.count(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.8,
+                          children: List.generate(
+                            snapshot.data!.length,
+                            (index) {
+                              var book = snapshot.data![index];
+                              return Book(
+                                id: book.id,
+                                title: book.title,
+                                thumb: book.thumb,
+                                description: book.description,
+                                categoryName: book.categoryName,
+                                author: book.author,
+                                publisher: book.publisher,
+                                pubDate: book.pubDate,
+                                link: book.link,
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
+              );
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }

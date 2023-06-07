@@ -104,21 +104,24 @@ class _NewMessageState extends State<NewMessage> {
           children: [
             Ink(
               decoration: ShapeDecoration(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: const BorderSide(
-                  color: const Color(0xff6DC4DB),
-                  width: 2,
-                )),
-          ),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(
+                      color: Color(0xff6DC4DB),
+                      width: 2,
+                    )),
+              ),
               child: IconButton(
                 iconSize: 30,
                 onPressed: () {
                   getImage();
-                  setState(() {
-                  });
-                  },
-                icon: ImageUpload == true ? const CircularProgressIndicator() : ImageLink.trim().isNotEmpty ? Image.network(ImageLink) :const Icon(Icons.image),
+                  setState(() {});
+                },
+                icon: ImageUpload == true
+                    ? const CircularProgressIndicator()
+                    : ImageLink.trim().isNotEmpty
+                        ? Image.network(ImageLink)
+                        : const Icon(Icons.image),
                 color: const Color(0xff6DC4DB),
               ),
             ),

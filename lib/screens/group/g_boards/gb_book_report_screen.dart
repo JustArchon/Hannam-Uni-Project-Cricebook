@@ -25,7 +25,7 @@ class _BookReportScreenState extends State<BookReportScreen> {
       await FirebaseFirestore.instance
           .collection('groups')
           .doc(widget.groupId)
-          .collection('discussions')
+          .collection('bookReports')
           .doc(widget.bookReportId)
           .collection('opinions')
           .add({
@@ -62,13 +62,13 @@ class _BookReportScreenState extends State<BookReportScreen> {
           ),
         ),
       ),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
             .collection('groups')
             .doc(widget.groupId)
             .collection('bookReports')
             .doc(widget.bookReportId)
-            .get(),
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
@@ -81,181 +81,315 @@ class _BookReportScreenState extends State<BookReportScreen> {
               doc['bookReportContent'].replaceAll('<br>', '\n');
 
           String bookReportWriter = doc['bookReportWriter'];
+          List<dynamic> likesMembers = doc['bookReportLikesMembers'];
+          int likesCount = likesMembers.length - 1;
+          bool likesButtonState = false;
+          if (likesMembers.contains(FirebaseAuth.instance.currentUser?.uid)) {
+            likesButtonState = true;
+          }
 
           return SingleChildScrollView(
             child: FittedBox(
               fit: BoxFit.fitWidth,
-              child: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    padding:
-                        const EdgeInsets.only(top: 20, right: 30, left: 30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(
-                                color: const Color(0xff6DC4DB), width: 3),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    color: Colors.grey,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  FutureBuilder<DocumentSnapshot>(
-                                    future: FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(bookReportWriter)
-                                        .get(),
-                                    builder: (context, userSnapshot) {
-                                      if (userSnapshot.hasError) {
-                                        return Text(
-                                            'Error: ${userSnapshot.error}');
-                                      }
-                                      if (!userSnapshot.hasData) {
-                                        return const SizedBox();
-                                      }
-                                      final userDoc = userSnapshot.data!;
-                                      String userName = userDoc['userName'];
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.87,
+                padding: const EdgeInsets.only(top: 20, right: 30, left: 30),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                              color: const Color(0xff6DC4DB), width: 3),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      padding: const EdgeInsets.all(12.5),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: const Color(0xff6DC4DB)),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/icons/아이콘_상태표시바용(512px).png',
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    FutureBuilder<DocumentSnapshot>(
+                                      future: FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(bookReportWriter)
+                                          .get(),
+                                      builder: (context, userSnapshot) {
+                                        if (userSnapshot.hasError) {
+                                          return Text(
+                                              'Error: ${userSnapshot.error}');
+                                        }
+                                        if (!userSnapshot.hasData) {
+                                          return const SizedBox();
+                                        }
+                                        final userDoc = userSnapshot.data!;
+                                        String userName = userDoc['userName'];
 
-                                      return Text(
-                                        userName,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Ssurround",
-                                        ),
-                                      );
+                                        return Text(
+                                          userName,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Ssurround",
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 70,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      FirebaseFirestore.instance
+                                          .collection('groups')
+                                          .doc(widget.groupId)
+                                          .collection('bookReports')
+                                          .doc(widget.bookReportId)
+                                          .get()
+                                          .then((documentSnapshot) {
+                                        List<dynamic> likesMembers =
+                                            documentSnapshot[
+                                                'bookReportLikesMembers'];
+                                        String bookReportWriter =
+                                            documentSnapshot[
+                                                'bookReportWriter'];
+                                        if (!likesMembers.contains(FirebaseAuth
+                                            .instance.currentUser?.uid)) {
+                                          FirebaseFirestore.instance
+                                              .collection('groups')
+                                              .doc(widget.groupId)
+                                              .collection('bookReports')
+                                              .doc(widget.bookReportId)
+                                              .update({
+                                            'bookReportLikesMembers':
+                                                FieldValue.arrayUnion([
+                                              FirebaseAuth
+                                                  .instance.currentUser?.uid
+                                            ]),
+                                          });
+                                          likesButtonState = true;
+                                        } else if (bookReportWriter ==
+                                            FirebaseAuth
+                                                .instance.currentUser?.uid) {
+                                          Future.delayed(Duration.zero, () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  content: const Text(
+                                                    '자신의 독후감에 좋아요를\n누를 수 없습니다.',
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      letterSpacing: 1.0,
+                                                      fontFamily:
+                                                          "SsurroundAir",
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    IconButton(
+                                                      icon: const Icon(
+                                                          Icons.close),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          });
+                                        } else {
+                                          FirebaseFirestore.instance
+                                              .collection('groups')
+                                              .doc(widget.groupId)
+                                              .collection('bookReports')
+                                              .doc(widget.bookReportId)
+                                              .update({
+                                            'bookReportLikesMembers':
+                                                FieldValue.arrayRemove([
+                                              FirebaseAuth
+                                                  .instance.currentUser?.uid
+                                            ]),
+                                          });
+                                          likesButtonState = false;
+                                        }
+                                      });
                                     },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.25,
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    bookReportContent,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: "Ssurround",
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 5,
+                                      padding: const EdgeInsets.all(5),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      backgroundColor: const Color(0xff6DC4DB),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.favorite,
+                                          color: likesButtonState
+                                              ? Colors.red
+                                              : Colors.grey[600],
+                                          size: 30,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          "$likesCount",
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: "SsurroundAir",
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 3),
-                          height: 2,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.black,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                opinionListShow(),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 3),
-                                  height: 2,
-                                  width: MediaQuery.of(context).size.width,
-                                  color: Colors.grey,
-                                ),
                               ],
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                            color: const Color(0xff6DC4DB), width: 3)),
-                    child: Row(
-                      children: [
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            maxLines: null,
-                            controller: _textEditingController,
-                            onChanged: (value) {
-                              opinion = value;
-                            },
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              hintText: '의견을 입력하세요.',
+                            const SizedBox(
+                              height: 20,
                             ),
-                          ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                bookReportContent,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: "SsurroundAir",
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          width: 5,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.black, width: 1)),
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                maxLines: null,
+                                controller: _textEditingController,
+                                onChanged: (value) {
+                                  opinion = value.replaceAll('\n', '<br>');
+                                },
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  hintText: '의견을 입력하세요.',
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                if (opinion.isEmpty) {
+                                  Future.delayed(Duration.zero, () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: const Text(
+                                            '내용을 입력하세요.',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              letterSpacing: 1.0,
+                                              fontFamily: "SsurroundAir",
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          actions: [
+                                            IconButton(
+                                              icon: const Icon(Icons.close),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  });
+                                } else {
+                                  FocusScope.of(context).unfocus();
+                                  _addOpinion(opinion);
+                                  _textEditingController.clear();
+                                  opinion = '';
+                                }
+                              },
+                              icon: const Icon(
+                                Icons.send,
+                                color: Color(0xff6DC4DB),
+                              ),
+                            ),
+                          ],
                         ),
-                        IconButton(
-                          onPressed: () {
-                            if (opinion.isEmpty) {
-                              Future.delayed(Duration.zero, () {
-                                final scaffoldContext =
-                                    ScaffoldMessenger.of(context);
-                                scaffoldContext.showSnackBar(
-                                  const SnackBar(
-                                    content: Text('내용을 입력하세요.'),
-                                    backgroundColor: Color(0xff6DC4DB),
-                                  ),
-                                );
-                              });
-                            } else {
-                              _addOpinion(opinion);
-                              _textEditingController.clear();
-                              opinion = '';
-                            }
-                          },
-                          icon: const Icon(
-                            Icons.send,
-                            color: Color(0xff6DC4DB),
-                          ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 3),
+                        height: 2,
+                        width: MediaQuery.of(context).size.width,
+                        color: const Color(0xff6DC4DB),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            opinionListShow(),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           );
@@ -269,7 +403,7 @@ class _BookReportScreenState extends State<BookReportScreen> {
       stream: FirebaseFirestore.instance
           .collection('groups')
           .doc(widget.groupId)
-          .collection('discussions')
+          .collection('bookReports')
           .doc(widget.bookReportId)
           .collection('opinions')
           .orderBy('opinionTime', descending: false)
@@ -285,11 +419,12 @@ class _BookReportScreenState extends State<BookReportScreen> {
           default:
             List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
             return Wrap(
-              spacing: 10.0,
-              runSpacing: 10.0,
+              spacing: 0.0,
+              runSpacing: 5.0,
               children: documents.map(
                 (doc) {
-                  String opinionContent = doc['opinionContent'];
+                  String opinionContent =
+                      doc['opinionContent'].replaceAll('<br>', '\n');
                   String opinionWriter = doc['opinionWriter'];
                   Timestamp? opinionTimestamp = doc['opinionTime'];
                   DateTime opinionTime = opinionTimestamp != null
@@ -299,9 +434,13 @@ class _BookReportScreenState extends State<BookReportScreen> {
                       DateFormat('yyyy/MM/dd HH:mm').format(opinionTime);
 
                   return Container(
+                    width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -309,7 +448,15 @@ class _BookReportScreenState extends State<BookReportScreen> {
                             Container(
                               width: 30,
                               height: 30,
-                              color: Colors.grey,
+                              padding: const EdgeInsets.all(7.5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: const Color(0xff6DC4DB)),
+                              ),
+                              child: Image.asset(
+                                'assets/icons/아이콘_상태표시바용(512px).png',
+                              ),
                             ),
                             const SizedBox(
                               width: 10,
@@ -337,7 +484,6 @@ class _BookReportScreenState extends State<BookReportScreen> {
                                       userName,
                                       style: const TextStyle(
                                         fontSize: 15,
-                                        fontWeight: FontWeight.bold,
                                         fontFamily: "Ssurround",
                                       ),
                                     ),
@@ -346,8 +492,8 @@ class _BookReportScreenState extends State<BookReportScreen> {
                                       formattedDate2,
                                       style: const TextStyle(
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w300,
-                                        fontFamily: "Ssurround",
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
@@ -359,12 +505,15 @@ class _BookReportScreenState extends State<BookReportScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          opinionContent,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Ssurround",
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            opinionContent,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontFamily: "SsurroundAir",
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],

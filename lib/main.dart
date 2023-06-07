@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:circle_book/screens/login_page.dart';
 //import 'package:circle_book/screens/main/m_base_screen.dart';
 import 'package:flutter/gestures.dart';
@@ -10,6 +11,7 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -37,5 +39,14 @@ class MyApp extends StatelessWidget {
       home: //const MainBaseScreen(),
           const LoginScreen(),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

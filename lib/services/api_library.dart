@@ -45,4 +45,19 @@ class ApiLibrary {
       throw Error();
     }
   }
+
+  Future<LibraryInfoModel> getLibraryInfo(String id) async {
+    Uri url = Uri.parse('$baseUrl?lib_code=$id');
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      var temp = Xml2Json()..parse(response.body);
+      var responseBody = jsonDecode(temp.toParker());
+      var result =
+          LibraryInfoModel.fromJson(responseBody['METADATA']['LIBINFO']);
+      return result;
+    } else {
+      throw Error();
+    }
+  }
 }

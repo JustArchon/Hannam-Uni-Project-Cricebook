@@ -12,3 +12,16 @@ class LibraryModel {
     local = local.substring(0, 2);
   }
 }
+
+class LibraryInfoModel {
+  String name;
+  String tel;
+  String address;
+  String id;
+
+  LibraryInfoModel.fromJson(Map<String, dynamic> json)
+      : name = json['LIB_NAME'],
+        tel = json['TEL'],
+        address = json['ADDRESS'],
+        id = json['LIB_CODE'];
+}

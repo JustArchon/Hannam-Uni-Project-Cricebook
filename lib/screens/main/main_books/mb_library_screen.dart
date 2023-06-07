@@ -61,12 +61,15 @@ class _LibraryScreen extends State<LibraryScreen> {
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           DropdownButton(
+              padding: const EdgeInsets.only(right: 20),
               style: const TextStyle(
                 fontSize: 15,
                 fontFamily: "Ssurround",
                 letterSpacing: 1.0,
+                color: Colors.black,
               ),
               value: selectCity,
               items: cities
@@ -94,24 +97,49 @@ class _LibraryScreen extends State<LibraryScreen> {
         const SizedBox(
           height: 10,
         ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xff6DC4DB)),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            children: [
-              Text(
-                '${library.name}<${library.local}>',
-                style: const TextStyle(
-                  fontSize: 20,
-                  letterSpacing: 1.0,
-                  fontFamily: "SsurroundAir",
-                  fontWeight: FontWeight.bold,
+        InkWell(
+          onTap: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return LibraryInfoPopup(id: library.id);
+                });
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xff6DC4DB)),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: RichText(
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(children: <TextSpan>[
+                        TextSpan(
+                            text: library.name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              letterSpacing: 1.0,
+                              fontFamily: "Ssurround",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            )),
+                        TextSpan(
+                          text: " <${library.local}>",
+                          style: const TextStyle(
+                            fontSize: 20,
+                            letterSpacing: 1.0,
+                            fontFamily: "Ssurround",
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff6DC4DB),
+                          ),
+                        )
+                      ])),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
@@ -151,5 +179,59 @@ class _LibraryScreen extends State<LibraryScreen> {
         );
       },
     );
+  }
+}
+
+class LibraryInfoPopup extends StatelessWidget {
+  final String id;
+  const LibraryInfoPopup({super.key, required this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    Future<LibraryInfoModel> result = ApiLibrary().getLibraryInfo(id);
+    return FutureBuilder(
+        future: result,
+        builder: ((context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return AlertDialog(
+            title: Text(snapshot.data!.name,
+                style: const TextStyle(
+                  fontSize: 20,
+                  letterSpacing: 1.0,
+                  fontFamily: "Ssurround",
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                )),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "주소: ${snapshot.data!.address}",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    letterSpacing: 1.0,
+                    fontFamily: "SsurroundAir",
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  "TEL: ${snapshot.data!.tel}",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    letterSpacing: 1.0,
+                    fontFamily: "SsurroundAir",
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }));
   }
 }

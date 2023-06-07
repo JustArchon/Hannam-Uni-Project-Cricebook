@@ -77,7 +77,8 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           final doc = snapshot.data!;
-          String discussiontopic = doc['discussionTopic'];
+          String discussiontopic =
+              doc['discussionTopic'].replaceAll('<br>', '\n');
           String discussionWriter = doc['discussionWriter'];
           DateTime discussionTime = doc['discussionTime'].toDate() as DateTime;
           String formattedDate =
@@ -86,176 +87,207 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
           return SingleChildScrollView(
             child: FittedBox(
               fit: BoxFit.fitWidth,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.only(top: 20, right: 30, left: 30),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        border: Border.all(
-                            color: const Color(0xff6DC4DB), width: 3),
-                      ),
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.87,
+                    padding:
+                        const EdgeInsets.only(top: 20, right: 30, left: 30),
+                    child: SingleChildScrollView(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.grey,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              FutureBuilder<DocumentSnapshot>(
-                                future: FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(discussionWriter)
-                                    .get(),
-                                builder: (context, userSnapshot) {
-                                  if (userSnapshot.hasError) {
-                                    return Text('Error: ${userSnapshot.error}');
-                                  }
-                                  if (!userSnapshot.hasData) {
-                                    return const SizedBox();
-                                  }
-                                  final userDoc = userSnapshot.data!;
-                                  String userName = userDoc['userName'];
-
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        userName,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: "Ssurround",
-                                        ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(
+                                  color: const Color(0xff6DC4DB), width: 3),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      padding: const EdgeInsets.all(12.5),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: const Color(0xff6DC4DB)),
                                       ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        formattedDate,
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w300,
-                                          fontFamily: "Ssurround",
-                                        ),
+                                      child: Image.asset(
+                                        'assets/icons/아이콘_상태표시바용(512px).png',
                                       ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            discussiontopic,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "Ssurround",
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 3),
-                      height: 2,
-                      width: MediaQuery.of(context).size.width,
-                      color: Colors.black,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      width: MediaQuery.of(context).size.width,
-                      height: 300,
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            opinionListShow(),
-                            Container(
-                              margin: const EdgeInsets.only(top: 3),
-                              height: 2,
-                              width: MediaQuery.of(context).size.width,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(
-                              color: const Color(0xff6DC4DB), width: 3)),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              maxLines: null,
-                              controller: _textEditingController,
-                              onChanged: (value) {
-                                opinion = value;
-                              },
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                hintText: '의견을 입력하세요.',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              if (opinion.isEmpty) {
-                                Future.delayed(Duration.zero, () {
-                                  final scaffoldContext =
-                                      ScaffoldMessenger.of(context);
-                                  scaffoldContext.showSnackBar(
-                                    const SnackBar(
-                                      content: Text('내용을 입력하세요.'),
-                                      backgroundColor: Color(0xff6DC4DB),
                                     ),
-                                  );
-                                });
-                              } else {
-                                _addOpinion(opinion);
-                                _textEditingController.clear();
-                                opinion = '';
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.send,
-                              color: Color(0xff6DC4DB),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    FutureBuilder<DocumentSnapshot>(
+                                      future: FirebaseFirestore.instance
+                                          .collection('users')
+                                          .doc(discussionWriter)
+                                          .get(),
+                                      builder: (context, userSnapshot) {
+                                        if (userSnapshot.hasError) {
+                                          return Text(
+                                              'Error: ${userSnapshot.error}');
+                                        }
+                                        if (!userSnapshot.hasData) {
+                                          return const SizedBox();
+                                        }
+                                        final userDoc = userSnapshot.data!;
+                                        String userName = userDoc['userName'];
+
+                                        return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              userName,
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: "Ssurround",
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              formattedDate,
+                                              style: const TextStyle(
+                                                fontSize: 15,
+                                                fontFamily: "Ssurround",
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Text(
+                                    discussiontopic,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: "SsurroundAir",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border:
+                                    Border.all(color: Colors.black, width: 1)),
+                            child: Row(
+                              children: [
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    maxLines: null,
+                                    controller: _textEditingController,
+                                    onChanged: (value) {
+                                      opinion = value.replaceAll('\n', '<br>');
+                                    },
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                      hintText: '의견을 입력하세요.',
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    if (opinion.isEmpty) {
+                                      Future.delayed(Duration.zero, () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              content: const Text(
+                                                '내용을 입력하세요.',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  letterSpacing: 1.0,
+                                                  fontFamily: "SsurroundAir",
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              actions: [
+                                                IconButton(
+                                                  icon: const Icon(Icons.close),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      });
+                                    } else {
+                                      FocusScope.of(context).unfocus();
+                                      _addOpinion(opinion);
+                                      _textEditingController.clear();
+                                      opinion = '';
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.send,
+                                    color: Color(0xff6DC4DB),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(top: 3),
+                            height: 2,
+                            width: MediaQuery.of(context).size.width,
+                            color: const Color(0xff6DC4DB),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                opinionListShow(),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
@@ -285,11 +317,12 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
           default:
             List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
             return Wrap(
-              spacing: 10.0,
-              runSpacing: 10.0,
+              spacing: 0.0,
+              runSpacing: 5.0,
               children: documents.map(
                 (doc) {
-                  String opinionContent = doc['opinionContent'];
+                  String opinionContent =
+                      doc['opinionContent'].replaceAll('<br>', '\n');
                   String opinionWriter = doc['opinionWriter'];
                   Timestamp? opinionTimestamp = doc['opinionTime'];
                   DateTime opinionTime = opinionTimestamp != null
@@ -299,7 +332,12 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
                       DateFormat('yyyy/MM/dd HH:mm').format(opinionTime);
 
                   return Container(
+                    width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Column(
                       children: [
                         Row(
@@ -308,7 +346,15 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
                             Container(
                               width: 30,
                               height: 30,
-                              color: Colors.grey,
+                              padding: const EdgeInsets.all(7.5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border:
+                                    Border.all(color: const Color(0xff6DC4DB)),
+                              ),
+                              child: Image.asset(
+                                'assets/icons/아이콘_상태표시바용(512px).png',
+                              ),
                             ),
                             const SizedBox(
                               width: 10,
@@ -336,7 +382,6 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
                                       userName,
                                       style: const TextStyle(
                                         fontSize: 15,
-                                        fontWeight: FontWeight.bold,
                                         fontFamily: "Ssurround",
                                       ),
                                     ),
@@ -345,8 +390,8 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
                                       formattedDate2,
                                       style: const TextStyle(
                                         fontSize: 10,
-                                        fontWeight: FontWeight.w300,
-                                        fontFamily: "Ssurround",
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
@@ -358,12 +403,15 @@ class _DiscussionScreenState extends State<DiscussionScreen> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          opinionContent,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Ssurround",
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            opinionContent,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontFamily: "SsurroundAir",
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],

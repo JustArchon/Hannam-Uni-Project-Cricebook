@@ -115,10 +115,17 @@ class ChatBubbles extends StatelessWidget {
                 top: 0,
                 right: isMe ? 5 : null,
                 left: isMe ? null : 5,
-                child: SizedBox(
+                child: Container(
                   width: 40,
                   height: 40,
-                  child: Image.asset('assets/icons/usericon.png'),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xff6DC4DB)),
+                  ),
+                  child: Image.asset(
+                    'assets/icons/아이콘_상태표시바용(512px).png',
+                  ),
                 ),
               )
             ]);

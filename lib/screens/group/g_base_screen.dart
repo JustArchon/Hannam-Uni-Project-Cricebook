@@ -132,7 +132,7 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
   }
 
   void _onItemTapped(int index) {
-    if (index == 2 || index == 3) {
+    if (index == 1 || index == 2 || index == 3) {
       FirebaseFirestore.instance
           .collection('groups')
           .doc(widget.groupId)
@@ -144,13 +144,32 @@ class _GroupBaseScreenState extends State<GroupBaseScreen> {
           int gs = groupData['groupStatus'];
 
           if (gs == 1) {
-            final scaffoldContext = ScaffoldMessenger.of(context);
-            scaffoldContext.showSnackBar(
-              const SnackBar(
-                content: Text('그룹 독서가 시작되어야 열람 가능합니다.'),
-                backgroundColor: Color(0xff6DC4DB),
-              ),
-            );
+            Future.delayed(Duration.zero, () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: const Text(
+                      '그룹 독서가 시작되어야 열람 가능',
+                      style: TextStyle(
+                        fontSize: 15,
+                        letterSpacing: 1.0,
+                        fontFamily: "SsurroundAir",
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    actions: [
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            });
           } else {
             setState(() {
               _selectedIndex = index;

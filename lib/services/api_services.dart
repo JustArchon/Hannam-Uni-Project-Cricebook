@@ -127,6 +127,9 @@ class ApiService {
     Uri url = Uri.parse(
         'https://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=$ttbkey&Query=$name&MaxResults=$maxResults&Cover=Big&output=js&version=20131101');
 
+    if (name.isEmpty) {
+      return bookInstances;
+    }
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
