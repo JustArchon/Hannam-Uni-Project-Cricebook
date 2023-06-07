@@ -164,7 +164,18 @@ class _MemberReportScreenState extends State<MemberReportScreen> {
                                       ]);
                                 });
                           },
-                          child: const Text('제출하기'),
+                          style: ElevatedButton.styleFrom(
+                                  elevation: 5,
+                                  backgroundColor: const Color(0xff6DC4DB),
+                                ),
+                          child: const Text('제출하기',
+                          style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: "SsurroundAir",
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.0,
+                                        color: Colors.white,
+                                      ),),
                         ),
                       ])),
                 );
