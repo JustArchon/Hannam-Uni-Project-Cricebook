@@ -52,6 +52,12 @@ dependencies:
   uuid: ^3.0.7
   image_picker: ^0.8.7+5
   percent_indicator: ^4.2.3
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: "circle_book_icon"
+  ios: true
+  image_path: "assets/icons/아이콘_배경x(512px).png"
 
 dependency_overrides:
   url_launcher_android: "<=6.0.35"
