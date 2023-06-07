@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="circle_book"
+        android:label="써클북"
         android:name="${applicationName}"
         android:icon="@mipmap/circle_book_icon">
         <activity
