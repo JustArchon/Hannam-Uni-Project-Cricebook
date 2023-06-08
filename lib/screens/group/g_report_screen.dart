@@ -87,6 +87,9 @@ class _MemberReportScreenState extends State<MemberReportScreen> {
                             _ReportReason = value;
                           },
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         ElevatedButton(
                           onPressed: () {
                             showDialog(

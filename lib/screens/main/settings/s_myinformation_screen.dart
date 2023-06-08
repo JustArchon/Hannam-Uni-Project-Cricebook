@@ -155,15 +155,14 @@ class MyinformationScreen extends StatelessWidget {
                                     });
                               },
                               child: const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text("비밀번호 변경",
                                       style: TextStyle(
                                           fontFamily: "Ssurround",
                                           fontSize: 18,
                                           color: Colors.black)),
-                                  SizedBox(
-                                    width: 220,
-                                  ),
                                   Icon(Icons.arrow_forward_ios)
                                 ],
                               ),

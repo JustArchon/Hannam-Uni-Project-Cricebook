@@ -54,14 +54,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                               children: [
                                 const CircleAvatar(
                                   radius: 30,
                                   backgroundImage:
                                       AssetImage("assets/icons/usericon.png"),
-                                ),
-                                const SizedBox(
-                                  width: 225,
                                 ),
                                 Image.asset('assets/icons/아이콘_배경x(512px).png',
                                     width: 80, height: 80),

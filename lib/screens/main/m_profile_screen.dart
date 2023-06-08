@@ -220,7 +220,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                               ],
                             ),
                             const SizedBox(
-                              height: 3,
+                              height: 7,
                             ),
                               Text(
                                 snapshot.data!["selfintroduction"],

@@ -84,6 +84,9 @@ class _AppReportScreenState extends State<AppReportScreen> {
                             _ReportReason = value;
                           },
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         ElevatedButton(
                           onPressed: () {
                             showDialog(
