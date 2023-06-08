@@ -388,12 +388,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                               var scaffoldContext = context;
                                               Future.delayed(Duration.zero, () {
-                                                Navigator.push(
+                                                Navigator.pushAndRemoveUntil(
                                                   scaffoldContext,
                                                   MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const MainBaseScreen()),
-                                                );
+                                                  builder: (BuildContext context) =>
+                                                  const MainBaseScreen()), (route) => false);
                                               });
                                             }
                                           } catch (e) {
@@ -570,12 +569,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 var scaffoldContext = context;
                                                 Future.delayed(Duration.zero,
                                                     () {
-                                                  Navigator.push(
-                                                    scaffoldContext,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            const MainBaseScreen()),
-                                                  );
+                                                  Navigator.pushAndRemoveUntil(
+                                                      scaffoldContext,
+                                                      MaterialPageRoute(
+                                                      builder: (BuildContext context) =>
+                                                      const MainBaseScreen()), (route) => false);
                                                 });
                                               }
                                             }
@@ -706,12 +704,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               var scaffoldContext = context;
                               Future.delayed(Duration.zero, () {
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                   scaffoldContext,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MainBaseScreen()),
-                                );
+                                    builder: (BuildContext context) =>
+                                        const MainBaseScreen()), (route) => false);
                               });
                             }
                           } catch (e) {
@@ -736,12 +733,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (newUser.user != null) {
                               var scaffoldContext = context;
                               Future.delayed(Duration.zero, () {
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                   scaffoldContext,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const MainBaseScreen()),
-                                );
+                                    builder: (BuildContext context) =>
+                                        const MainBaseScreen()), (route) => false);
                               });
                             }
                           }
