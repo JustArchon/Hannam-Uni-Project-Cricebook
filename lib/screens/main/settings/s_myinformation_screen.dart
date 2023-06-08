@@ -81,7 +81,7 @@ class MyinformationScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 20,
                               ),
-                              const Text("알람 설정",
+                              const Text("내 정보 관리",
                                 style: TextStyle(
                                     fontFamily: "Ssurround",
                                     fontSize: 18,
