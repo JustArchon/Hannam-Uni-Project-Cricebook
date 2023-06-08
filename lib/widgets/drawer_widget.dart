@@ -41,6 +41,7 @@ class Drawerwidget extends StatelessWidget {
                           child: CircularProgressIndicator(),
                         );
                       } else {
+                        String profileIcon = snapshot.data!['profileIcon'];
                         return Column(
                           children: [
                             Expanded(
@@ -50,11 +51,18 @@ class Drawerwidget extends StatelessWidget {
                                   // 프로젝트에 assets 폴더 생성 후 이미지 2개 넣기
                                   // pubspec.yaml 파일에 assets 주석에 이미지 추가하기
                                   UserAccountsDrawerHeader(
-                                    currentAccountPicture: const CircleAvatar(
-                                      // 현재 계정 이미지 set
-                                      backgroundImage: AssetImage(
-                                          'assets/icons/usericon.png'),
-                                      backgroundColor: Colors.white,
+                                    currentAccountPicture: Container(
+                                      width: 40,
+                                      height: 40,
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                        border: Border.all(color: Colors.white),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/$profileIcon.png',
+                                      ),
                                     ),
                                     otherAccountsPictures: const <Widget>[
                                       // CircleAvatar(
@@ -62,10 +70,16 @@ class Drawerwidget extends StatelessWidget {
                                       //   backgroundImage: AssetImage('assets/profile2.png'),
                                       // )
                                     ],
-                                    accountName:
-                                        Text(snapshot.data!['userName']),
-                                    accountEmail:
-                                        Text(snapshot.data!['userEmail']),
+                                    accountName: Text(
+                                        snapshot.data!['userName'],
+                                        style: const TextStyle(
+                                            fontFamily: "Ssurround",
+                                            color: Colors.black)),
+                                    accountEmail: Text(
+                                        snapshot.data!['userEmail'],
+                                        style: const TextStyle(
+                                            fontFamily: "Ssurround",
+                                            color: Colors.black)),
                                     /*
                             onDetailsPressed: () {
                               print('arrow is clicked');
@@ -81,7 +95,10 @@ class Drawerwidget extends StatelessWidget {
                                   SingleChildScrollView(
                                     child: Column(
                                       children: [
-                                        const Text("그룹 멤버"),
+                                        const Text("그룹 멤버",
+                                            style: TextStyle(
+                                                fontFamily: "Ssurround",
+                                                color: Colors.black)),
                                         ListView.builder(
                                           shrinkWrap: true,
                                           itemCount: gm?.length,
@@ -105,18 +122,49 @@ class Drawerwidget extends StatelessWidget {
                                                     );
                                                   } else {
                                                     return ListTile(
-                                                      leading: const CircleAvatar(
-                                                          backgroundImage:
-                                                              AssetImage(
-                                                                  'assets/icons/usericon.png')),
-                                                      title: Text(snapshot
-                                                          .data!['userName']),
+                                                      leading: Container(
+                                                        width: 40,
+                                                        height: 40,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(10),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.white,
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          border: Border.all(
+                                                              color: const Color(
+                                                                  0xff6DC4DB)),
+                                                        ),
+                                                        child: Image.asset(
+                                                          'assets/$profileIcon.png',
+                                                        ),
+                                                      ),
+                                                      title: Text(
+                                                          snapshot.data![
+                                                              'userName'],
+                                                          style: const TextStyle(
+                                                              fontFamily:
+                                                                  "Ssurround",
+                                                              color: Colors
+                                                                  .black)),
                                                       subtitle: null,
                                                       trailing: gl ==
                                                               snapshot.data![
                                                                   'userUID']
-                                                          ? const Text('그룹장')
-                                                          : const Text('그룹원'),
+                                                          ? const Text('그룹장',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Ssurround",
+                                                                  color: Colors
+                                                                      .black))
+                                                          : const Text('그룹원',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Ssurround",
+                                                                  color: Colors
+                                                                      .black)),
                                                       onTap: () {
                                                         Navigator.of(context).push(MaterialPageRoute(
                                                             builder: (context) =>
