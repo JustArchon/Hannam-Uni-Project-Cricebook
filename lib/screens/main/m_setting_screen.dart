@@ -1,10 +1,10 @@
+import 'package:circle_book/screens/login_page.dart';
 import 'package:circle_book/screens/main/settings/s_myinformation_screen.dart';
-import 'package:circle_book/screens/main/settings/s_notification_screen.dart';
 import 'package:circle_book/screens/main/settings/s_report_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// I"m trash.. of course JustArchon you fucking
+
 class MainSettingsScreen extends StatelessWidget {
   const MainSettingsScreen({super.key});
 
@@ -118,14 +118,16 @@ class MainSettingsScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
+                              /*
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const NotificationScreen(),
-                                ),
-                              );
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const NotificationScreen(),
+                                    ),
+                                  );
                                 },
                                 child: const Row(
                                   mainAxisAlignment:
@@ -143,6 +145,7 @@ class MainSettingsScreen extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
+                              */
                               GestureDetector(
                                 onTap: () {
                                   showDialog(
@@ -157,12 +160,13 @@ class MainSettingsScreen extends StatelessWidget {
                                               child: const Text('확인'),
                                               onPressed: () async {
                                                 try {
-                                                  await FirebaseFirestore
+                                                  /*await FirebaseFirestore
                                                       .instance
                                                       .collection('users')
                                                       .doc(FirebaseAuth.instance
                                                           .currentUser?.uid)
                                                       .delete();
+                                                      */
                                                   await user!.delete();
                                                   Navigator.pop(context);
                                                   Navigator.pop(context);
@@ -328,7 +332,12 @@ class MainSettingsScreen extends StatelessWidget {
                                   {
                                     try {
                                       await FirebaseAuth.instance.signOut();
-                                      Navigator.pop(context);
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  const LoginScreen()),
+                                          (route) => false);
                                     } catch (e) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
@@ -360,13 +369,8 @@ class MainSettingsScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                            ]
-                      )
-                  );
-            }
-          )
-        )
-      ),
+                            ]));
+                  }))),
     );
   }
 }
