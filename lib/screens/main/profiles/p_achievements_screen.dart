@@ -60,20 +60,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서 1회 완료'),
                           subtitle: const Text('그룹 독서 1회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent: Bookcount > 1 ? 1 : Bookcount / 1,
-                            center: Text(
-                              Bookcount > 1
-                                  ? '100%'
-                                  : '${(Bookcount / 1) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: Bookcount > 1 ? 1 : Bookcount / 1,
+                              center: Text(
+                                Bookcount > 1
+                                    ? '100%'
+                                    : '${(Bookcount / 1) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (Bookcount >= 1) {
@@ -200,20 +202,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서 5회 완료'),
                           subtitle: const Text('그룹 독서 5회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent: Bookcount > 5 ? 1 : Bookcount / 5,
-                            center: Text(
-                              Bookcount > 5
-                                  ? '100%'
-                                  : '${(Bookcount / 5) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: Bookcount > 5 ? 1 : Bookcount / 5,
+                              center: Text(
+                                Bookcount > 5
+                                    ? '100%'
+                                    : '${(Bookcount / 5) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (Bookcount >= 5) {
@@ -341,20 +345,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서 10회 완료'),
                           subtitle: const Text('그룹 독서 10회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent: Bookcount > 10 ? 1 : Bookcount / 10,
-                            center: Text(
-                              Bookcount > 10
-                                  ? '100%'
-                                  : '${(Bookcount / 10) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: Bookcount > 10 ? 1 : Bookcount / 10,
+                              center: Text(
+                                Bookcount > 10
+                                    ? '100%'
+                                    : '${(Bookcount / 10) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (Bookcount >= 10) {
@@ -475,7 +481,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                         ),
                         Container(
                           height: 1.0,
-                          width: 500.0,
+                          width: MediaQuery.of(context).size.width,
                           color: Colors.black,
                         ),
                         const Text("그룹장 횟수 업적"),
@@ -488,21 +494,23 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서장 1회 완료'),
                           subtitle: const Text('그룹장을 맡아 그룹 독서 1회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent:
-                                GroupLeaderCount > 1 ? 1 : GroupLeaderCount / 1,
-                            center: Text(
-                              GroupLeaderCount > 1
-                                  ? '100%'
-                                  : '${(GroupLeaderCount / 1) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent:
+                                  GroupLeaderCount > 1 ? 1 : GroupLeaderCount / 1,
+                              center: Text(
+                                GroupLeaderCount > 1
+                                    ? '100%'
+                                    : '${(GroupLeaderCount / 1) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (GroupLeaderCount >= 1) {
@@ -630,21 +638,23 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서장 5회 완료'),
                           subtitle: const Text('그룹장을 맡아 그룹 독서 5회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent:
-                                GroupLeaderCount > 5 ? 1 : GroupLeaderCount / 5,
-                            center: Text(
-                              GroupLeaderCount > 5
-                                  ? '100%'
-                                  : '${(GroupLeaderCount / 5) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent:
+                                  GroupLeaderCount > 5 ? 1 : GroupLeaderCount / 5,
+                              center: Text(
+                                GroupLeaderCount > 5
+                                    ? '100%'
+                                    : '${(GroupLeaderCount / 5) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (GroupLeaderCount >= 5) {
@@ -772,22 +782,24 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서장 10회 완료'),
                           subtitle: const Text('그룹장을 맡아 그룹 독서 10회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent: GroupLeaderCount > 10
-                                ? 1
-                                : GroupLeaderCount / 10,
-                            center: Text(
-                              GroupLeaderCount > 10
-                                  ? '100%'
-                                  : '${(GroupLeaderCount / 10) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: GroupLeaderCount > 10
+                                  ? 1
+                                  : GroupLeaderCount / 10,
+                              center: Text(
+                                GroupLeaderCount > 10
+                                    ? '100%'
+                                    : '${(GroupLeaderCount / 10) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (GroupLeaderCount >= 10) {
@@ -908,7 +920,7 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                         ),
                         Container(
                           height: 1.0,
-                          width: 500.0,
+                          width: MediaQuery.of(context).size.width,
                           color: Colors.black,
                         ),
                         const Text("독서인증 횟수 업적"),
@@ -921,20 +933,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서 인증 1회 완료'),
                           subtitle: const Text('그룹 독서 인증을 1회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent: CertifiCount > 1 ? 1 : CertifiCount / 1,
-                            center: Text(
-                              CertifiCount > 1
-                                  ? '100%'
-                                  : '${(CertifiCount / 1) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: CertifiCount > 1 ? 1 : CertifiCount / 1,
+                              center: Text(
+                                CertifiCount > 1
+                                    ? '100%'
+                                    : '${(CertifiCount / 1) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (CertifiCount >= 1) {
@@ -1062,20 +1076,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서 인증 5회 완료'),
                           subtitle: const Text('그룹 독서 인증을 5회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent: CertifiCount > 5 ? 1 : CertifiCount / 5,
-                            center: Text(
-                              CertifiCount > 5
-                                  ? '100%'
-                                  : '${(CertifiCount / 5) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: CertifiCount > 5 ? 1 : CertifiCount / 5,
+                              center: Text(
+                                CertifiCount > 5
+                                    ? '100%'
+                                    : '${(CertifiCount / 5) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (CertifiCount >= 5) {
@@ -1203,20 +1219,22 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                   size: 55, color: Color(0xff6DC4DB)),
                           title: const Text('그룹 독서 인증 10회 완료'),
                           subtitle: const Text('그룹 독서 인증을 10회를 완료하세요!'),
-                          trailing: CircularPercentIndicator(
-                            radius: 28.0,
-                            lineWidth: 7.0,
-                            animation: true,
-                            percent: CertifiCount > 10 ? 1 : CertifiCount / 10,
-                            center: Text(
-                              CertifiCount > 10
-                                  ? '100%'
-                                  : '${(CertifiCount / 10) * 100}%',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 10.0),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: CertifiCount > 10 ? 1 : CertifiCount / 10,
+                              center: Text(
+                                CertifiCount > 10
+                                    ? '100%'
+                                    : '${(CertifiCount / 10) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
                             ),
-                            circularStrokeCap: CircularStrokeCap.round,
-                            progressColor: const Color(0xff6DC4DB),
                           ),
                           onTap: () {
                             if (CertifiCount >= 10) {
