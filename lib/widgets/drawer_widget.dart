@@ -85,12 +85,18 @@ class Drawerwidget extends StatelessWidget {
                               print('arrow is clicked');
                             },
                             */
-                                    decoration: const BoxDecoration(
-                                        color: Color(0xff6DC4DB),
-                                        borderRadius: BorderRadius.only(
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xff6DC4DB),
+                                        borderRadius: const BorderRadius.only(
                                             bottomLeft: Radius.circular(40.0),
-                                            bottomRight:
-                                                Radius.circular(40.0))),
+                                            bottomRight: Radius.circular(40.0)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.3),
+                                              blurRadius: 5,
+                                              spreadRadius: 5)
+                                        ]),
                                   ),
                                   SingleChildScrollView(
                                     child: Column(
