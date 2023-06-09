@@ -651,70 +651,92 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
 
                                           return Column(
                                             children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.all(10),
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.57,
-                                                decoration: BoxDecoration(
-                                                    border: Border.all()),
-                                                alignment: Alignment.center,
-                                                child: Column(
-                                                  children: [
-                                                    Expanded(
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        child: Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(10.0),
-                                                          child: TextField(
-                                                            focusNode:
-                                                                _focusNode,
-                                                            textInputAction:
-                                                                TextInputAction
-                                                                    .newline,
-                                                            maxLines: null,
-                                                            controller:
-                                                                _reportController,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                              hintText:
-                                                                  '독후감을 작성하세요.',
-                                                              border:
-                                                                  InputBorder
-                                                                      .none,
+                                              Stack(
+                                                children: [
+                                                  Container(
+                                                    margin:
+                                                      const EdgeInsets.all(10),
+                                                      width: MediaQuery.of(context)
+                                                          .size
+                                                          .width,
+                                                      height: MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.57,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.brown,
+                                                          borderRadius: BorderRadius.circular(30),
+                                                          border: Border.all(color: Colors.brown)),
+                                                      alignment: Alignment.center,
+                                                    child: Container(
+                                                      margin:
+                                                          const EdgeInsets.all(10),
+                                                      width: MediaQuery.of(context)
+                                                          .size
+                                                          .width,
+                                                      height: MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.57,
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.yellow,
+                                                          borderRadius: BorderRadius.circular(30),
+                                                          border: Border.all(color: Colors.yellow)),
+                                                      alignment: Alignment.center,
+                                                      child: Column(
+                                                        children: [
+                                                          Expanded(
+                                                            child:
+                                                                SingleChildScrollView(
+                                                              child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(10.0),
+                                                                child: TextField(
+                                                                  focusNode:
+                                                                      _focusNode,
+                                                                  textInputAction:
+                                                                      TextInputAction
+                                                                          .newline,
+                                                                  maxLines: null,
+                                                                  controller:
+                                                                      _reportController,
+                                                                  decoration:
+                                                                      const InputDecoration(
+                                                                    hintText:
+                                                                        '독후감을 작성하세요.',
+                                                                    border:
+                                                                        InputBorder
+                                                                            .none,
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    FittedBox(
-                                                      fit: BoxFit.fitWidth,
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(10.0),
-                                                        child: const Text(
-                                                          '공유는 그룹독서 종료 2일전부터 가능합니다.',
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color: Colors.red,
-                                                            fontFamily:
-                                                                "Ssurround",
+                                                          FittedBox(
+                                                            fit: BoxFit.fitWidth,
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(10.0),
+                                                              child: const Text(
+                                                                '공유는 그룹독서 종료 2일전부터 가능합니다.',
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight.bold,
+                                                                  color: Colors.red,
+                                                                  fontFamily:
+                                                                      "Ssurround",
+                                                                ),
+                                                              ),
+                                                            ),
                                                           ),
-                                                        ),
+                                                        ],
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
                                               SizedBox(
                                                 width: MediaQuery.of(context)
