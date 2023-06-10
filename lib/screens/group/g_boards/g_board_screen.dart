@@ -664,10 +664,24 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
                                                               .height *
                                                           0.57,
                                                       decoration: BoxDecoration(
-                                                          color: Colors.brown,
-                                                          borderRadius: BorderRadius.circular(30),
-                                                          border: Border.all(color: Colors.brown)),
-                                                      alignment: Alignment.center,
+                                                        color: const Color(
+                                                            0xffB98764),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.3),
+                                                              blurRadius: 5,
+                                                              spreadRadius: 5)
+                                                        ],
+                                                        border: Border.all(
+                                                            color: const Color(
+                                                                0xffB98764))),
+                                                    alignment: Alignment.center,
                                                     child: Container(
                                                       margin:
                                                           const EdgeInsets.all(10),
@@ -679,9 +693,10 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
                                                               .height *
                                                           0.57,
                                                       decoration: BoxDecoration(
-                                                          color: Colors.yellow,
+                                                          color: Colors.white,
                                                           borderRadius: BorderRadius.circular(30),
-                                                          border: Border.all(color: Colors.yellow)),
+                                                          border: Border.all(color: const Color(
+                                                                0xffF9F871))),
                                                       alignment: Alignment.center,
                                                       child: Column(
                                                         children: [
@@ -713,7 +728,20 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
                                                               ),
                                                             ),
                                                           ),
-                                                          FittedBox(
+                                                          
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Column(
+                                                  children: [
+                                                    FittedBox(
                                                             fit: BoxFit.fitWidth,
                                                             child: Container(
                                                               padding:
@@ -732,125 +760,117 @@ class _GroupBoardScreenState extends State<GroupBoardScreen>
                                                               ),
                                                             ),
                                                           ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: [
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        bookReport =
-                                                            _reportController
-                                                                .text
-                                                                .replaceAll(
-                                                                    '\n',
-                                                                    '<br>');
-                                                        _addBookReports(
-                                                            bookReport);
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: [
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            bookReport =
+                                                                _reportController
+                                                                    .text
+                                                                    .replaceAll(
+                                                                        '\n',
+                                                                        '<br>');
+                                                            _addBookReports(
+                                                                bookReport);
 
-                                                        Future.delayed(
-                                                            Duration.zero, () {
-                                                          showDialog(
-                                                            context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
-                                                              return AlertDialog(
-                                                                content:
-                                                                    const Text(
-                                                                  '독후감이 저장되었습니다.',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    letterSpacing:
-                                                                        1.0,
-                                                                    fontFamily:
-                                                                        "SsurroundAir",
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                                actions: [
-                                                                  IconButton(
-                                                                    icon: const Icon(
-                                                                        Icons
-                                                                            .close),
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                  ),
-                                                                ],
+                                                            Future.delayed(
+                                                                Duration.zero, () {
+                                                              showDialog(
+                                                                context: context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return AlertDialog(
+                                                                    content:
+                                                                        const Text(
+                                                                      '독후감이 저장되었습니다.',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        letterSpacing:
+                                                                            1.0,
+                                                                        fontFamily:
+                                                                            "SsurroundAir",
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                      ),
+                                                                    ),
+                                                                    actions: [
+                                                                      IconButton(
+                                                                        icon: const Icon(
+                                                                            Icons
+                                                                                .close),
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(
+                                                                                  context)
+                                                                              .pop();
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
                                                               );
-                                                            },
-                                                          );
-                                                        });
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        elevation: 5,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        backgroundColor:
-                                                            const Color(
-                                                                0xff6DC4DB),
-                                                      ),
-                                                      child: const Text(
-                                                        '저장',
-                                                        style: TextStyle(
-                                                          fontSize: 20,
-                                                          fontFamily:
-                                                              "SsurroundAir",
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
+                                                            });
+                                                          },
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            elevation: 5,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10)),
+                                                            backgroundColor:
+                                                                const Color(
+                                                                    0xff6DC4DB),
+                                                          ),
+                                                          child: const Text(
+                                                            '저장',
+                                                            style: TextStyle(
+                                                              fontSize: 20,
+                                                              fontFamily:
+                                                                  "SsurroundAir",
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    ElevatedButton(
-                                                      onPressed: () {
-                                                        checkEvent(testDate);
-                                                      },
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        elevation: 5,
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10)),
-                                                        backgroundColor:
-                                                            const Color(
-                                                                0xff6DC4DB),
-                                                      ),
-                                                      child: const Text(
-                                                        '공유',
-                                                        style: TextStyle(
-                                                          fontSize: 20,
-                                                          fontFamily:
-                                                              "SsurroundAir",
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white,
+                                                        ElevatedButton(
+                                                          onPressed: () {
+                                                            checkEvent(testDate);
+                                                          },
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            elevation: 5,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            10)),
+                                                            backgroundColor:
+                                                                const Color(
+                                                                    0xff6DC4DB),
+                                                          ),
+                                                          child: const Text(
+                                                            '공유',
+                                                            style: TextStyle(
+                                                              fontSize: 20,
+                                                              fontFamily:
+                                                                  "SsurroundAir",
+                                                              fontWeight:
+                                                                  FontWeight.bold,
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
