@@ -1,10 +1,13 @@
+import 'package:circle_book/screens/group/g_report_screen.dart';
 import 'package:circle_book/screens/main/profiles/p_achievements_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class MainProfilePage extends StatefulWidget {
-  const MainProfilePage({super.key});
+  const MainProfilePage(this.userid, this.groupid, {super.key});
+  final userid;
+  final groupid;
 
   @override
   State<MainProfilePage> createState() => _MainProfilePageState();
@@ -25,13 +28,12 @@ class _MainProfilePageState extends State<MainProfilePage> {
         elevation: 2,
         backgroundColor: const Color(0xff6DC4DB),
         foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
               .collection('users')
-              .doc(FirebaseAuth.instance.currentUser?.uid)
+              .doc(widget.userid)
               .snapshots(),
           builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -79,7 +81,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        showDialog(
+                        if(widget.userid == FirebaseAuth.instance.currentUser?.uid) {
+                          showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDialog(
@@ -100,8 +103,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                       } else {
                                         FirebaseFirestore.instance
                                             .collection('users')
-                                            .doc(FirebaseAuth
-                                                .instance.currentUser?.uid)
+                                            .doc(widget.userid)
                                             .update({
                                           "userName": newName,
                                         });
@@ -118,6 +120,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                 ],
                               );
                             });
+                        }
                       },
                       child: RichText(
                         text: TextSpan(
@@ -167,7 +170,8 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                 const SizedBox(width: 5),
                                 GestureDetector(
                                   onTap: () {
-                                    showDialog(
+                                    if(widget.userid == FirebaseAuth.instance.currentUser?.uid) {
+                                      showDialog(
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
@@ -188,8 +192,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                               } else {
                                                 FirebaseFirestore.instance
                                                     .collection('users')
-                                                    .doc(FirebaseAuth.instance
-                                                        .currentUser?.uid)
+                                                    .doc(widget.userid)
                                                     .update({
                                                   "selfintroduction":
                                                       newIntroduce,
@@ -207,6 +210,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                         ],
                                       );
                                     });
+                                    }
                                   },
                                   child: const Text(
                                     '개인소개',
@@ -287,6 +291,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                       color: Color(0xff6DC4DB),
                                     ),
                                   ),
+                                  widget.userid == FirebaseAuth.instance.currentUser?.uid ? 
                                   IconButton(
                                       icon: const Icon(Icons.list),
                                       color: const Color(0xff6DC4DB),
@@ -297,7 +302,9 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                                 builder: (context) =>
                                                     AchievementsScreen(snapshot
                                                         .data!['userUID'])));
-                                      }),
+                                      })
+                                      :
+                                    const SizedBox(width: 1),
                                     const Expanded(
                                       child: SizedBox(width: 1)
                                     ),
@@ -312,6 +319,7 @@ class _MainProfilePageState extends State<MainProfilePage> {
                                 ],
                               ),
                             ),
+                            const SizedBox(height: 10,),
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.2,
                               child: GridView.count(
@@ -346,7 +354,20 @@ class _MainProfilePageState extends State<MainProfilePage> {
             }
           },
         ),
+        
       ),
-    );
+      floatingActionButton:
+            FirebaseAuth.instance.currentUser?.uid != widget.userid
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MemberReportScreen(
+                                userId: widget.userid,
+                                groupId: widget.groupid,
+                              )));
+                    },
+                    backgroundColor: const Color(0xff6DC4DB),
+                    child: const Icon(Icons.report))
+                : null);
   }
 }

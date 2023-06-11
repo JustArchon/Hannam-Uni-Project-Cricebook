@@ -1,4 +1,5 @@
 import 'package:circle_book/screens/group/g_member_manage_screen.dart';
+import 'package:circle_book/screens/main/m_profile_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -174,7 +175,7 @@ class Drawerwidget extends StatelessWidget {
                                                       onTap: () {
                                                         Navigator.of(context).push(MaterialPageRoute(
                                                             builder: (context) =>
-                                                                GroupProfilePage(
+                                                                MainProfilePage(
                                                                     snapshot.data![
                                                                         'userUID'],
                                                                     groupid)));
