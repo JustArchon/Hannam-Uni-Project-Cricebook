@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:circle_book/screens/login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:circle_book/screens/main/m_base_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'screens/main/m_base_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +39,15 @@ class MyApp extends StatelessWidget {
         },
       ),
       home: //const MainBaseScreen(),
-          const LoginScreen(),
+          StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.userChanges(),
+              builder: (ctx, usersnapshot) {
+                if (usersnapshot.hasData) {
+                  return const MainBaseScreen();
+                } else {
+                  return const LoginScreen();
+                }
+              }),
     );
   }
 }

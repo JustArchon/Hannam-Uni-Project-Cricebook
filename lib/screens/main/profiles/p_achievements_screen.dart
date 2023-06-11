@@ -926,292 +926,6 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                         const Text("독서인증 횟수 업적"),
                         ListTile(
                           leading: snapshot.data!['complete_Achievements']
-                                  .contains('certificount1')
-                              ? Image.asset(
-                                  'assets/medals/certificount1medal.png')
-                              : const Icon(Icons.lock,
-                                  size: 55, color: Color(0xff6DC4DB)),
-                          title: const Text('그룹 독서 인증 1회 완료'),
-                          subtitle: const Text('그룹 독서 인증을 1회를 완료하세요!'),
-                          trailing: FittedBox(
-                            child: CircularPercentIndicator(
-                              radius: 28.0,
-                              lineWidth: 7.0,
-                              animation: true,
-                              percent: CertifiCount > 1 ? 1 : CertifiCount / 1,
-                              center: Text(
-                                CertifiCount > 1
-                                    ? '100%'
-                                    : '${(CertifiCount / 1) * 100}%',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 10.0),
-                              ),
-                              circularStrokeCap: CircularStrokeCap.round,
-                              progressColor: const Color(0xff6DC4DB),
-                            ),
-                          ),
-                          onTap: () {
-                            if (CertifiCount >= 1) {
-                              var newlist =
-                                  snapshot.data!['mounted_Achievements'];
-                              if (snapshot.data!['complete_Achievements']
-                                      .contains('certificount1') ==
-                                  false) {
-                                var comlist =
-                                    snapshot.data!['complete_Achievements'];
-                                comlist.add('certificount1');
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(FirebaseAuth.instance.currentUser?.uid)
-                                    .update({
-                                  "complete_Achievements": comlist,
-                                });
-                              }
-                              if (snapshot.data!['mounted_Achievements']
-                                  .contains('certificount1medal')) {
-                                newlist.remove('certificount1medal');
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(FirebaseAuth.instance.currentUser?.uid)
-                                    .update({
-                                  "mounted_Achievements": newlist,
-                                });
-                                Future.delayed(Duration.zero, () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: const Text(
-                                          '정상적으로 업적 뱃지 제거가 완료되었습니다.',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            letterSpacing: 1.0,
-                                            fontFamily: "SsurroundAir",
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        actions: [
-                                          IconButton(
-                                            icon: const Icon(Icons.close),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                });
-                              } else {
-                                newlist.add('certificount1medal');
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(FirebaseAuth.instance.currentUser?.uid)
-                                    .update({
-                                  "mounted_Achievements": newlist,
-                                });
-                                Future.delayed(Duration.zero, () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: const Text(
-                                          '정상적으로 업적 뱃지 추가가 완료되었습니다.',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            letterSpacing: 1.0,
-                                            fontFamily: "SsurroundAir",
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        actions: [
-                                          IconButton(
-                                            icon: const Icon(Icons.close),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                });
-                              }
-                            } else {
-                              Future.delayed(Duration.zero, () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: const Text(
-                                        '아직 획득하지 못한 뱃지입니다. 목표를 달성후 장착해보세요!',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          letterSpacing: 1.0,
-                                          fontFamily: "SsurroundAir",
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      actions: [
-                                        IconButton(
-                                          icon: const Icon(Icons.close),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              });
-                            }
-                          },
-                        ),
-                        ListTile(
-                          leading: snapshot.data!['complete_Achievements']
-                                  .contains('certificount5')
-                              ? Image.asset(
-                                  'assets/medals/certificount5medal.png')
-                              : const Icon(Icons.lock,
-                                  size: 55, color: Color(0xff6DC4DB)),
-                          title: const Text('그룹 독서 인증 5회 완료'),
-                          subtitle: const Text('그룹 독서 인증을 5회를 완료하세요!'),
-                          trailing: FittedBox(
-                            child: CircularPercentIndicator(
-                              radius: 28.0,
-                              lineWidth: 7.0,
-                              animation: true,
-                              percent: CertifiCount > 5 ? 1 : CertifiCount / 5,
-                              center: Text(
-                                CertifiCount > 5
-                                    ? '100%'
-                                    : '${(CertifiCount / 5) * 100}%',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 10.0),
-                              ),
-                              circularStrokeCap: CircularStrokeCap.round,
-                              progressColor: const Color(0xff6DC4DB),
-                            ),
-                          ),
-                          onTap: () {
-                            if (CertifiCount >= 5) {
-                              var newlist =
-                                  snapshot.data!['mounted_Achievements'];
-                              if (snapshot.data!['complete_Achievements']
-                                      .contains('certificount5') ==
-                                  false) {
-                                var comlist =
-                                    snapshot.data!['complete_Achievements'];
-                                comlist.add('certificount5');
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(FirebaseAuth.instance.currentUser?.uid)
-                                    .update({
-                                  "complete_Achievements": comlist,
-                                });
-                              }
-                              if (snapshot.data!['mounted_Achievements']
-                                  .contains('certificount5medal')) {
-                                newlist.remove('certificount5medal');
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(FirebaseAuth.instance.currentUser?.uid)
-                                    .update({
-                                  "mounted_Achievements": newlist,
-                                });
-                                Future.delayed(Duration.zero, () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: const Text(
-                                          '정상적으로 업적 뱃지 제거가 완료되었습니다.',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            letterSpacing: 1.0,
-                                            fontFamily: "SsurroundAir",
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        actions: [
-                                          IconButton(
-                                            icon: const Icon(Icons.close),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                });
-                              } else {
-                                newlist.add('certificount5medal');
-                                FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(FirebaseAuth.instance.currentUser?.uid)
-                                    .update({
-                                  "mounted_Achievements": newlist,
-                                });
-                                Future.delayed(Duration.zero, () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: const Text(
-                                          '정상적으로 업적 뱃지 추가가 완료되었습니다.',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            letterSpacing: 1.0,
-                                            fontFamily: "SsurroundAir",
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        actions: [
-                                          IconButton(
-                                            icon: const Icon(Icons.close),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                });
-                              }
-                            } else {
-                              Future.delayed(Duration.zero, () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: const Text(
-                                        '아직 획득하지 못한 뱃지입니다. 목표를 달성후 장착해보세요!',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          letterSpacing: 1.0,
-                                          fontFamily: "SsurroundAir",
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      actions: [
-                                        IconButton(
-                                          icon: const Icon(Icons.close),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              });
-                            }
-                          },
-                        ),
-                        ListTile(
-                          leading: snapshot.data!['complete_Achievements']
                                   .contains('certificount10')
                               ? Image.asset(
                                   'assets/medals/certificount10medal.png')
@@ -1290,6 +1004,292 @@ class _AchievementsScreenState extends State<AchievementsScreen> {
                                 });
                               } else {
                                 newlist.add('certificount10medal');
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .update({
+                                  "mounted_Achievements": newlist,
+                                });
+                                Future.delayed(Duration.zero, () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: const Text(
+                                          '정상적으로 업적 뱃지 추가가 완료되었습니다.',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            letterSpacing: 1.0,
+                                            fontFamily: "SsurroundAir",
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          IconButton(
+                                            icon: const Icon(Icons.close),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                });
+                              }
+                            } else {
+                              Future.delayed(Duration.zero, () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: const Text(
+                                        '아직 획득하지 못한 뱃지입니다. 목표를 달성후 장착해보세요!',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          letterSpacing: 1.0,
+                                          fontFamily: "SsurroundAir",
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      actions: [
+                                        IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              });
+                            }
+                          },
+                        ),
+                        ListTile(
+                          leading: snapshot.data!['complete_Achievements']
+                                  .contains('certificount50')
+                              ? Image.asset(
+                                  'assets/medals/certificount50medal.png')
+                              : const Icon(Icons.lock,
+                                  size: 55, color: Color(0xff6DC4DB)),
+                          title: const Text('그룹 독서 인증 50회 완료'),
+                          subtitle: const Text('그룹 독서 인증을 50회를 완료하세요!'),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: CertifiCount > 50 ? 1 : CertifiCount / 50,
+                              center: Text(
+                                CertifiCount > 50
+                                    ? '100%'
+                                    : '${(CertifiCount / 50) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
+                            ),
+                          ),
+                          onTap: () {
+                            if (CertifiCount >= 50) {
+                              var newlist =
+                                  snapshot.data!['mounted_Achievements'];
+                              if (snapshot.data!['complete_Achievements']
+                                      .contains('certificount50') ==
+                                  false) {
+                                var comlist =
+                                    snapshot.data!['complete_Achievements'];
+                                comlist.add('certificount50');
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .update({
+                                  "complete_Achievements": comlist,
+                                });
+                              }
+                              if (snapshot.data!['mounted_Achievements']
+                                  .contains('certificount50medal')) {
+                                newlist.remove('certificount50medal');
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .update({
+                                  "mounted_Achievements": newlist,
+                                });
+                                Future.delayed(Duration.zero, () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: const Text(
+                                          '정상적으로 업적 뱃지 제거가 완료되었습니다.',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            letterSpacing: 1.0,
+                                            fontFamily: "SsurroundAir",
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          IconButton(
+                                            icon: const Icon(Icons.close),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                });
+                              } else {
+                                newlist.add('certificount50medal');
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .update({
+                                  "mounted_Achievements": newlist,
+                                });
+                                Future.delayed(Duration.zero, () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: const Text(
+                                          '정상적으로 업적 뱃지 추가가 완료되었습니다.',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            letterSpacing: 1.0,
+                                            fontFamily: "SsurroundAir",
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          IconButton(
+                                            icon: const Icon(Icons.close),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                });
+                              }
+                            } else {
+                              Future.delayed(Duration.zero, () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: const Text(
+                                        '아직 획득하지 못한 뱃지입니다. 목표를 달성후 장착해보세요!',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          letterSpacing: 1.0,
+                                          fontFamily: "SsurroundAir",
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      actions: [
+                                        IconButton(
+                                          icon: const Icon(Icons.close),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              });
+                            }
+                          },
+                        ),
+                        ListTile(
+                          leading: snapshot.data!['complete_Achievements']
+                                  .contains('certificount100')
+                              ? Image.asset(
+                                  'assets/medals/certificount100medal.png')
+                              : const Icon(Icons.lock,
+                                  size: 55, color: Color(0xff6DC4DB)),
+                          title: const Text('그룹 독서 인증 100회 완료'),
+                          subtitle: const Text('그룹 독서 인증을 100회를 완료하세요!'),
+                          trailing: FittedBox(
+                            child: CircularPercentIndicator(
+                              radius: 28.0,
+                              lineWidth: 7.0,
+                              animation: true,
+                              percent: CertifiCount > 100 ? 1 : CertifiCount / 100,
+                              center: Text(
+                                CertifiCount > 100
+                                    ? '100%'
+                                    : '${(CertifiCount / 100) * 100}%',
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10.0),
+                              ),
+                              circularStrokeCap: CircularStrokeCap.round,
+                              progressColor: const Color(0xff6DC4DB),
+                            ),
+                          ),
+                          onTap: () {
+                            if (CertifiCount >= 100) {
+                              var newlist =
+                                  snapshot.data!['mounted_Achievements'];
+                              if (snapshot.data!['complete_Achievements']
+                                      .contains('certificount100') ==
+                                  false) {
+                                var comlist =
+                                    snapshot.data!['complete_Achievements'];
+                                comlist.add('certificount100');
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .update({
+                                  "complete_Achievements": comlist,
+                                });
+                              }
+                              if (snapshot.data!['mounted_Achievements']
+                                  .contains('certificount100medal')) {
+                                newlist.remove('certificount100medal');
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(FirebaseAuth.instance.currentUser?.uid)
+                                    .update({
+                                  "mounted_Achievements": newlist,
+                                });
+                                Future.delayed(Duration.zero, () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: const Text(
+                                          '정상적으로 업적 뱃지 제거가 완료되었습니다.',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            letterSpacing: 1.0,
+                                            fontFamily: "SsurroundAir",
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        actions: [
+                                          IconButton(
+                                            icon: const Icon(Icons.close),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                });
+                              } else {
+                                newlist.add('certificount100medal');
                                 FirebaseFirestore.instance
                                     .collection('users')
                                     .doc(FirebaseAuth.instance.currentUser?.uid)

@@ -127,9 +127,9 @@ flutter:
     - assets/medals/groupleadercount1medal.png
     - assets/medals/groupleadercount5medal.png
     - assets/medals/groupleadercount10medal.png
-    - assets/medals/certificount1medal.png
-    - assets/medals/certificount5medal.png
     - assets/medals/certificount10medal.png
+    - assets/medals/certificount50medal.png
+    - assets/medals/certificount100medal.png
 
 
 
