@@ -1,16 +1,27 @@
-# circle_book
+# Circle_Book
 
 A new Flutter project.
 
-## Getting Started
+가면 갈수록 낮아지는 현대인 독서 증진을 위해 사용자의 입장에 맞는 도서를 찾아주고, 이에 같은 책을 읽는 사람들을 그룹으로 매칭시켜 서로 얼마나 독서를 했고, 독후감을 공유하면서 현대인이 독서에 대한 흥미를 가지도록 하기 위한 앱
 
-This project is a starting point for a Flutter application.
+- 사용자간 그룹 시스템, 
+리얼타임 시스템을 통한 그룹 일정 실시간 반영
+같은 책을 선택한 사람들만 매칭시켜주므로 그룹 활동에 대한 동기부여
+그룹원 간 독서 현황 공유를 통한 목표 제시
+그룹 내 채팅방 시스템을 통해 그룹원 간 정보 공유 가능 (사진 전송 가능)
+그룹 일정 종료 후, 독후감 공유 및 의견 시스템, 평판시스템을 통한 유저 간 정보교류 제공
+업적 시스템을 통한 사용자들의 목표 및 성취감 제공
+- 도서 추천 시스템(메인화면)
+사용자가 설정한 장르의 책, 베스트셀러 등을 자동으로 메인화면에서 추천
+- 도서 검색 시스템
+사용자가 원하는 장르, 책 제목을 입력해서 책 검색 가능
+알라딘API를 통한 도서 자료 연동 및 구매 사이트 자동 이동
+KOLIS-NET API를 통한 도서관 정보 연동을 통한 도서관 내 책 보유여부 확인가능
+- 프로필 시스템
+자신의 소개 및 관심분야 작성 가능
+자신이 달성한 업적 및 책 소개 가능
+사용자 평판에 맞는 프로필에 색깔 띠 제공
+- 업적 시스템
+사용자가 활동했던 내역에 따라서 각종 다양한 업적 뱃지 제공
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[P2023/0431][어플리케이션을 이용한 독서 모임 시스템][특허 출원 시도]
